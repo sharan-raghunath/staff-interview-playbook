@@ -15,6 +15,7 @@ Acts as the internet edge for the application.
 - Web Application Firewall (WAF)
 - DDoS protection
 - Edge security
+- IP whitelisting
 - Traffic filtering before requests enter Azure
 
 ---
@@ -216,14 +217,3 @@ Those responsibilities belong to Edge API and the internal orchestration layer.
 - OCR preprocessing is separated from field extraction.
 - Components should be independently scalable where appropriate.
 - Service boundaries should represent logical responsibilities rather than historical implementation constraints.
-
-## Design Decisions
-
-### API Service vs Orchestrator
-- API Service owns application-specific business logic.
-- Orchestrator remains application-agnostic.
-
-### Text Extractor vs Data Extractor
-- OCR preprocessing separated from ML extraction.
-- Independent scaling.
-- Fault isolation.
