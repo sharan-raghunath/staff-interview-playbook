@@ -1,6 +1,7 @@
 # Changelog
 
 ## Day 1
+
 ### Coding
 - Two Sum
 - Hash Lookup pattern
@@ -21,12 +22,11 @@
 
 ### Backend
 - ASP.NET Core Request Pipeline
-- JWT validation
+- JWT validation introduction
 - Zero Trust
 
 ### Production Architecture
-- API Service vs Orchestrator
-- Separation of application-specific and generic business logic
+- Initial API Service vs Orchestrator discussion
 
 ---
 
@@ -37,15 +37,12 @@
 - Frequency Counting pattern
 
 ### Backend
-- Stack vs Heap (Introduction)
+- Stack vs Heap introduction
 - Arrays as reference types
 - Character arithmetic (`c - 'a'`)
 
 ### Production Architecture
 - Text Extractor vs Data Extractor
-- Independent scaling and responsibilities
-
-### System Design
 - Gateway responsibilities
 - Responsibilities vs Components
 
@@ -55,23 +52,55 @@
 
 ### Coding
 - Product of Array Except Self
-- Prefix/Suffix Computation pattern
+- Prefix / Suffix Computation
 - Space optimization by reusing the output array
 
 ### Backend
 - Why HTTP is stateless
 - Why Sessions were invented
-- Cookies and browser behaviour
-- `Set-Cookie` vs `Cookie`
+- How Cookies transport Session IDs
 - Browser vs Angular vs ASP.NET responsibilities
 
 ### Production Architecture
-- Synchronous vs Asynchronous communication
-- Current Invoice Manager workflow
-- Identified Orchestrator as the boundary for future asynchronous processing
-- Queue-based architecture discussion
-- WebSockets / SignalR identified as a future learning topic
+- Synchronous vs Asynchronous communication introduction
+- Current Invoice Manager synchronous bottlenecks
+- WebSockets / SignalR identified as future learning topics
 
-### Coaching Improvements
-- Introduced Hint Ladder for coding problems
-- Agreed to delay hints to encourage independent discovery
+---
+
+## Day 5
+
+### Backend
+- Distributed Sessions using Redis
+- JWT fundamentals
+- JWT structure: Header, Payload, Signature
+- Public / private key signing
+- `kid`
+- JWKS
+- Key rotation
+- Important claims: `iss`, `aud`, `sub`, `oid`, `tid`, `exp`, `nbf`, `iat`, `scp`, `roles`
+- RBAC vs ABAC
+- Roles vs Scopes
+- Access Token vs ID Token
+- Refresh Tokens
+- Refresh Token rotation
+- JWT revocation
+- JWT trade-offs
+
+### Coding
+- Valid Palindrome
+- Two Pointers pattern
+- O(n) time / O(1) space solution
+- Readability vs compact code discussion
+
+### System Design
+- Orchestrator crash scenario
+- Current fail-fast behaviour
+- Need for recovery/checkpointing at orchestration boundary
+- Future discussion planned for idempotency, retries, DLQ and async processing
+
+### Repository
+- Added project context
+- Added roadmap
+- Added pending items
+- Updated Invoice Manager architecture and responsibility split

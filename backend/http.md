@@ -2,13 +2,11 @@
 
 ## Why was HTTP designed to be stateless?
 
-This is one of the most fundamental design decisions of the web.
-
 HTTP was intentionally designed as a **stateless protocol**.
 
-This means every request is independent, and the server does not remember previous requests from the same client.
+This means each request is independent. The server does not automatically remember previous requests from the same client.
 
-For example:
+Example:
 
 ```http
 GET /products
@@ -16,101 +14,84 @@ GET /products
 
 The server processes the request and returns a response.
 
-If the browser immediately sends another request:
+Later:
 
 ```http
 GET /cart
 ```
 
-The server has no built-in knowledge that both requests came from the same user.
-
-Every request is treated as a brand-new request.
+HTTP itself does not tell the server that both requests came from the same user.
 
 ---
 
 ## Why not make HTTP stateful?
 
-Imagine HTTP itself remembered every connected client.
+If HTTP itself remembered every client, every server would need to maintain state for:
 
-For every request, every web server would need to remember:
+- who the user is
+- what pages they visited
+- their shopping cart
+- login state
+- preferences
+- session information
 
-- Which user made previous requests.
-- Shopping cart contents.
-- Authentication state.
-- Previously visited pages.
-- Session information.
+This would increase memory usage and make horizontal scaling harder.
 
-Even a request for a small static resource like:
+HTTP follows a clean responsibility boundary:
 
-```http
-GET /logo.png
-```
-
-would require the server to maintain client state.
-
-This would significantly increase server memory usage and reduce scalability.
-
-Instead, HTTP follows a simple philosophy:
-
-> HTTP is responsible for transporting requests and responses.
->
-> It is **not** responsible for remembering users.
-
-This separation of responsibilities allows servers to process millions of independent requests efficiently.
+> HTTP transports requests and responses.  
+> It does not remember users.
 
 ---
 
 ## The problem this creates
 
-Modern web applications require user state.
+Real applications need continuity.
 
 Examples:
 
 - Shopping carts
 - Logged-in users
-- User preferences
 - Multi-step forms
+- User preferences
 
-If HTTP forgets everything after every request, how can an application remember a user?
+Since HTTP does not remember anything by itself, applications need higher-level mechanisms to maintain state.
 
-This limitation led to the invention of **sessions**.
+This leads to:
+
+```text
+HTTP
+↓
+Stateless
+↓
+Sessions
+↓
+Cookies
+```
 
 ---
 
 ## Key Takeaways
 
 - HTTP is stateless by design.
-- Every request is independent.
-- Statelessness improves scalability.
-- HTTP intentionally avoids managing user state.
-- Application-level mechanisms are required to maintain user state.
+- Statelessness improves scalability and simplicity.
+- User state must be handled above HTTP.
+- Sessions and cookies were introduced to solve continuity problems.
 
 ---
 
-## Next
+## Interview Discussion
 
-- Sessions
-- Cookies
-- Load Balancers
-- Distributed Sessions
-- JWT
+A strong answer to "Why is HTTP stateless?" should include:
 
----
-
-# Interview Discussion
-
-### Why was HTTP designed to be stateless?
-
-A good answer should include:
-
-- Scalability
-- Separation of responsibilities
-- Independent request processing
-- Simpler server design
-- User state handled at the application layer
+- Each request is independent.
+- HTTP does not maintain user state.
+- Statelessness simplifies server design.
+- Statelessness supports scalability.
+- Application-level mechanisms handle user continuity.
 
 Avoid saying only:
 
-> "HTTP doesn't store state."
+> HTTP does not store state.
 
-Instead explain **why** the protocol was intentionally designed that way.
+Instead explain why that design exists.

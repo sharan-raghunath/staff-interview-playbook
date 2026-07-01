@@ -1,187 +1,167 @@
-# Design Decisions
+# Invoice Manager Design Decisions
 
-This document captures the rationale behind the major architectural decisions made in Invoice Manager.
+## Edge API as Public Boundary
 
----
+### Decision
 
-# Edge API
+Only the Edge API is public-facing.
 
-## Decision
+### Why
 
-Expose only the Edge API publicly.
+The Edge API protects the internal platform from external consumers.
 
-## Why?
+It owns:
 
-The Edge API forms the boundary between external consumers and the Invoice Manager platform.
+- authentication
+- authorization
+- request validation
+- source-system integration
+- tenant-aware request translation
 
-It is responsible for:
-
-- Authentication
-- Authorization
-- Request validation
-- Integration with external Asset Finance systems
-- Translating external requests into internal workflows
-
-Internal services should never be exposed directly to external consumers.
-
-## Future Considerations
-
-If Invoice Manager needs to support another source system, introduce another Edge API rather than modifying the core processing services.
+Internal services should remain private implementation details.
 
 ---
 
-# API Service vs Orchestrator
+## Multi-Tenant Source System Integration
 
-## Original Decision
+### Decision
 
-The API Service and Orchestrator were separated because they were owned by different teams.
+Invoice Manager supports tenant-specific source-system configuration.
 
-- API Service was developed by the current team using .NET.
-- Orchestrator was developed by another team using Java.
+### Why
 
-The API Service contained Invoice Manager-specific business logic while the Orchestrator focused on workflow coordination.
+The platform is multi-tenant.
 
-## Current State
+Different tenants may integrate with different source systems without requiring a new Edge API for every integration.
 
-The Orchestrator has now been migrated to .NET 8.
+This keeps the public API boundary stable while allowing tenant-specific behaviour through configuration.
 
-The original technology boundary no longer exists.
+---
 
-## Future Direction
+## API Service vs Orchestrator
 
-Evaluate consolidating the API Service and Orchestrator into a single internal Invoice Processing Service.
+### Original Decision
 
-The preferred architecture becomes:
+API Service and Orchestrator were separate partly because of historical team and technology boundaries.
 
-```
+Originally:
+
+- API Service was .NET
+- Orchestrator was Java
+- different teams owned the services
+
+### Current State
+
+Orchestrator has been migrated to .NET 8.
+
+The historical technology boundary is weaker now.
+
+### Future Direction
+
+Evaluate consolidation if the API Service and Orchestrator no longer have distinct responsibilities.
+
+Potential future architecture:
+
+```text
 Edge API
-        │
-        ▼
+↓
 Invoice Processing Service
-        │
-        ▼
+↓
 Text Extractor
-        │
-        ▼
+↓
 Data Extractor
 ```
 
-Benefits include:
+Benefits:
 
-- Fewer network hops
-- Simpler deployment
-- Easier debugging
-- Reduced operational complexity
+- fewer network hops
+- simpler deployment
+- easier debugging
+- reduced operational overhead
 
-The Edge API should remain separate because it represents a logical architectural boundary.
+Caution:
+
+- do not merge if responsibilities remain logically distinct
+- preserve the Edge API as the public boundary
 
 ---
 
-# Text Extractor vs Data Extractor
+## Text Extractor vs Data Extractor
 
-## Decision
+### Decision
 
-Separate OCR from field extraction.
+Separate OCR/document preprocessing from field extraction.
 
-## Why?
+### Why
 
-Although Azure OCR services can process PDFs directly, the machine learning models were trained using normalized images.
-
-The Text Extractor performs:
+Text Extractor owns:
 
 - PDF to image conversion
-- Image normalization
-- Rotation correction
-- DPI normalization
+- image normalization
 - OCR extraction
 
-The Data Extractor performs:
+Data Extractor owns:
 
-- Machine learning inference
-- GenAI inference
-- Field prediction
+- ML extraction
+- GenAI extraction
+- Semantic Kernel / skills flow
+- structured prediction
 
-Separating these responsibilities allows each service to evolve independently.
-
-## Benefits
-
-- Independent scaling
-- Independent deployments
-- Fault isolation
-- Clear ownership
-- Easier model evolution
+The services have different CPU, memory, scaling and evolution profiles.
 
 ---
 
-# ML vs GenAI Extraction
+## ML and GenAI inside Data Extractor
 
-## Decision
+### Decision
 
-Support both traditional ML and GenAI within the Data Extractor.
+Data Extractor supports both ML-based and GenAI-based extraction.
 
-## Why?
+### Why
 
-Different extraction techniques have different strengths.
+Traditional ML / NER provides deterministic field extraction.
 
-Traditional ML provides deterministic field extraction using custom NER models.
+GenAI provides flexibility for complex documents.
 
-GenAI provides greater flexibility for complex documents.
-
-The Data Extractor abstracts these implementations behind a single service boundary.
+Data Extractor abstracts both extraction methods behind one service boundary.
 
 ---
 
-# Synchronous Processing
+## Current Synchronous Processing
 
-## Current Decision
+### Current Decision
 
 Invoice processing is currently synchronous.
 
-The entire workflow completes before returning a response.
+### Benefits
 
-## Why?
+- simpler implementation
+- easier request tracing
+- straightforward response path
+- acceptable for smaller documents
 
-- Simpler implementation
-- Easier debugging
-- Immediate response for smaller invoices
+### Limitations
 
-## Known Limitations
+- long-running request risk
+- gateway timeouts
+- limited recovery
+- poor UX for large documents
+- duplicate work on retries
 
-- Long-running requests
-- Gateway timeout constraints
-- User waits for the entire workflow
-- Reduced resilience
+### Future Direction
 
-## Future Direction
-
-Move to an asynchronous architecture by introducing a queue after the orchestration layer.
-
-This allows:
-
-- Immediate acknowledgement to the client
-- Background processing
-- Retry support
-- Better scalability
-- Event-driven workflows
-
-This future design is documented separately in `future-state.md`.
+Move long-running processing to asynchronous workflow with durable state and queues.
 
 ---
 
-# Public vs Internal Services
+## DR Environment
 
-## Decision
+### Decision
 
-Only the Edge API is publicly accessible.
+Production has a DR environment in another Azure region.
 
-Everything else remains internal to the AKS cluster.
+### Why
 
-## Why?
+Supports regional failover and recovery.
 
-- Smaller attack surface
-- Stronger security boundaries
-- Internal contracts remain private
-- Independent evolution of internal services
-- Easier API versioning
-
-This follows the Backend-for-Frontend (BFF) pattern, where the Edge API represents the public boundary and internal services remain implementation details.
+Detailed DR behaviour is pending documentation.

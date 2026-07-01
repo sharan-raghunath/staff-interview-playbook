@@ -2,126 +2,187 @@
 
 ## Why were Sessions invented?
 
-HTTP is a stateless protocol.
+HTTP is stateless.
 
-After every request, the server forgets everything about the client.
+After each request, HTTP itself forgets the client.
 
-However, real-world applications require continuity.
+Applications, however, need user-specific state:
 
-Examples include:
+- logged-in user
+- shopping cart
+- preferences
+- tenant information
+- roles / claims
+- workflow state
 
-- Shopping carts
-- Logged-in users
-- Multi-step forms
-- User preferences
-
-Applications therefore needed a mechanism to associate multiple HTTP requests with the same user.
-
-Sessions solve this problem.
+Sessions were introduced to associate multiple HTTP requests with the same user.
 
 ---
 
 ## What is a Session?
 
-A session is server-side state associated with a unique identifier.
+A session is server-side state associated with a unique Session ID.
 
 Example:
 
-Session Table
+| Session ID | Server-side Data |
+|------------|------------------|
+| ABC123 | userId, roles, tenant, cart |
 
-| Session ID | User | Shopping Cart |
-|------------|------|---------------|
-| A12B34     | John | iPhone, AirPods |
+The browser does not store the whole session.
 
-The browser never sees the shopping cart directly.
-
-Instead, it only stores the Session ID.
+The browser usually stores only the Session ID.
 
 ---
 
-## How does the browser know its Session ID?
+## Session Data vs Session ID
+
+Browser stores:
+
+```text
+SessionId = ABC123
+```
+
+Server stores:
+
+```json
+{
+  "sessionId": "ABC123",
+  "userId": "user-42",
+  "roles": ["Reviewer"],
+  "tenant": "AF",
+  "cart": ["item1", "item2"]
+}
+```
+
+This distinction is critical.
+
+The browser has an opaque identifier.
+
+The server has the actual identity, claims and application state.
+
+---
+
+## How Cookies help Sessions
 
 When the server creates a session, it sends:
 
 ```http
-Set-Cookie: SessionId=A12B34
+Set-Cookie: SessionId=ABC123; HttpOnly; Secure; SameSite=Lax
 ```
 
-The browser stores this cookie.
+The browser stores the cookie.
 
-For every subsequent request to the same domain, the browser automatically sends:
+For subsequent requests to the same domain/application, the browser automatically sends:
 
 ```http
-Cookie: SessionId=A12B34
+Cookie: SessionId=ABC123
 ```
 
-The browser handles this automatically.
-
-Angular, React or JavaScript do not manually attach the Cookie header.
+The server uses the Session ID to look up session data.
 
 ---
 
-## Session Lifecycle
+## Single Server
 
-1. User visits the application.
-2. Server creates a Session ID.
-3. Server stores session state.
-4. Server returns `Set-Cookie`.
-5. Browser stores the cookie.
-6. Browser automatically sends the cookie on subsequent requests.
-7. Server retrieves session data using the Session ID.
+Sessions work simply when there is only one server:
+
+```text
+Browser
+↓
+Server A
+↓
+In-memory session store
+```
+
+Server A can look up the session in its own memory.
 
 ---
 
-## Advantages
+## Multiple Servers
 
-- Session data never leaves the server.
-- Easy to invalidate.
-- Sensitive data remains server-side.
+With load balancing:
+
+```text
+Browser
+↓
+Load Balancer
+├── Server A
+└── Server B
+```
+
+If Server A created the session but the next request reaches Server B, Server B may not have that session in memory.
+
+The Session ID is not necessarily invalid. It is valid-looking, but Server B cannot find matching state.
+
+Possible outcomes:
+
+- user appears logged out
+- cart appears empty
+- session lookup returns null
+- application throws an error
 
 ---
 
-## Limitations
+## Shared Session Store
 
-Single-server deployments work well.
+To solve this, session state can be moved to a centralized store:
 
-Multiple application servers introduce challenges.
-
-Example:
-
-```
-          Load Balancer
-         /             \
-   Server A         Server B
+```text
+Server A ─┐
+          ├── Redis / Database
+Server B ─┘
 ```
 
-If the session exists only in Server A's memory and the next request reaches Server B, the session cannot be found.
+Now all servers can resolve the same Session ID.
 
-This problem leads to:
+Common stores:
 
-- Sticky Sessions
-- Distributed Session Stores
 - Redis
-
-These will be discussed later.
-
----
-
-## Key Takeaways
-
-- Sessions exist because HTTP is stateless.
-- Sessions store user state on the server.
-- Browsers remember only the Session ID.
-- Cookies transport the Session ID.
-- Sessions become challenging in distributed systems.
+- distributed cache
+- database
 
 ---
 
-# Interview Discussion
+## Trade-offs
 
-A good Staff Engineer answer should explain:
+Shared session stores solve horizontal scaling but introduce new problems:
 
-- Why sessions were invented.
-- Why HTTP intentionally avoided user state.
-- Why sessions become problematic in horizontally scaled systems.
-- Why distributed session stores such as Redis are commonly introduced.
+- extra network call per request
+- Redis/database becomes a dependency
+- additional latency
+- HA/failover required
+- operational complexity
+- session expiry and cleanup management
+
+---
+
+## Sessions vs JWT
+
+Session-based model:
+
+```text
+Browser stores opaque Session ID.
+Server stores identity and state.
+```
+
+JWT model:
+
+```text
+Browser stores signed token containing claims.
+API validates token without session lookup.
+```
+
+Neither is universally better.
+
+Sessions make revocation easier.
+
+JWT improves stateless validation but makes immediate revocation harder.
+
+---
+
+## Interview Discussion
+
+Strong answer:
+
+> Sessions exist because HTTP is stateless. The server creates state for the user and maps it to a Session ID. The browser stores only the Session ID, usually in a cookie, and sends it on future requests. In horizontally scaled systems, in-memory sessions break because requests may hit different servers, so session state is often moved to a distributed store like Redis. This solves scaling but introduces a new dependency in the request path.

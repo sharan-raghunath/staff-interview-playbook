@@ -1,8 +1,26 @@
-# Invoice Manager
+# Invoice Manager Architecture
 
-## Architecture
+## Current High-Level Architecture
 
-Akamai -> Gateway -> Traefik -> Edge API -> API Service -> Orchestrator -> Text Extractor -> Data Extractor
+```text
+Akamai
+  ↓
+Azure Application Gateway
+  ↓
+Traefik
+  ↓
+Edge API
+  ↓
+API Service
+  ↓
+Orchestrator
+  ↓
+Text Extractor
+  ↓
+Data Extractor
+```
+
+---
 
 ## Component Responsibilities
 
@@ -10,7 +28,7 @@ Akamai -> Gateway -> Traefik -> Edge API -> API Service -> Orchestrator -> Text 
 
 Acts as the internet edge for the application.
 
-#### Responsibilities
+Responsibilities:
 
 - Web Application Firewall (WAF)
 - DDoS protection
@@ -22,31 +40,52 @@ Acts as the internet edge for the application.
 
 ### Azure Application Gateway
 
-Acts as the Azure gateway before traffic enters the AKS cluster.
+Acts as the Azure gateway layer before traffic enters the AKS cluster.
 
-#### Responsibilities
+Responsibilities:
 
-- Gateway into the Kubernetes cluster
+- Gateway into Azure / AKS boundary
 - Layer 7 routing
 - Traffic forwarding to Traefik
+- Gateway-level policies where configured
 
-> **TODO**
-> Confirm whether TLS termination occurs at Azure Application Gateway or Traefik.
+TODO:
+
+- Confirm whether TLS termination occurs at Azure Application Gateway or Traefik.
 
 ---
 
-### Traefik (Ingress Controller)
+### Azure Outbound Firewall
 
-Ingress controller within the AKS cluster.
+Controls outbound communication from the Azure environment to external systems.
 
-#### Responsibilities
+Responsibilities:
 
-- Routes requests to the appropriate Kubernetes services
-- Internal ingress into the cluster
-- Kubernetes-native routing and load balancing
+- Whitelist outbound calls to external Identity Provider endpoints
+- Whitelist outbound calls to configured source systems
+- Control egress traffic from the application environment
 
-> **TODO**
-> Confirm whether Traefik performs TLS termination or receives already decrypted traffic from Azure Application Gateway.
+This is important because Invoice Manager integrates with external systems such as:
+
+- Identity Provider
+- Asset Finance / tenant-specific source systems
+
+---
+
+### Traefik
+
+Ingress controller inside AKS.
+
+Responsibilities:
+
+- Kubernetes ingress routing
+- Routing requests to the appropriate service
+- Cluster-native load balancing
+- Ingress-level middleware where configured
+
+TODO:
+
+- Confirm whether Traefik performs TLS termination or receives already decrypted traffic from Azure Application Gateway.
 
 ---
 
@@ -54,166 +93,147 @@ Ingress controller within the AKS cluster.
 
 The only public-facing application API.
 
-The Edge API acts as the boundary between external consumers and the internal Invoice Manager platform.
+The Edge API is the boundary between external consumers and internal Invoice Manager services.
 
-#### Responsibilities
+Responsibilities:
 
-- Authenticate and authorize incoming requests
+- Authenticate incoming requests
+- Authorize incoming requests
 - Validate request payloads
-- Integrate with external source systems (Asset Finance)
-- Expose public REST APIs
+- Integrate with external source systems
+- Support multi-tenant configuration
 - Translate external requests into internal workflows
-- Never expose internal services directly
+- Ensure internal services are not directly exposed
 
-> **Design Principle**
->
-> If Invoice Manager needs to integrate with a different source system in the future, a new Edge API should be introduced rather than modifying the core processing services.
+Important clarification:
+
+Invoice Manager is multi-tenant. A new Edge API is not necessarily required for every source-system integration. Each tenant can be configured to work with a different source system.
 
 ---
 
 ### API Service
 
-Internal service within the AKS cluster.
+Internal service within AKS.
 
-This service exists primarily for historical reasons.
+The API Service exists partly for historical reasons.
 
-Originally, the Orchestrator was developed in Java by another team, while the current team developed the API Service in .NET to implement business-specific functionality.
+Originally:
 
-Today, the Orchestrator has been migrated to .NET 8.
+- Orchestrator was implemented in Java by another team.
+- API Service was developed in .NET by the current team.
 
-#### Current Responsibilities
+Current responsibilities:
 
-- Internal business logic
-- Invoice Manager application-specific functionality
-- Communication with the Orchestrator
+- Internal Invoice Manager business logic
+- Communication with Orchestrator
+- Internal service boundary between Edge API and Orchestrator
 
-#### Future State
+Future consideration:
 
-The API Service and Orchestrator are candidates for consolidation into a single service, as both now run on .NET 8 and have closely related responsibilities.
-
-The preferred architecture is:
-
-```
-Edge API
-        │
-        ▼
-Invoice Processing Service
-```
-
-instead of:
-
-```
-Edge API
-        │
-        ▼
-API Service
-        │
-        ▼
-Orchestrator
-```
-
-This removes an unnecessary service boundary while keeping the public-facing Edge API separate.
+Since Orchestrator has been migrated to .NET 8, API Service and Orchestrator are candidates for consolidation if there is no longer a clear responsibility split.
 
 ---
 
 ### Orchestrator
 
-Coordinates the complete invoice processing workflow.
+Coordinates the invoice processing workflow.
 
-The Orchestrator contains workflow logic rather than business integration logic.
-
-#### Responsibilities
+Responsibilities:
 
 - Coordinate invoice processing
 - Invoke Text Extractor
 - Invoke Data Extractor
 - Aggregate responses
 - Manage workflow sequencing
-- Handle retries and orchestration logic
+- Handle orchestration-level errors
+- Future candidate for persistence/checkpointing
 
-The Orchestrator should remain independent of any external Asset Finance system.
+The Orchestrator should focus on workflow coordination, not external source-system integration.
 
 ---
 
-### Text Extractor (TE)
+### Text Extractor
 
-Responsible for preparing documents for machine learning.
+Responsible for document preparation and OCR.
 
-#### Responsibilities
+Responsibilities:
 
-- PDF → Image conversion
+- PDF to image conversion
 - Image normalization
-- Rotation correction
 - DPI normalization
+- Rotation correction
 - OCR extraction
 - Parallel OCR processing across pages
 
-The Text Extractor focuses entirely on document preparation and OCR.
+Text Extractor exists separately because OCR preprocessing has its own CPU, memory and scaling profile.
 
 ---
 
-### Data Extractor (DE)
+### Data Extractor
 
 Responsible for invoice field extraction.
 
-The Data Extractor supports multiple extraction approaches:
+Data Extractor supports:
 
-1. Traditional ML-based extraction
+1. ML-based extraction
 2. GenAI-based extraction
 
-#### Responsibilities
+Responsibilities:
 
 - Load field-specific ML models
 - Execute custom NER models
 - Predict invoice fields
-- Support GenAI-based extraction flow
+- Support GenAI-based extraction
 - Use Semantic Kernel and skills for GenAI orchestration
 - Aggregate extracted data
 - Return structured prediction results
 
-#### ML-Based Flow
+Data Extractor does not own:
 
-The ML-based flow uses field-specific custom NER models to extract invoice fields from OCR output.
+- public API exposure
+- source-system integration
+- user-facing validation
+- end-to-end workflow orchestration
 
-#### GenAI-Based Flow
-
-The GenAI-based flow uses Semantic Kernel and skills to perform extraction from OCR data using GenAI.
-
-This allows the Data Extractor to support both deterministic model-based extraction and GenAI-driven extraction depending on the use case.
-
-#### Boundary
-
-The Data Extractor does not own:
-
-- Source system integration
-- Public API exposure
-- User-facing request validation
-- End-to-end workflow orchestration
-
-Those responsibilities belong to Edge API and the internal orchestration layer.
 ---
 
 ## Responsibility Boundaries
 
 | Component | Primary Responsibility |
 |-----------|------------------------|
-| Akamai | Edge security |
-| Azure Application Gateway | Azure gateway |
+| Akamai | Edge security, WAF, DDoS, IP whitelisting |
+| Azure Application Gateway | Azure gateway and L7 routing |
+| Azure Outbound Firewall | Egress whitelisting |
 | Traefik | Kubernetes ingress |
-| Edge API | Public APIs and external system integration |
-| API Service | Internal business logic (candidate for future consolidation) |
+| Edge API | Public API boundary and external integration |
+| API Service | Internal business logic / historical service boundary |
 | Orchestrator | Workflow orchestration |
 | Text Extractor | OCR and document preprocessing |
 | Data Extractor | ML / GenAI invoice field extraction |
 
 ---
 
+## Disaster Recovery
+
+Production has a DR environment hosted in another Azure region.
+
+The DR setup supports switch-over / auto failover.
+
+More detailed DR design will be documented later in:
+
+```text
+system-design/invoice-manager/disaster-recovery.md
+```
+
+---
+
 ## Architectural Principles
 
-- Single responsibility per service.
-- Public traffic terminates at the Edge API.
-- Internal services are never exposed externally.
-- Workflow orchestration is separated from machine learning inference.
-- OCR preprocessing is separated from field extraction.
-- Components should be independently scalable where appropriate.
-- Service boundaries should represent logical responsibilities rather than historical implementation constraints.
+- Only Edge API is public-facing.
+- Internal services are not exposed externally.
+- Public traffic is filtered before entering Azure.
+- Outbound traffic to external systems requires firewall whitelisting.
+- Workflow orchestration is separated from OCR and ML inference.
+- OCR preprocessing and field extraction are separate because they have different compute profiles.
+- Service boundaries should represent logical responsibilities, not only historical implementation constraints.
+- Multi-tenancy should be handled through configuration where appropriate.

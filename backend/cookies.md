@@ -2,106 +2,133 @@
 
 ## Why were Cookies invented?
 
-Sessions solve the server-side problem.
+Sessions solve the server-side problem:
 
-However, the browser must identify itself on every request.
+> How do we store user state?
 
-Cookies solve this client-side problem.
+Cookies solve the client-side transport problem:
+
+> How does the browser remember and send the Session ID on future requests?
 
 ---
 
 ## What is a Cookie?
 
-A cookie is a small piece of data stored by the browser.
+A cookie is a small piece of data stored by the browser and automatically sent to matching domains.
 
-The server sends:
+Server response:
 
 ```http
-Set-Cookie: SessionId=A12B34
+Set-Cookie: SessionId=ABC123; HttpOnly; Secure; SameSite=Lax
 ```
 
-The browser stores it.
-
-Future requests automatically include:
+Future request:
 
 ```http
-Cookie: SessionId=A12B34
+Cookie: SessionId=ABC123
 ```
 
 ---
 
 ## Browser Behaviour
 
-Cookie handling is implemented by the browser.
+Cookie handling is browser behaviour.
 
-Application code typically does not manually add Cookie headers.
+Angular, React or JavaScript do not manually add the `Cookie` header.
 
-Instead:
+The browser decides which cookies belong to a request based on:
 
-ASP.NET writes:
+- domain
+- path
+- expiry
+- Secure
+- SameSite
+- other cookie attributes
+
+Application frameworks such as ASP.NET generate `Set-Cookie` headers, but the browser stores and resends cookies.
+
+---
+
+## ASP.NET Role
+
+ASP.NET can create cookies using APIs like:
 
 ```csharp
-Response.Cookies.Append(...)
+Response.Cookies.Append("SessionId", sessionId);
 ```
 
-which generates:
+This results in an HTTP response header:
 
 ```http
-Set-Cookie
+Set-Cookie: SessionId=...
 ```
 
-The browser stores the cookie and automatically sends it on future requests.
+The browser takes over from there.
 
 ---
 
 ## Cookies vs Sessions
 
-Cookies are stored on the client.
+| Concept | Stored Where | Purpose |
+|---------|--------------|---------|
+| Cookie | Browser | Transport data such as Session ID |
+| Session | Server | Store user/application state |
 
-Sessions are stored on the server.
+A common pattern:
 
-Cookies usually carry only the Session ID.
-
-The Session ID is used to retrieve server-side state.
+```text
+Cookie carries Session ID.
+Session store contains user state.
+```
 
 ---
 
-## Important Cookie Attributes
+## Important Attributes
 
-To be covered later:
+### HttpOnly
 
-- HttpOnly
-- Secure
-- SameSite
-- Domain
-- Path
-- Expiration
+Prevents JavaScript from reading the cookie.
+
+Useful for reducing XSS impact.
+
+### Secure
+
+Cookie is sent only over HTTPS.
+
+### SameSite
+
+Controls whether cookies are sent with cross-site requests.
+
+Important for CSRF protection.
+
+### Domain and Path
+
+Control where the browser sends the cookie.
+
+### Expiry / Max-Age
+
+Controls cookie lifetime.
+
+---
+
+## Interview Discussion
+
+Question:
+
+> Does Angular send cookies?
+
+Good answer:
+
+> Angular does not manually send the Cookie header. The browser automatically attaches cookies to matching requests according to cookie rules. Angular only initiates the HTTP request.
 
 ---
 
 ## Future Topics
 
-Cookies naturally lead into:
+Cookies naturally lead to:
 
 - Same-Origin Policy
 - CORS
-- withCredentials
+- `withCredentials`
 - CSRF
-
-These topics are intentionally deferred until later.
-
----
-
-# Interview Discussion
-
-Common interview question:
-
-"Does Angular automatically send cookies?"
-
-Answer:
-
-No.
-
-The browser automatically sends cookies according to the HTTP specification.
-
-Angular simply asks the browser to make an HTTP request.
+- Secure cookie storage
