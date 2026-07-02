@@ -10,14 +10,14 @@ The user should not wait for the entire OCR + extraction workflow to complete wi
 
 ## Proposed Direction
 
-Introduce an asynchronous boundary around the orchestration layer.
+Introduce an asynchronous boundary around the processing workflow.
 
 Possible high-level flow:
 
 ```text
 User
 ↓
-Edge API
+Edge API / Web App
 ↓
 API Service / Invoice Processing Service
 ↓
@@ -31,9 +31,11 @@ Text Extractor
 ↓
 Data Extractor
 ↓
-Persist result
+Persist prediction result
 ↓
-Notify user / allow polling
+User reviews and overrides
+↓
+Submit to source system
 ```
 
 ---
@@ -47,7 +49,7 @@ Current synchronous design has limitations:
 - poor user experience for large documents
 - limited recovery if Orchestrator crashes
 - retries may duplicate expensive work
-- progress is not clearly persisted
+- progress is not durably tracked
 
 Async design can improve:
 
@@ -68,18 +70,15 @@ Instead of waiting for final extraction result:
 2. System returns `202 Accepted`.
 3. User receives a tracking/job ID.
 4. UI shows processing status.
-5. User is notified when processing completes.
+5. User is notified or can fetch results when processing completes.
 
 Notification options:
 
 - polling
+- long polling
+- Server-Sent Events
 - WebSockets
 - SignalR
-- Server-Sent Events
-
-TODO:
-
-- Learn WebSockets and SignalR internals before deciding final approach.
 
 ---
 
@@ -93,7 +92,7 @@ Future async architecture needs:
 - retry policy
 - dead letter queue
 - status tracking
-- result persistence
+- temporary result persistence
 - observability
 - timeout handling
 - recovery after crash
@@ -120,14 +119,14 @@ Future behaviour should be:
 
 ---
 
-## Open Questions
+## Open Design Questions for Day 7
 
+- Azure Service Bus or Kafka?
+- Queue or topic?
+- Should queue messages represent whole jobs or individual stages?
 - Where should workflow state be stored?
-- Should the queue message represent the whole invoice or one processing stage?
-- Should TE and DE publish events directly?
-- Should Orchestrator remain central or become a workflow worker?
-- What is the retry policy per stage?
-- What qualifies for DLQ?
-- How do we handle partial success?
-- How do we notify users?
-- How do we handle multi-region DR with queued jobs?
+- Should TE/DE publish events or only respond to Orchestrator?
+- Should Orchestrator be a stateful workflow engine or a stateless worker with external state?
+- How should DLQ replay work?
+- How should polling or push notification be selected?
+- How should multi-region DR handle in-flight messages?

@@ -1,6 +1,6 @@
 # JWT
 
-## Why JWT exists
+## Why JWT Exists
 
 JWT was introduced as one way to reduce dependency on server-side session storage.
 
@@ -92,7 +92,7 @@ This allows APIs to validate tokens without contacting the Identity Provider on 
 
 ---
 
-## Why the browser cannot safely modify a JWT
+## Why the Browser Cannot Safely Modify a JWT
 
 The browser/user can technically edit the token text.
 
@@ -219,253 +219,81 @@ APIs commonly validate:
 - required scopes or roles
 - tenant rules if multi-tenant
 
-If authentication validation fails, return `401 Unauthorized`.
-
-If authentication succeeds but authorization fails, return `403 Forbidden`.
-
 ---
 
-## ID Token vs Access Token
+## Access Token vs ID Token
 
-### ID Token
+| Token | Audience | Purpose |
+|-------|----------|---------|
+| Access Token | API | Authorize API calls |
+| ID Token | Client application | Tell the client who logged in |
 
-Purpose:
-
-> Tell the client application who the user is.
-
-Consumer:
-
-> Client application.
-
-Used for:
-
-- login
-- user identity
-- profile information
-- local session creation
-
-### Access Token
-
-Purpose:
-
-> Allow an API to authorize a request.
-
-Consumer:
-
-> API.
-
-Used for:
-
-- API access
-- scopes
-- roles
-- audience validation
-
-Important rule:
-
-> APIs should validate Access Tokens, not ID Tokens.
-
-An ID Token may contain user identity, but its audience is typically the client application, not the API.
-
----
-
-## Roles vs Scopes
-
-### Roles
-
-Roles answer:
-
-> Who are you in this application?
-
-Examples:
-
-- Admin
-- Reviewer
-- Approver
-
-Roles are commonly used for RBAC.
-
-### Scopes
-
-Scopes answer:
-
-> What can this token do?
-
-Examples:
-
-- `invoice.read`
-- `invoice.write`
-- `invoice.approve`
-
-Scopes are common in delegated OAuth flows.
-
----
-
-## RBAC vs ABAC
-
-### RBAC
-
-Role-Based Access Control.
-
-Example:
-
-```text
-Role == Admin
-↓
-Allow
-```
-
-Good for simple permissions.
-
-### ABAC
-
-Attribute-Based Access Control.
-
-Evaluates attributes from:
-
-- user
-- resource
-- action
-- environment
-
-Example:
-
-```text
-User.Tenant == Invoice.Tenant
-AND Invoice.Status == Pending
-AND User.Role == Reviewer
-```
-
-Invoice Manager is a strong ABAC-style system because authorization depends on tenant, invoice state, user attributes and business rules.
+APIs should not use ID Tokens for authorization.
 
 ---
 
 ## Refresh Tokens
 
-Access Tokens are usually short-lived.
+Refresh Tokens allow the application to obtain a new Access Token without asking the user to log in again.
 
-Why not issue long-lived Access Tokens?
+They exist because Access Tokens should be short-lived.
 
-Because if stolen, attackers can call APIs until expiry.
-
-Refresh Tokens exist so users do not need to log in again every time an Access Token expires.
-
-Flow:
-
-```text
-Access Token expires
-↓
-Client sends Refresh Token to IdP
-↓
-IdP issues new Access Token
-```
-
-Refresh Tokens are sent to the Identity Provider, not to APIs.
+Refresh Tokens are sensitive and should be protected carefully.
 
 ---
 
 ## Refresh Token Rotation
 
-Without rotation:
+Refresh Token Rotation reduces the risk of long-lived refresh tokens.
 
 ```text
-Same Refresh Token works repeatedly
+RT1 used
+↓
+RT2 issued
+↓
+RT1 invalidated
 ```
 
-If stolen, attacker can keep getting new Access Tokens.
-
-With rotation:
-
-```text
-R1 used
-↓
-IdP issues R2
-↓
-R1 invalidated
-```
-
-If R1 is reused, the IdP can detect possible compromise and revoke the token chain.
+If RT1 is reused later, it may indicate theft.
 
 ---
 
-## JWT Revocation
+## Revocation
 
 Pure JWT validation is stateless.
 
-That is both its strength and weakness.
-
-If a user logs out, an unexpired Access Token may still validate successfully because the API does not call the IdP on every request.
+This makes immediate revocation difficult.
 
 Options:
 
-### Short-lived Access Tokens
+- short-lived Access Tokens
+- Refresh Token revocation
+- revocation list keyed by `jti`
+- token introspection
+- reference tokens
 
-Most common.
+Trade-off:
 
-Limits exposure window.
-
-### Revocation List / Blacklist
-
-Store revoked token IDs, often by `jti`, in Redis or a database.
-
-Every request checks whether the token was revoked.
-
-This supports immediate logout but reintroduces a distributed lookup.
-
-### Token Introspection
-
-API asks the IdP whether the token is still active.
-
-Stronger revocation semantics, but adds latency and dependency.
-
-### Reference Tokens
-
-Token is an opaque reference.
-
-API looks up token details from the authorization server.
-
-More session-like.
+A revocation list reintroduces a distributed lookup, which JWT was partly designed to avoid.
 
 ---
 
-## JWT Trade-offs
+## When Not to Use Pure JWT
 
-JWT is good when:
+Pure stateless JWT may not be ideal when immediate revocation is mandatory.
 
-- APIs need scalable token validation
-- microservices need local validation
-- short revocation delay is acceptable
-- distributed session storage is undesirable
+Examples:
 
-JWT may not be ideal when:
+- banking
+- trading
+- healthcare
+- government systems
+- highly sensitive admin systems
 
-- immediate logout is mandatory
-- user disablement must take effect instantly
-- banking / trading / highly regulated systems require real-time revocation
-- token size becomes large
-- claims change frequently
+In those systems, server-side sessions, reference tokens or introspection may be preferable.
 
 ---
 
-## Staff Interview Answer
+## Staff-Level Summary
 
-Question:
-
-> Is JWT better than sessions?
-
-Strong answer:
-
-> JWT and server-side sessions optimize for different trade-offs. JWT improves scalability by allowing APIs to validate tokens locally without a shared session store, but immediate revocation becomes harder. Server-side sessions make revocation straightforward but require centralized session storage for distributed deployments. The right choice depends on the application's security, scalability and operational requirements.
-
----
-
-## Common Mistakes
-
-- Treating ID Tokens as API Access Tokens.
-- Saying JWT is always stateless and therefore always better.
-- Ignoring revocation.
-- Putting sensitive data in JWT payload.
-- Not validating audience.
-- Not validating issuer.
-- Confusing roles and scopes.
-- Assuming signature validation alone is sufficient.
+> JWT and server-side sessions optimize for different trade-offs. JWT improves scalability by enabling local token validation, but immediate revocation becomes harder. Sessions make revocation easier but require shared state in distributed deployments.

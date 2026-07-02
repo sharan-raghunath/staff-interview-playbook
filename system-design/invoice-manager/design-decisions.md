@@ -1,19 +1,19 @@
 # Invoice Manager Design Decisions
 
-## Edge API as Public Boundary
+## Edge API / Web App as Public Boundary
 
 ### Decision
 
-Only the Edge API is public-facing.
+Only Edge API / Web App is public-facing.
 
 ### Why
 
-The Edge API protects the internal platform from external consumers.
+This service boundary protects the internal platform from external consumers.
 
 It owns:
 
-- authentication
-- authorization
+- user authentication entry point
+- public application/API boundary
 - request validation
 - source-system integration
 - tenant-aware request translation
@@ -38,6 +38,24 @@ This keeps the public API boundary stable while allowing tenant-specific behavio
 
 ---
 
+## Invoice Manager Is Not System of Record
+
+### Decision
+
+Invoice Manager does not own invoice business data as a system of record.
+
+### Why
+
+Invoice Manager predicts fields, allows user override, and submits results to a source system.
+
+The source system owns invoice business data and lifecycle.
+
+### Consequence
+
+Invoice Manager should own processing lifecycle state, not long-term invoice business state.
+
+---
+
 ## API Service vs Orchestrator
 
 ### Original Decision
@@ -58,12 +76,12 @@ The historical technology boundary is weaker now.
 
 ### Future Direction
 
-Evaluate consolidation if the API Service and Orchestrator no longer have distinct responsibilities.
+Evaluate consolidation if API Service and Orchestrator no longer have distinct responsibilities.
 
 Potential future architecture:
 
 ```text
-Edge API
+Edge API / Web App
 ↓
 Invoice Processing Service
 ↓
@@ -82,7 +100,7 @@ Benefits:
 Caution:
 
 - do not merge if responsibilities remain logically distinct
-- preserve the Edge API as the public boundary
+- preserve Edge API / Web App as the public boundary
 
 ---
 
@@ -164,4 +182,4 @@ Production has a DR environment in another Azure region.
 
 Supports regional failover and recovery.
 
-Detailed DR behaviour is pending documentation.
+Detailed DR behaviour for async queues and in-flight jobs is pending future design.

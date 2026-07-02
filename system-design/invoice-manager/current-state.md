@@ -7,7 +7,7 @@ User uploads document
 ↓
 Malware scan
 ↓
-Edge API
+Edge API / Web App
 ↓
 API Service
 ↓
@@ -17,14 +17,18 @@ Text Extractor
 ↓
 Data Extractor
 ↓
-Response returned to user
+Predictions returned to user
+↓
+User reviews/overrides predictions
+↓
+Submit final result to source system
 ```
 
 ---
 
 ## Current Behaviour
 
-The current architecture is largely synchronous.
+The current architecture is largely synchronous during prediction.
 
 The user waits while:
 
@@ -52,16 +56,15 @@ Data Extractor can become the bottleneck because:
 
 ## Timeout Issue
 
-If processing takes longer than the configured timeout, the user receives an error.
+If processing takes longer than a gateway/browser/request timeout, the user receives an error even if downstream processing later completes.
 
-Previously discussed example:
+Possible outcomes:
 
-- Akamai timeout around 4 minutes
-- Internal service-to-service timeout around 10 minutes
+- 499 Client Closed Request if the client disconnects
+- 504 Gateway Timeout if a gateway times out
+- 500-style application error depending on where failure is handled
 
-TODO:
-
-- Confirm exact timeout values for each layer.
+The expensive processing result may be wasted because no caller remains to receive it.
 
 ---
 

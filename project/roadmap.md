@@ -6,6 +6,7 @@
 - [x] Trade-off based reasoning
 - [x] First-principles learning
 - [x] Production-system anchoring
+- [x] Security-boundary based reasoning
 - [ ] STAR story extraction
 - [ ] Staff-level communication drills
 
@@ -19,8 +20,10 @@
 - [x] Cookies
 - [x] Distributed Sessions
 - [x] JWT
-- [ ] OAuth 2.0
-- [ ] OIDC
+- [x] OAuth 2.0
+- [x] OIDC
+- [x] Token Lifecycle
+- [x] Logout / SSO / SLO
 - [ ] SAML
 - [ ] CORS
 - [ ] CSRF
@@ -32,6 +35,7 @@
 - [ ] REST vs gRPC
 - [ ] Reverse Proxies
 - [ ] Load Balancers
+- [ ] L4 vs L7
 - [ ] ASP.NET Middleware
 - [ ] Dependency Injection
 - [ ] Garbage Collection
@@ -47,7 +51,8 @@
 - [x] Frequency Counting
 - [x] Prefix / Suffix
 - [x] Two Pointers
-- [ ] Sliding Window
+- [x] Fixed-size Sliding Window
+- [ ] Variable-size Sliding Window
 - [ ] Stack
 - [ ] Queue
 - [ ] Binary Search
@@ -63,15 +68,20 @@
 
 ## Phase 3 — Distributed Systems
 
+- [x] Idempotency introduction
+- [x] Retry strategy introduction
+- [x] Dead Letter Queue introduction
 - [ ] CAP theorem
 - [ ] Consistency models
 - [ ] Eventual consistency
-- [ ] Idempotency
-- [ ] Retry strategies
-- [ ] Dead Letter Queues
+- [ ] At-least-once vs exactly-once processing
+- [ ] Idempotent consumers
+- [ ] Backoff and jitter
 - [ ] Kafka
+- [ ] Azure Service Bus
 - [ ] Message queues
 - [ ] Saga pattern
+- [ ] Outbox pattern
 - [ ] CQRS
 - [ ] Event sourcing
 - [ ] Distributed locking
@@ -106,6 +116,10 @@
 
 - [x] URL Shortener introduction
 - [x] Invoice Manager architecture baseline
+- [x] Invoice Manager authentication architecture
+- [x] Invoice Manager async motivation
+- [x] Async API contract
+- [x] Idempotency / retry / DLQ introduction
 - [ ] Invoice Manager async redesign
 - [ ] E-commerce
 - [ ] Chat system
