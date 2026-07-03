@@ -16,6 +16,7 @@ For a new chat or a fresh working session, start with:
 - [`project/context.md`](project/context.md)
 - [`project/roadmap.md`](project/roadmap.md)
 - [`project/pending.md`](project/pending.md)
+- [`STAFF_INTERVIEW_SCORECARD.md`](STAFF_INTERVIEW_SCORECARD.md)
 
 These files are the canonical context for the Interview Prep project.
 
@@ -31,6 +32,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Product of Array Except Self — Prefix / Suffix Computation
 - ✅ Valid Palindrome — Two Pointers
 - ✅ Maximum Average Subarray I — Fixed-size Sliding Window
+- ✅ Find Pivot Index — Prefix Sum / Running Sum
 
 ### Backend / Security
 
@@ -66,6 +68,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Correlation ID vs Idempotency Key
 - ✅ Retry strategy
 - ✅ Dead Letter Queue concept
+- ✅ Async redesign Part 1: queue placement, SQL job state, OCR artifact persistence
 - 🟡 End-to-end async redesign
 - ⬜ Queue technology choice
 - ⬜ Multi-region async DR design

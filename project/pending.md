@@ -30,6 +30,7 @@ This file tracks what is intentionally pending. Completed topics should not rema
 
 ### System Design
 
+- Queue fundamentals from first principles
 - Full Invoice Manager async redesign
 - Queue technology choice: Azure Service Bus vs Kafka
 - Queue vs Topic topology

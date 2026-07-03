@@ -52,6 +52,7 @@
 - [x] Prefix / Suffix
 - [x] Two Pointers
 - [x] Fixed-size Sliding Window
+- [x] Prefix Sum / Running Sum
 - [ ] Variable-size Sliding Window
 - [ ] Stack
 - [ ] Queue
@@ -78,6 +79,7 @@
 - [ ] Idempotent consumers
 - [ ] Backoff and jitter
 - [ ] Kafka
+- [ ] Queue fundamentals
 - [ ] Azure Service Bus
 - [ ] Message queues
 - [ ] Saga pattern
@@ -120,6 +122,7 @@
 - [x] Invoice Manager async motivation
 - [x] Async API contract
 - [x] Idempotency / retry / DLQ introduction
+- [x] Invoice Manager async redesign Part 1
 - [ ] Invoice Manager async redesign
 - [ ] E-commerce
 - [ ] Chat system

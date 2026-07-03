@@ -52,6 +52,7 @@ Coaching style:
 | Day 4 | Product of Array Except Self | Prefix / Suffix | ✅ Complete |
 | Day 5 | Valid Palindrome | Two Pointers | ✅ Complete |
 | Day 6 | Maximum Average Subarray I | Fixed-size Sliding Window | ✅ Complete |
+| Day 7 | Find Pivot Index | Prefix Sum / Running Sum | ✅ Complete |
 
 ### Completed Backend Topics
 
@@ -135,6 +136,18 @@ Important clarifications:
 
 ---
 
+
+## Day 7 Additions
+
+- Reviewed service diagram relationships without reproducing proprietary visuals.
+- Canonical runtime path includes Client Web / Akamai / Azure Application Gateway / Traefik / AKS.
+- Identity path includes Client IdP federation into FIS IdP and Microsoft Entra.
+- Text Extractor abstracts Azure Computer Vision and Azure Document Intelligence.
+- Redis is documented as distributed cache, not source of truth.
+- SQL is the future source of truth for processing state.
+- OCR output should be persisted as a processing artifact in the future async design.
+- Queue fundamentals are the next required building block before Azure Service Bus details.
+
 ## Where to Continue Next
 
 Next major topic: **Invoice Manager async redesign**.
@@ -159,15 +172,12 @@ DLQ
 Queue topology and technology selection
 ```
 
-Day 7 should likely cover:
+Next session should cover:
 
-- Azure Service Bus vs Kafka
-- queue vs topic
-- job state table
-- idempotent consumers
-- retry/backoff/jitter
-- DLQ operations
-- progress tracking
-- polling vs SignalR/WebSockets/SSE
-- KEDA scaling integration
-- DR for queued/in-flight work
+- Queue fundamentals from first principles
+- Producer / consumer / message ownership
+- ACK / NACK
+- Message lock / visibility timeout
+- Retry and DLQ mechanics
+- Then map those concepts to Azure Service Bus
+- Finalize Invoice Manager queue placement and topology

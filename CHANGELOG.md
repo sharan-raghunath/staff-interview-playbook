@@ -162,3 +162,48 @@
 - Added START_HERE context file
 - Added authentication, OAuth, OIDC, coding and system-design documentation
 - Added ADRs and architecture principles
+
+
+## Day 7
+
+### Rapid-Fire Interview
+- Browser to Invoice Manager request lifecycle
+- Current vs future failure handling
+- Zero Trust and compromised-service blast radius
+- Data ownership for Invoice Manager
+- Edge API compromise and limitations of Zero Trust
+
+### Architecture / Documentation
+- Reviewed proprietary architecture diagram without reproducing it
+- Captured architecture relationships in neutral documentation
+- Added Client Web / Akamai / App Gateway / Traefik / AKS runtime path
+- Added identity federation path: Client IdP → Federation → FIS IdP → Microsoft Entra
+- Added Azure Redis Cache as distributed cache
+- Added Azure Computer Vision and Azure Document Intelligence behind Text Extraction abstraction
+- Added platform vs application-owned service boundaries
+
+### System Design
+- Async Invoice Manager redesign Part 1
+- Queue placement discussion based on responsibilities
+- SQL vs Redis for job state
+- SQL selected as source of truth for processing state
+- Redis positioned as cache only
+- Future workflow states: accepted, queued, OCR in progress, OCR complete, inference in progress, prediction complete
+- OCR output persistence as a future processing artifact
+- Decided to study queue fundamentals before Azure Service Bus details
+
+### Coding
+- Find Pivot Index
+- Prefix Sum / Running Sum pattern
+- Derived O(n²) brute force
+- Optimized to O(n) using total sum and running left sum
+- Final C# solution accepted conceptually
+
+### Repository
+- Added Day 7 journal
+- Added Find Pivot Index coding note
+- Added async redesign Part 1 document
+- Added queue fundamentals placeholder
+- Added ADR-006 for SQL as processing-state source of truth
+- Added ADR-007 for OCR artifact persistence
+- Added Staff Interview Scorecard

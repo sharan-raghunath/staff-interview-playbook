@@ -12,6 +12,7 @@ This file tracks patterns, not just problems.
 | Prefix / Suffix | Product of Array Except Self | Day 4 | ✅ |
 | Two Pointers | Valid Palindrome | Day 5 | ✅ |
 | Fixed-size Sliding Window | Maximum Average Subarray I | Day 6 | ✅ |
+| Prefix Sum / Running Sum | Find Pivot Index | Day 7 | ✅ |
 
 ---
 
@@ -155,3 +156,43 @@ Complexity:
 
 - Time: O(n)
 - Space: O(1)
+
+
+---
+
+## Prefix Sum / Running Sum
+
+Representative problem: Find Pivot Index.
+
+Recognition clues:
+
+- Need to compare sums or counts on the left and right of an index.
+- Repeated range-sum calculation appears in brute force.
+- Problem asks about balance, equilibrium, pivot, cumulative sum or range sum.
+
+Core idea:
+
+> Maintain cumulative state so that each index can be evaluated without recomputing previous ranges.
+
+For Pivot Index:
+
+```text
+rightSum = totalSum - leftSum - nums[i]
+```
+
+Then after checking index `i`:
+
+```text
+leftSum += nums[i]
+```
+
+Complexity:
+
+- Time: O(n)
+- Space: O(1)
+
+Common mistakes:
+
+- Updating the left sum before evaluating the current index.
+- Including the pivot element in either side.
+- Forgetting that empty sides sum to 0.

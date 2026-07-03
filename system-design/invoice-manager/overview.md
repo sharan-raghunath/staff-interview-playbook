@@ -54,3 +54,28 @@ Completed
 ```
 
 This is workflow state, not invoice business ownership.
+
+
+## Day 7 Architecture Notes
+
+The following architecture relationships were captured from a proprietary diagram without reproducing the image:
+
+```text
+Client Web / Asset Finance Web
+  ↓
+Akamai
+  ↓
+Azure Application Gateway
+  ↓
+Traefik Ingress
+  ↓
+AKS-hosted Invoice Manager services
+```
+
+Application-owned services include IM Web / Edge API, IM REST API, Orchestrator, Billing, Text Extraction and Data Extraction.
+
+Platform dependencies include Azure SQL, Azure Redis Cache, Azure Key Vault, Azure App Configuration, Application Insights, Log Analytics, Azure Computer Vision and Azure Document Intelligence.
+
+Text Extraction abstracts OCR provider choice and can call Azure Computer Vision or Azure Document Intelligence.
+
+Redis is used as distributed cache, but SQL should be source of truth for future recovery-critical processing state.

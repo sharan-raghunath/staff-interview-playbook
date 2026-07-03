@@ -24,6 +24,7 @@ This is a living assessment based on completed sessions.
 | Prefix / Suffix | 7.5/10 | Solved Product Except Self with guidance and optimization |
 | Two Pointers | 8.5/10 | Solved Valid Palindrome optimally |
 | Fixed Sliding Window | 8/10 | Solved Maximum Average Subarray I; fixed indexing bug |
+| Prefix Sum / Running Sum | 8/10 | Solved Find Pivot Index with O(n) / O(1) solution |
 | Trees / Graphs | Not started | User expects rustiness due to long gap |
 | Dynamic Programming | Not started | Future topic |
 
@@ -36,7 +37,7 @@ This is a living assessment based on completed sessions.
 | Async Motivation | 8.5/10 | Can explain why long-running HTTP is a smell |
 | Idempotency | 7.5/10 | Understands idempotency key and retry behavior |
 | Retry / DLQ | 7/10 | Concept introduced; deeper design pending |
-| Full Async Redesign | Pending | Day 7 focus |
+| Full Async Redesign | 6.5/10 | Part 1 covered: queue placement, SQL job state, OCR persistence; queue mechanics pending |
 
 ## Communication
 

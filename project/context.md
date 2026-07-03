@@ -58,6 +58,7 @@ Avoid giving algorithmic hints too early. The user prefers discovering the solut
 | Day 4 | Product of Array Except Self | Prefix / Suffix | Reuse output array for O(1) extra space |
 | Day 5 | Valid Palindrome | Two Pointers | O(n) time, O(1) space, skip non-alphanumeric |
 | Day 6 | Maximum Average Subarray I | Fixed-size Sliding Window | Maintain window sum and max sum |
+| Day 7 | Find Pivot Index | Prefix Sum / Running Sum | Compare left and right sums using total sum |
 
 ## Backend Progress
 
@@ -224,3 +225,16 @@ At end of each day:
 6. User pushes to GitHub.
 
 The repository is the canonical knowledge base.
+
+
+## Day 7 Architecture Clarifications
+
+- The runtime entry path includes Client Web / Asset Finance Web → Akamai → Azure Application Gateway → Traefik → AKS.
+- The identity path includes Client IdP → Federation → FIS Identity Provider → Microsoft Entra → Invoice Manager.
+- IM Web / Edge API, IM REST API, Orchestrator, Billing, Text Extraction and Data Extraction are application-owned services.
+- Azure SQL, Redis, Key Vault, App Configuration, Application Insights, Log Analytics, Azure CV and Azure DI are platform dependencies.
+- Text Extraction can call Azure Computer Vision or Azure Document Intelligence.
+- Redis is a distributed cache and should not be used as source of truth for processing state.
+- SQL should own future job state and recovery-critical workflow metadata.
+- OCR output should be persisted as a temporary processing artifact in the future async design.
+- Queue fundamentals should be derived before Azure Service Bus implementation details.
