@@ -5,7 +5,7 @@ This file tracks patterns, not just problems.
 ## Completed Patterns
 
 | Pattern | Representative Problem | Day | Status |
-|---------|------------------------|-----|--------|
+|---|---|---:|---|
 | Hash Lookup | Two Sum | Day 1 | ✅ |
 | Running Minimum | Best Time to Buy and Sell Stock | Day 2 | ✅ |
 | Frequency Counting | Valid Anagram | Day 3 | ✅ |
@@ -13,8 +13,7 @@ This file tracks patterns, not just problems.
 | Two Pointers | Valid Palindrome | Day 5 | ✅ |
 | Fixed-size Sliding Window | Maximum Average Subarray I | Day 6 | ✅ |
 | Prefix Sum / Running Sum | Find Pivot Index | Day 7 | ✅ |
-
----
+| Fast & Slow Pointers | Linked List Cycle | Day 8 | ✅ |
 
 ## Core Interview Process
 
@@ -29,17 +28,9 @@ For every coding problem:
 7. Analyze optimized complexity.
 8. Discuss edge cases and trade-offs.
 
----
-
 ## Hash Lookup
 
 Representative problem: Two Sum.
-
-Recognition clues:
-
-- Need to find a complement.
-- Brute force repeatedly searches previous/future values.
-- Previously seen values matter.
 
 Core idea:
 
@@ -47,41 +38,29 @@ Core idea:
 
 Complexity:
 
-- Time: O(n)
-- Space: O(n)
-
----
+```text
+Time: O(n)
+Space: O(n)
+```
 
 ## Running Minimum
 
 Representative problem: Best Time to Buy and Sell Stock.
 
-Recognition clues:
-
-- Need best value seen so far.
-- Ordering matters.
-- Brute force compares all pairs.
-
 Core idea:
 
-> Track the minimum price seen so far and compute best profit at each position.
+> Track the minimum price seen so far and compute the best profit at each position.
 
 Complexity:
 
-- Time: O(n)
-- Space: O(1)
-
----
+```text
+Time: O(n)
+Space: O(1)
+```
 
 ## Frequency Counting
 
 Representative problem: Valid Anagram.
-
-Recognition clues:
-
-- Count occurrences.
-- Compare frequencies.
-- Words like anagram, duplicate, occurrence, frequency.
 
 Core idea:
 
@@ -89,90 +68,63 @@ Core idea:
 
 Complexity:
 
-- Time: O(n)
-- Space: O(1) for fixed alphabet, O(k) otherwise
-
----
+```text
+Time: O(n)
+Space: O(1) for a fixed alphabet; O(k) otherwise
+```
 
 ## Prefix / Suffix Computation
 
 Representative problem: Product of Array Except Self.
 
-Recognition clues:
-
-- Answer at index depends on everything before and after it.
-- Repeated range computation.
-- Division may be disallowed.
-
 Core idea:
 
-> Precompute cumulative information from the left and right, and combine them.
+> Precompute cumulative information from the left and right, then combine it.
 
 Complexity:
 
-- Time: O(n)
-- Space: O(1) extra if output array is reused
-
----
+```text
+Time: O(n)
+Space: O(1) extra when the output array is reused
+```
 
 ## Two Pointers
 
 Representative problem: Valid Palindrome.
 
-Recognition clues:
-
-- Work can be done from both ends.
-- Need to compare pairs.
-- Need to avoid extra memory.
-- Sorted array problems.
-
 Core idea:
 
-> Maintain two pointers and move them based on problem-specific rules.
+> Maintain two pointers and move them according to problem-specific rules.
 
 Complexity:
 
-- Time: O(n)
-- Space: O(1)
-
----
+```text
+Time: O(n)
+Space: O(1)
+```
 
 ## Fixed-Size Sliding Window
 
 Representative problem: Maximum Average Subarray I.
 
-Recognition clues:
-
-- Contiguous subarray or substring.
-- Fixed size `k`.
-- Adjacent windows overlap heavily.
-- Brute force recalculates almost the same range.
-
 Core idea:
 
-> Maintain the state of the current window. When the window moves, remove the outgoing element and add the incoming element.
+> Maintain current-window state. Remove the outgoing element and add the incoming element when the window moves.
 
 Complexity:
 
-- Time: O(n)
-- Space: O(1)
-
-
----
+```text
+Time: O(n)
+Space: O(1)
+```
 
 ## Prefix Sum / Running Sum
 
 Representative problem: Find Pivot Index.
 
-Recognition clues:
-
-- Need to compare sums or counts on the left and right of an index.
-- Repeated range-sum calculation appears in brute force.
-- Problem asks about balance, equilibrium, pivot, cumulative sum or range sum.
-
 Core idea:
 
-> Maintain cumulative state so that each index can be evaluated without recomputing previous ranges.
+> Maintain cumulative state so each index can be evaluated without recalculating previous ranges.
 
 For Pivot Index:
 
@@ -180,7 +132,7 @@ For Pivot Index:
 rightSum = totalSum - leftSum - nums[i]
 ```
 
-Then after checking index `i`:
+Then update:
 
 ```text
 leftSum += nums[i]
@@ -188,11 +140,29 @@ leftSum += nums[i]
 
 Complexity:
 
-- Time: O(n)
-- Space: O(1)
+```text
+Time: O(n)
+Space: O(1)
+```
 
-Common mistakes:
+## Fast & Slow Pointers
 
-- Updating the left sum before evaluating the current index.
-- Including the pivot element in either side.
-- Forgetting that empty sides sum to 0.
+Representative problem: Linked List Cycle.
+
+Recognition clues:
+
+- linked list or sequence traversal;
+- cycle detection;
+- need to avoid storing every visited node;
+- one traversal can move at a different rate than another.
+
+Core idea:
+
+> In a finite cycle, two pointers moving at different speeds eventually meet. Without a cycle, the fast pointer reaches the end.
+
+Complexity:
+
+```text
+Time: O(n)
+Space: O(1)
+```

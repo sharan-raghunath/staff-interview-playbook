@@ -4,13 +4,11 @@
 
 Personal knowledge base for Senior / Staff Backend Engineer interview preparation.
 
-The goal is not to memorize interview answers. The goal is to understand **why** technologies exist, what problems they solve, what trade-offs they introduce, and how to explain them clearly in interviews.
-
----
+The goal is not to memorize interview answers. The goal is to understand why technologies exist, what problems they solve, what trade-offs they introduce, and how to explain them clearly in interviews.
 
 ## Start Here
 
-For a new chat or a fresh working session, start with:
+For a new chat or a fresh working session, read:
 
 - [`START_HERE.md`](START_HERE.md)
 - [`project/context.md`](project/context.md)
@@ -19,8 +17,6 @@ For a new chat or a fresh working session, start with:
 - [`STAFF_INTERVIEW_SCORECARD.md`](STAFF_INTERVIEW_SCORECARD.md)
 
 These files are the canonical context for the Interview Prep project.
-
----
 
 ## Progress
 
@@ -33,6 +29,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Valid Palindrome — Two Pointers
 - ✅ Maximum Average Subarray I — Fixed-size Sliding Window
 - ✅ Find Pivot Index — Prefix Sum / Running Sum
+- ✅ Linked List Cycle — Fast & Slow Pointers
 
 ### Backend / Security
 
@@ -60,20 +57,18 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Invoice Manager current architecture
 - ✅ Invoice Manager responsibilities
 - ✅ Invoice Manager authentication and identity architecture
-- ✅ Text Extractor vs Data Extractor
-- ✅ API Service vs Orchestrator historical split
-- ✅ Sync vs Async motivation
+- ✅ Sync vs async motivation
 - ✅ Async API contract: `202 Accepted`, `jobId`, `statusUrl`
 - ✅ Idempotency model
 - ✅ Correlation ID vs Idempotency Key
-- ✅ Retry strategy
-- ✅ Dead Letter Queue concept
-- ✅ Async redesign Part 1: queue placement, SQL job state, OCR artifact persistence
-- 🟡 End-to-end async redesign
-- ⬜ Queue technology choice
+- ✅ SQL as target-state processing-state authority
+- ✅ OCR artifact persistence rationale
+- ✅ Queue lifecycle from first principles
+- ✅ Visibility timeout and ownership renewal concepts
+- ✅ Failure classification, DLQ policy and controlled replay
+- 🟡 Azure Service Bus mapping and queue topology
+- ⬜ Transactional messaging
 - ⬜ Multi-region async DR design
-
----
 
 ## Repository Structure
 
@@ -82,15 +77,12 @@ backend/                  Backend fundamentals and security topics
 coding/                   Coding patterns and solved problems
 system-design/            System design and architecture
 system-design/invoice-manager/
-                          Invoice Manager architecture documentation
+                          Invoice Manager architecture and target-state notes
 architecture/             General architecture principles
 adr/                      Architecture Decision Records
-interview/                Vocabulary and mistakes
 daily-journal/            Daily learning logs
 project/                  Roadmap, context, pending items and skills matrix
 ```
-
----
 
 ## Learning Philosophy
 
@@ -102,10 +94,8 @@ Each topic should answer:
 4. How is it used in production?
 5. How should it be explained in a Staff Engineer interview?
 
----
-
 ## Current Status
 
-The Authentication and Authorization module is now complete for Senior / Staff interview purposes.
+Authentication and authorization are complete for Senior / Staff interview purposes.
 
-The next major architecture focus is evolving Invoice Manager from a synchronous processing model into an asynchronous, resilient, observable workflow.
+The current architecture focus is the Invoice Manager transition from synchronous fail-fast processing toward an asynchronous, durable workflow. Queue concepts are now understood at the abstraction level; vendor mapping is the next step.

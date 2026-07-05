@@ -10,7 +10,7 @@ Start with:
 
 Do not start with:
 
-> Should we use Kafka?
+> Which technology should we use?
 
 Technology choices should follow responsibility boundaries and business requirements.
 

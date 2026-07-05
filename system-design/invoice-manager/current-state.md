@@ -95,10 +95,9 @@ Orchestrator crashes before Data Extractor starts
 OCR result may be lost from workflow perspective
 ```
 
-Future design should consider:
+Target-state direction already discussed:
 
-- persisted workflow state
-- idempotency keys
-- stage-level checkpoints
-- retryable commands
-- async processing
+- durable job/workflow state;
+- idempotency keys;
+- asynchronous processing;
+- recovery from a persisted completed stage rather than assuming the original HTTP request remains alive.

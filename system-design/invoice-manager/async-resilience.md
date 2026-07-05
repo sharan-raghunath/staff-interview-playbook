@@ -1,37 +1,32 @@
 # Invoice Manager Async and Resilience Design Notes
 
-This file captures the Day 6 system design work. The final end-to-end async redesign will be completed in a future session.
+## Scope
+
+This file records the target-state concepts that have been derived so far. It does not describe features already present in production.
 
 ## Core Problem
 
-Long-running invoice processing is coupled to the lifetime of an HTTP request.
+Current Invoice Manager processing is synchronous and fail-fast. Long-running OCR and prediction are tied to the HTTP request that initiated them.
 
-This creates problems:
+Consequences:
 
-- user waits on a loading screen
-- browser/gateway timeouts
-- wasted downstream processing after client disconnects
-- duplicate uploads after refresh/retry
-- difficult crash recovery
-- expensive TE/DE work repeated unnecessarily
+- poor user experience while waiting;
+- gateway/browser timeout risk;
+- client disconnect may leave costly work with no response recipient;
+- users may retry and duplicate work;
+- no durable recovery path for partially completed processing.
 
 Staff-level summary:
 
-> The business operation can outlive the HTTP request. Therefore, the business operation should be decoupled from the HTTP request lifecycle.
-
----
+> A business operation can outlive its HTTP request, so the business operation should be decoupled from that request lifecycle.
 
 ## Async API Contract
 
-Instead of waiting for the final prediction response, the API should return quickly.
-
-Example:
+Target contract:
 
 ```http
 HTTP/1.1 202 Accepted
 ```
-
-Response body:
 
 ```json
 {
@@ -40,200 +35,90 @@ Response body:
 }
 ```
 
-The client can use the `jobId` or `statusUrl` to track progress.
-
----
-
-## Polling
-
-Polling is a simple first option.
-
-Advantages:
-
-- simple to implement
-- works through browsers/proxies
-- easy to debug
-- no persistent connection required
-
-Disadvantages:
-
-- many requests return no new information
-- extra token validation
-- extra API/database/cache load
-- potential rate-limit pressure at scale
-
-Example:
-
-```text
-5,000 concurrent jobs × 30 polls = 150,000 status requests
-```
-
-Future comparison needed:
-
-- polling
-- long polling
-- Server-Sent Events
-- WebSockets
-- SignalR
-
----
+The browser uses the job reference to query processing status. Polling is the simplest initial option; push-notification approaches remain a later design decision.
 
 ## Idempotency
 
-If the client retries the same logical upload, the backend should not process it twice.
+The client sends one idempotency key per logical upload.
 
-The client should send an Idempotency Key per logical upload.
+- Retry while the job is active → return the same `202`, `jobId` and status URL.
+- Retry after completion → return the same logical outcome/result location.
+- Same key with a different payload → reject as invalid reuse.
 
-Example:
+Correlation ID remains observability metadata and must not be reused as the idempotency key.
 
-```http
-POST /predict
-Idempotency-Key: abc-123
-```
-
-If the original request is still processing:
+## Target State Responsibilities
 
 ```text
-Return 202 Accepted with the same jobId/statusUrl.
+IM Web / Edge API
+  → accepts user request and exposes status
+
+IM REST API
+  → validates request, creates job, produces initial work
+
+Queue
+  → durably hands work to a consumer
+
+Orchestrator
+  → consumes work, owns workflow-level queue interaction,
+    updates workflow state and invokes TE/DE
+
+Text Extractor
+  → OCR and Azure AI abstraction
+
+Data Extractor
+  → field prediction
 ```
 
-If the original request completed:
+## Processing State and Artifacts
+
+SQL is the authoritative store for future processing state. It should retain job lifecycle data and safe user-facing failure state.
+
+Blob storage should hold temporary OCR artifacts. SQL stores the artifact reference and workflow metadata.
+
+Target workflow states may include:
 
 ```text
-Return the completed result or result location.
+Accepted
+Queued
+OCRInProgress
+OCRComplete
+FieldInferenceInProgress
+PredictionComplete
+ReadyForUserReview
+Submitted
+Completed
+Failed
 ```
 
-If the same Idempotency Key is reused with a different payload:
+Do not mark a stage complete until its downstream work and the artifact required to advance/recover have both completed successfully.
 
-```text
-Reject with 400/409.
-```
+## Failure Propagation
 
-Possible stored metadata:
+Store two distinct views of failures:
 
-```text
-IdempotencyKey
-User/Tenant
-PayloadHash or UploadId
-JobId
-Status
-ResultLocation
-CreatedAt
-ExpiresAt
-```
+1. **Operational detail** for support/recovery: stage, attempts, category, technical error, correlation ID and timestamps.
+2. **User-facing job status**: safe message, current stage and whether retry is meaningful.
 
----
+Examples:
 
-## Correlation ID vs Idempotency Key
+| Failure type | Retry | DLQ | User-facing result |
+|---|---:|---:|---|
+| Unsupported file | No | No | Upload a supported document. |
+| Corrupted/unreadable document | No | No | The document could not be processed. |
+| Temporary dependency failure | Yes | After retry limit | Processing is delayed or failed safely. |
+| Azure AI 401/403 | No normal retry | Yes | Processing failed safely. |
 
-Correlation ID is for observability.
+## Current Open Boundary
 
-Idempotency Key is for business correctness.
+The incremental design retains synchronous Orchestrator-to-TE/DE HTTP calls. Orchestrator is the queue consumer, so it owns temporary message ownership and its renewal while TE is processing.
 
-One logical upload may have:
+Making TE or DE independent queue consumers is a larger architecture decision and remains open.
 
-```text
-IdempotencyKey = same across retries
-CorrelationId = different per execution trace
-RequestId = different per HTTP attempt
-JobId = same processing job
-```
+## Explicitly Deferred
 
-Do not use Correlation ID as Idempotency Key.
-
----
-
-## Retry Strategy
-
-Retries should be used for transient failures.
-
-Good retry candidates:
-
-- 408 Request Timeout
-- 429 Too Many Requests, respecting `Retry-After`
-- 502 Bad Gateway
-- 503 Service Unavailable
-- 504 Gateway Timeout
-- temporary network failures
-- connection resets
-
-Usually do not retry:
-
-- 400 Bad Request
-- 401 Unauthorized
-- 403 Forbidden
-- validation failures
-- business rule failures
-
-A 500 error requires classification. Some 500s are transient, others are programming bugs.
-
-Staff-level question:
-
-> Is this failure likely to succeed if I try again later?
-
----
-
-## Retry Limits
-
-Do not retry forever.
-
-Use:
-
-- max retry count
-- exponential backoff
-- jitter
-- per-error classification
-- circuit breakers where appropriate
-
-After retries are exhausted, preserve the message/job for investigation and recovery.
-
----
-
-## Dead Letter Queue
-
-A DLQ stores work that could not be processed successfully after retries.
-
-DLQ enables:
-
-- investigation
-- replay
-- manual intervention
-- automated recovery after dependency recovery
-
-DLQ messages should include enough context:
-
-- job ID
-- idempotency key
-- correlation ID
-- tenant
-- stage
-- retry count
-- failure reason
-- exception details
-- timestamp
-
----
-
-## Operating Model
-
-A production system should have:
-
-- DLQ dashboard
-- alerting on DLQ growth
-- replay mechanism
-- ability to quarantine poison messages
-- ability to distinguish dependency outage from payload bug
-
----
-
-## Next Design Step
-
-The next session should turn these notes into a full end-to-end async architecture:
-
-- choose queue technology
-- define queue/topic topology
-- define job state store
-- define worker/orchestrator model
-- define progress status model
-- define DR behaviour
-- define KEDA scaling model
+- transactional consistency between SQL updates and next-stage work creation;
+- product-specific queue configuration;
+- notification transport choice;
+- multi-region queued-work recovery;
+- independent queue consumers for TE/DE.

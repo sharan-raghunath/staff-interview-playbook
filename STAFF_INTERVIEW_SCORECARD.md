@@ -1,36 +1,36 @@
 # Staff Interview Scorecard
 
-This is a living Friday review document. It tracks readiness by competency rather than by topic count.
+This is a living review document. It tracks readiness by competency rather than topic count.
 
-## Week 1 / Day 7 Snapshot
+## Day 8 Snapshot
 
 | Competency | Current Level | Evidence |
-|------------|---------------|----------|
-| Backend fundamentals | 9.3/10 | Strong understanding of HTTP, sessions, cookies, JWT, OAuth and OIDC |
-| Authentication and authorization | 9.5/10 | Can reason about tokens, scopes, roles, OBO, service identity, Zero Trust and blast radius |
-| Coding patterns | 7.8/10 | Completed seven foundational problems with improving process discipline |
-| System design | 8.4/10 | Strong ownership/responsibility reasoning; async redesign still in progress |
-| Distributed systems | 6.8/10 | Idempotency/retry/DLQ introduced; queue fundamentals pending |
-| Cloud architecture | 8.2/10 | Strong Azure/AKS context; needs structured networking and queue technology comparison |
-| Interview communication | 8/10 | Major improvement; continue making answers more concise and complete |
+|---|---:|---|
+| Backend fundamentals | 9.3/10 | Strong HTTP, session, cookie, JWT, OAuth and OIDC understanding |
+| Authentication and authorization | 9.5/10 | Can reason about scopes, OBO, service identity, Zero Trust and blast radius |
+| Coding patterns | 8/10 | Eight foundational problems; structured brute-force-to-optimization flow is becoming consistent |
+| System design | 8.6/10 | Strong ownership and current-vs-target-state discipline |
+| Distributed systems | 7.6/10 | Derived queue lifecycle, retries, failure classification and DLQ replay policy |
+| Cloud architecture | 8.2/10 | Strong Azure/AKS context; Azure messaging product mapping remains pending |
+| Interview communication | 8.1/10 | Strong reasoning; keep answers concise and complete |
 
-## Notable Week 1 Improvements
+## Notable Improvements Since Day 7
 
-- Stronger separation of current state vs future state.
-- Better responsibility-based architecture thinking.
-- Improved ability to derive technologies from problems rather than naming technologies first.
-- Stronger security-boundary reasoning.
-- Better coding interview structure: clarify, brute force, optimize, code, analyze.
+- Derived queue primitives from failure modes rather than memorizing a cloud product.
+- Identified that queue ownership belongs to the message consumer.
+- Correctly challenged whether TE should be queue-aware in the incremental architecture.
+- Improved failure taxonomy beyond a simplistic transient/permanent split.
+- Added operational distinction: Azure AI 401/403 should be investigated and can go to DLQ even though retry is not useful.
+- Added fast/slow pointer pattern with linked-list cycle detection.
 
 ## Current Weak Spots
 
-- Queue mechanics from first principles.
-- Azure Service Bus vs Kafka comparison.
-- Trees, graphs, heaps and DP not started.
-- Networking module not started.
-- Behavioral STAR stories not started.
-- Need continued practice with concise Staff-level answers.
+- Azure Service Bus mapping and queue topology.
+- Remaining queue concepts: topic/queue usage, ordering and competing consumers.
+- Trees, graphs, heaps and DP.
+- Networking module.
+- Behavioral STAR stories.
 
 ## Coaching Notes
 
-The user learns best when concepts are derived from problems and mapped to Invoice Manager. Avoid jumping directly to vendor implementation details before establishing the abstraction.
+The user learns best when concepts are derived from problems and then mapped to Invoice Manager. Avoid vendor implementation details until the underlying abstraction is complete. Do not add future concepts to learned documentation before they are covered.

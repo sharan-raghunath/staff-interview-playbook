@@ -10,8 +10,6 @@
 - [ ] STAR story extraction
 - [ ] Staff-level communication drills
 
----
-
 ## Phase 1 — Backend Engineering Mastery
 
 - [x] APIs
@@ -42,8 +40,6 @@
 - [ ] Threading
 - [ ] async/await internals
 
----
-
 ## Phase 2 — Coding Patterns
 
 - [x] Hash Lookup
@@ -53,11 +49,12 @@
 - [x] Two Pointers
 - [x] Fixed-size Sliding Window
 - [x] Prefix Sum / Running Sum
+- [x] Fast & Slow Pointers
 - [ ] Variable-size Sliding Window
 - [ ] Stack
 - [ ] Queue
 - [ ] Binary Search
-- [ ] Linked List
+- [ ] Linked List: reversal and manipulation
 - [ ] Trees
 - [ ] BST
 - [ ] Heap
@@ -65,33 +62,34 @@
 - [ ] Backtracking
 - [ ] Dynamic Programming
 
----
-
 ## Phase 3 — Distributed Systems
 
 - [x] Idempotency introduction
 - [x] Retry strategy introduction
-- [x] Dead Letter Queue introduction
+- [x] Queue fundamentals from first principles
+- [x] Visibility timeout and ownership renewal concepts
+- [x] Failure classification
+- [x] DLQ and controlled replay policy
+- [x] Exponential backoff concept
+- [ ] Azure Service Bus mapping
+- [ ] Queue vs topic
+- [ ] Competing consumers and ordering
+- [ ] Idempotent consumers
+- [ ] Transactional messaging
+- [ ] Outbox pattern
+- [ ] Multi-region queued-work recovery
 - [ ] CAP theorem
 - [ ] Consistency models
 - [ ] Eventual consistency
 - [ ] At-least-once vs exactly-once processing
-- [ ] Idempotent consumers
-- [ ] Backoff and jitter
 - [ ] Kafka
-- [ ] Queue fundamentals
-- [ ] Azure Service Bus
-- [ ] Message queues
 - [ ] Saga pattern
-- [ ] Outbox pattern
 - [ ] CQRS
 - [ ] Event sourcing
 - [ ] Distributed locking
 - [ ] Leader election
 - [ ] Service mesh
 - [ ] Observability
-
----
 
 ## Phase 4 — Cloud Architecture
 
@@ -112,8 +110,6 @@
 - [ ] AWS comparison
 - [ ] GCP comparison
 
----
-
 ## Phase 5 — System Design
 
 - [x] URL Shortener introduction
@@ -123,7 +119,8 @@
 - [x] Async API contract
 - [x] Idempotency / retry / DLQ introduction
 - [x] Invoice Manager async redesign Part 1
-- [ ] Invoice Manager async redesign
+- [x] Queue lifecycle for Invoice Manager target state
+- [ ] Invoice Manager end-to-end async redesign
 - [ ] E-commerce
 - [ ] Chat system
 - [ ] File upload system
@@ -134,8 +131,6 @@
 - [ ] Uber
 - [ ] Dropbox
 - [ ] Stock trading
-
----
 
 ## Phase 6 — Behavioral
 
@@ -148,8 +143,6 @@
 - [ ] Mentoring
 - [ ] Trade-offs
 - [ ] Delivering under pressure
-
----
 
 ## Phase 7 — Company-specific Prep
 

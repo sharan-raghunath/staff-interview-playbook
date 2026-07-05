@@ -52,7 +52,7 @@ The source system owns invoice business data and lifecycle.
 
 ### Consequence
 
-Invoice Manager should own processing lifecycle state, not long-term invoice business state.
+In the target async design, Invoice Manager should own processing lifecycle state, not long-term invoice business state.
 
 ---
 

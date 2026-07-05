@@ -2,131 +2,79 @@
 
 ## Goal
 
-Move long-running invoice processing away from a purely synchronous request-response model.
+Move long-running invoice processing away from a purely synchronous request-response model while preserving a clear separation between Invoice Manager processing state and source-system invoice ownership.
 
-The user should not wait for the entire OCR + extraction workflow to complete within a single HTTP request.
-
----
-
-## Proposed Direction
-
-Introduce an asynchronous boundary around the processing workflow.
-
-Possible high-level flow:
+## Proposed Direction So Far
 
 ```text
 User
-↓
-Edge API / Web App
-↓
-API Service / Invoice Processing Service
-↓
-Persist job
-↓
+  ↓
+IM Web / Edge API
+  ↓
+IM REST API
+  ↓
+Create durable job state in SQL
+  ↓
+Create durable work item
+  ↓
 Queue
-↓
-Worker / Orchestrator
-↓
-Text Extractor
-↓
-Data Extractor
-↓
-Persist prediction result
-↓
-User reviews and overrides
-↓
-Submit to source system
+  ↓
+Orchestrator
+  ↓
+Text Extractor / Data Extractor
+  ↓
+Persist processing artifacts and job progress
+  ↓
+User reviews predictions
+  ↓
+Submit result to source system
 ```
 
----
+This is a target-state direction, not current production behavior.
 
-## Why Async?
+## API Experience
 
-Current synchronous design has limitations:
+The request returns quickly with `202 Accepted`, a `jobId` and a `statusUrl`.
 
-- long-running requests
-- gateway timeouts
-- poor user experience for large documents
-- limited recovery if Orchestrator crashes
-- retries may duplicate expensive work
-- progress is not durably tracked
+The browser queries the status endpoint. The final choice between polling and any push mechanism remains open.
 
-Async design can improve:
+## Persisted State
 
-- resilience
-- retry handling
-- user experience
-- throughput
-- recovery
-- scalability
+SQL should be authoritative for:
 
----
+- job identity;
+- current stage and status;
+- idempotency metadata;
+- artifact references;
+- safe user-facing failure status;
+- operational failure metadata required for recovery.
 
-## User Experience
+Redis can cache status reads but cannot be the recovery authority.
 
-Instead of waiting for final extraction result:
+## Queue and Consumer Boundary
 
-1. User uploads document.
-2. System returns `202 Accepted`.
-3. User receives a tracking/job ID.
-4. UI shows processing status.
-5. User is notified or can fetch results when processing completes.
+The queue separates job creation from long-running execution.
 
-Notification options:
-
-- polling
-- long polling
-- Server-Sent Events
-- WebSockets
-- SignalR
-
----
-
-## Required Capabilities
-
-Future async architecture needs:
-
-- durable job state
-- idempotency keys
-- stage-level checkpoints
-- retry policy
-- dead letter queue
-- status tracking
-- temporary result persistence
-- observability
-- timeout handling
-- recovery after crash
-
----
-
-## Orchestrator Failure Scenario
-
-Example:
+Initial target direction:
 
 ```text
-Text Extractor completes
-↓
-Orchestrator crashes before Data Extractor starts
+IM REST API → queue → Orchestrator → synchronous HTTP calls to TE/DE
 ```
 
-Future behaviour should be:
+Orchestrator owns queue-message processing because it consumes the queue message. TE/DE remain business-processing services rather than queue-aware workers in this incremental design.
 
-- OCR completion state is persisted
-- Orchestrator/worker can resume from the next stage
-- Data Extractor is invoked once or idempotently
-- duplicate retries do not corrupt state
-- user sees job status rather than 500 error
+## Failure Policy
 
----
+- User input errors fail the job directly; they do not enter the DLQ.
+- Retryable dependency errors retry with increasing delay and a maximum retry count.
+- Operational/system failures requiring investigation enter the DLQ.
+- DLQ replay happens only after root cause investigation and in controlled batches.
 
-## Open Design Questions for Day 7
+## Deferred Decisions
 
-- Azure Service Bus or Kafka?
-- Queue or topic?
-- Should queue messages represent whole jobs or individual stages?
-- Where should workflow state be stored?
-- Should TE/DE publish events or only respond to Orchestrator?
-- Should Orchestrator be a stateful workflow engine or a stateless worker with external state?
-- How should DLQ replay work?
-- How should polling or push notification be selected?
-- How should multi-region DR handle in-flight messages?
+- Azure queue product and topology;
+- queue vs topic;
+- detailed notification design;
+- transactional messaging;
+- multi-region recovery;
+- independent queue consumption by TE/DE.

@@ -24,7 +24,7 @@
 
 ## System Design
 
-- Do not start with Kafka/queues before explaining why async is needed.
+- Do not start with a product choice before explaining why asynchronous processing is needed.
 - Do not conflate Correlation ID and Idempotency Key.
 - Do not retry everything blindly.
 - Do not drop failed work after retries without preserving it for recovery.

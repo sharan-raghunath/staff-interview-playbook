@@ -1,77 +1,56 @@
 # Pending Items
 
-This file tracks what is intentionally pending. Completed topics should not remain here.
+This file tracks intentionally pending topics. A pending topic may be named here, but it must not be explained as if it has already been learned.
 
 ## Immediate Next Topics
 
+### Messaging / Distributed Systems
+
+- Azure Service Bus mapping for the queue model learned on Day 8.
+- Queue vs topic.
+- Competing consumers and ordering.
+- Finalize Invoice Manager queue topology.
+- Product-specific settlement behavior.
+- Transactional messaging.
+- Outbox pattern.
+- Idempotent consumer design.
+- Multi-region recovery for queued work.
+
 ### Backend / Networking
 
-- SAML overview
-- TLS and certificates
-- DNS resolution
-- Reverse Proxy vs Load Balancer vs API Gateway vs Ingress Controller
-- L4 vs L7
-- NLB vs ALB
-- HTTP/2 vs HTTP/3
-- gRPC
-- CORS
-- CSRF
+- SAML overview.
+- TLS and certificates.
+- DNS resolution.
+- Reverse proxy vs load balancer vs API gateway vs ingress controller.
+- L4 vs L7.
+- HTTP/2 vs HTTP/3.
+- gRPC.
+- CORS and CSRF.
 
 ### Coding
 
-- Variable-size Sliding Window
-- Two Sum II
-- Container With Most Water
-- Binary Search intro
-- Valid Parentheses
-- Reverse Linked List
-- Maximum Depth of Binary Tree
-- Number of Islands
-
-### System Design
-
-- Queue fundamentals from first principles
-- Full Invoice Manager async redesign
-- Queue technology choice: Azure Service Bus vs Kafka
-- Queue vs Topic topology
-- Job state table design
-- Idempotent consumer design
-- Retry backoff and jitter
-- DLQ replay operations
-- Progress tracking
-- Polling vs SignalR vs WebSockets vs SSE
-- KEDA scaling with queues
-- Multi-region DR for in-flight queued work
-- Outbox pattern
-- Saga pattern
-
----
+- Variable-size Sliding Window.
+- Two Sum II.
+- Container With Most Water.
+- Binary Search intro.
+- Valid Parentheses.
+- Reverse Linked List.
+- Maximum Depth of Binary Tree.
+- Number of Islands.
 
 ## Invoice Manager Documentation TODOs
 
 - Confirm TLS termination: App Gateway vs Traefik.
-- Document Azure outbound firewall rules in more operational detail.
-- Document DR failover details.
+- Document Azure outbound firewall rules in more detail.
+- Document DR failover mechanics.
 - Document tenant-specific source-system configuration in detail.
-- Document API Service + Orchestrator consolidation decision after deeper review.
+- Revisit API Service + Orchestrator consolidation after deeper review.
 - Document GenAI extraction flow in more detail.
-- Document KEDA scaling.
-- Document Prometheus metrics.
-- Document current timeout values.
-- Document current retry behaviour from code/config.
-
----
-
-## Future Deep Dives From External Prompts
-
-- L4 vs L7, ALB vs NLB, Kubernetes Service type LoadBalancer, Ingress and Gateway.
-- Reverse Proxy vs API Gateway vs Ingress Controller vs Service Mesh.
-
----
+- Document current timeout values and retry behavior from code/config.
 
 ## Repository TODOs
 
-- Add diagrams using Mermaid.
-- Add more detailed ADRs as architecture decisions are finalized.
+- Add Mermaid diagrams only after the corresponding architecture decisions are stable.
+- Add ADRs as decisions are actually made.
 - Add STAR stories after behavioral sessions begin.
-- Add company-specific interview sections after core curriculum matures.
+- Add company-specific interview sections after the core curriculum matures.

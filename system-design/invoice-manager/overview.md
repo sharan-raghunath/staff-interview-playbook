@@ -10,7 +10,7 @@ It is used to:
 2. Extract OCR text.
 3. Predict invoice fields using ML and/or GenAI.
 4. Allow users to override predictions.
-5. Submit the final reviewed result to the configured source system.
+5. Submit the final reviewed result to a configured source system.
 
 ## Not a System of Record
 
@@ -18,43 +18,35 @@ Invoice Manager is **not** the system of record for invoice business data.
 
 The configured source system owns:
 
-- invoice persistence
-- invoice lifecycle
-- accounting/business state
-- downstream business processing
+- invoice persistence;
+- invoice lifecycle;
+- accounting/business state;
+- downstream business processing.
 
-Invoice Manager owns:
+Invoice Manager currently owns:
 
-- document processing
-- prediction lifecycle
-- user review workflow
-- temporary/job state
-- submission orchestration
+- document processing;
+- prediction lifecycle while the request is being handled;
+- user overrides;
+- pricing-related metadata;
+- operational/application metadata;
+- submission orchestration.
 
-## System of Record for Processing State
+## Target-State Processing Ownership
 
-Invoice Manager should own processing lifecycle state.
+The proposed async architecture gives Invoice Manager responsibility for durable processing state and temporary artifacts needed to recover its own workflow. This is a target-state capability, not a claim about today’s synchronous fail-fast flow.
 
-Example:
+Examples of target-state processing information:
 
 ```text
-Accepted
-↓
-Queued
-↓
-OCR Completed
-↓
-Prediction Completed
-↓
-Waiting for User Review
-↓
-Submitted to Source System
-↓
-Completed
+Job ID
+Current stage
+Artifact reference
+Failure category
+Retry/replay history
 ```
 
-This is workflow state, not invoice business ownership.
-
+This remains workflow state, not invoice business ownership.
 
 ## Day 7 Architecture Notes
 
@@ -76,6 +68,4 @@ Application-owned services include IM Web / Edge API, IM REST API, Orchestrator,
 
 Platform dependencies include Azure SQL, Azure Redis Cache, Azure Key Vault, Azure App Configuration, Application Insights, Log Analytics, Azure Computer Vision and Azure Document Intelligence.
 
-Text Extraction abstracts OCR provider choice and can call Azure Computer Vision or Azure Document Intelligence.
-
-Redis is used as distributed cache, but SQL should be source of truth for future recovery-critical processing state.
+Text Extractor abstracts Azure Computer Vision and Azure Document Intelligence so that Orchestrator does not need OCR-provider-specific knowledge.
