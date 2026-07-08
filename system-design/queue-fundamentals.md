@@ -2,7 +2,7 @@
 
 ## Status
 
-Conceptual lifecycle complete. Azure Service Bus mapping is intentionally pending.
+Conceptual lifecycle and Azure Service Bus mapping complete for the current scope.
 
 ## Why a Queue Exists
 
@@ -32,9 +32,9 @@ These solve different problems.
 
 | Item | Purpose | Authoritative location |
 |---|---|---|
-| Job state | User-visible processing lifecycle and recovery metadata | SQL |
+| Job/stage state | User-visible processing lifecycle and recovery metadata | SQL |
 | Queue message | Durable handoff of pending work to a consumer | Queue |
-| OCR artifact | Recoverable intermediate processing output | Blob storage, referenced by SQL |
+| OCR artifact | Recoverable intermediate processing output | Blob Storage, referenced by SQL |
 
 Redis may accelerate frequently read status but must not be the authority for recovery-critical state.
 
@@ -54,16 +54,14 @@ Consumer
 For the incremental Invoice Manager target state:
 
 ```text
-IM REST API → produces initial processing work
-Orchestrator → consumes it and owns the workflow-level queue interaction
-Text Extractor / Data Extractor → remain processing services called by Orchestrator
+IM REST API → produces work for a stage
+Orchestrator → consumes OCR and field-extraction work
+Text Extractor / Data Extractor → processing services called by Orchestrator
 ```
 
-## Exclusive Temporary Ownership
+## Temporary Exclusive Ownership
 
 A received message must not be deleted immediately. If the consumer crashes, the work must remain recoverable.
-
-The queue therefore temporarily hides the message from other consumers while one consumer owns it.
 
 ```text
 Visible
@@ -73,45 +71,120 @@ Received by consumer
 Hidden / owned temporarily
   ↓
 Successful handling → remove from queue
+Retryable failed attempt → release for later retry
 Consumer failure or expired ownership → eligible for another consumer
 ```
 
-## Visibility Timeout and Ownership Renewal
+## Three Consumer Actions
 
-The temporary ownership period is the visibility timeout.
+| Situation | Consumer action |
+|---|---|
+| Work is still progressing and needs more time | renew ownership |
+| Current attempt failed and should retry later | release for retry |
+| Durable stage result and SQL state prove success | complete / acknowledge |
 
-If OCR takes longer than that period, the consumer must renew ownership before it expires. Otherwise another consumer may receive the same message while the original consumer is still working.
+Renewing ownership is not a business progress report. It says only that the consumer remains alive and owns the message.
 
-Lease renewal means:
+For the incremental Invoice Manager target state, Orchestrator owns renewal because it consumes the queue message and calls TE/DE synchronously over HTTP.
 
-> I am still alive and still own this work item.
+## Durable Success Before Completion
 
-It is not a business-progress update.
+For a processing stage, acknowledgement/completion comes after the recovery-critical output and SQL stage state are durable.
 
-In the incremental Invoice Manager target state, Orchestrator owns renewal because it is the queue consumer. TE does not need queue awareness while Orchestrator invokes TE synchronously over HTTP.
+OCR example:
 
-## Successful Handling and Acknowledgement
+```text
+Receive OCR message
+→ call Text Extractor
+→ persist OCR artifact in Blob Storage
+→ update SQL OCR-stage state and artifact reference
+→ complete queue message
+```
 
-A consumer needs a way to tell the queue:
+Acknowledging early can lose work permanently. Acknowledging late can cause redelivery, which durable-state reconciliation can make safe.
 
-> This work item was successfully handled; do not deliver it again.
+## Redelivery and Reconciliation
 
-Conceptually, that is an **acknowledgement**. The product-specific operation name is deliberately deferred.
+A redelivery does not automatically mean repeat the work.
 
-For an OCR stage, the consumer should acknowledge/complete the queue work only after:
+```text
+1. Read SQL stage state.
+2. If stage is complete, do not call the processor; complete the message.
+3. If SQL is incomplete, inspect deterministic durable output for the same job/stage/idempotency identity.
+4. If output exists, reconcile SQL and complete the message.
+5. Only if neither SQL nor durable output proves completion, process the work.
+```
 
-1. OCR succeeds.
-2. The OCR artifact/reference required for recovery is persisted.
-3. The job state reflects the completed stage.
-4. The next stage work has been created.
+This protects against crashes between artifact persistence, SQL updates, and queue completion. It also handles an ambiguous completion timeout: a completion request may have succeeded even though the worker did not receive the response.
 
-The atomicity of persisting workflow state and creating the next work item is intentionally deferred to the transactional-messaging module.
+## Competing Consumers and Duplicate Messages
+
+Multiple Orchestrator pods can consume from the same queue. The queue gives one visible message to one consumer while its temporary ownership remains valid.
+
+After lease expiry, another consumer can receive the message. A prior worker might later resume, so a lease alone is not enough for exactly-once business processing.
+
+For duplicate messages of the same workflow stage, the consumer atomically claims the stage in SQL:
+
+```text
+Pending → Processing
+only if it is still Pending.
+```
+
+The protections have separate roles:
+
+```text
+Queue lease
+→ protects one received message from competing consumers.
+
+Atomic SQL stage claim
+→ protects one workflow stage from duplicate messages.
+
+Idempotency key + durable-state checks
+→ make retries and redelivery safe after crashes or ambiguous outcomes.
+```
+
+## Ordering
+
+Invoice Manager requires ordering per job:
+
+```text
+OCR complete + durable OCR artifact
+→ field extraction becomes eligible.
+```
+
+It does not require global FIFO across all invoices. Different jobs can be processed in parallel.
+
+SQL stage transitions and atomic stage claims enforce the dependency. Strict ordered Service Bus sessions were discussed as a product capability but are not selected for this target design.
+
+## Queue vs Topic
+
+Use a queue for a work command that one logical worker must perform:
+
+```text
+Perform OCR for Job 123.
+Extract fields for Job 123.
+```
+
+Use a topic when one published event must be independently delivered to multiple interested subscribers. A topic is not part of the OCR/field-extraction topology derived so far because these are work commands, not broadcast events.
+
+## Azure Service Bus Mapping
+
+| Concept | Azure Service Bus mapping |
+|---|---|
+| Durable work queue | Service Bus queue |
+| Receive without immediate deletion | Peek-Lock receive mode |
+| Temporary ownership | message lock |
+| Extend ownership while work remains healthy | lock renewal (`RenewMessageLock`) |
+| Durable success | `CompleteMessage` |
+| Retryable failed attempt | `AbandonMessage` or lock expiry, followed by retry policy |
+| Operationally unprocessable message | dead-lettering / DLQ |
+| Multiple replicas share work | competing consumers |
+
+Use explicit message settlement for the Invoice Manager stage workflow. Receive-and-delete semantics would remove a message before the stage's durable output and SQL state could prove success.
 
 ## Failure Handling
 
-The worker must classify failure before deciding what happens next.
-
-### User input / business validation failures
+### Business validation failure
 
 Examples:
 
@@ -123,107 +196,73 @@ Action:
 
 ```text
 Fail job directly
-Do not retry
+Do not retry normally
 Do not send to DLQ
 Return safe user-facing guidance
 ```
 
-### Retryable dependency failures
+### Retryable dependency failure
 
 Examples:
 
 - timeout;
 - temporary network failure;
 - temporary downstream unavailability;
-- throttling.
+- rate limiting / temporary overload.
 
 Action:
 
 ```text
-Retry after delay
-Use maximum retry count
-Increase delay between repeated retries
+Record attempt as needed
+Release for retry under backoff policy
+Stop after maximum retry count
+Move exhausted work to DLQ for investigation/replay
 ```
 
-### Operational failures requiring investigation
+### Operational non-retryable failure
 
 Examples:
 
-- Azure AI authentication/authorization failure;
-- configuration error;
-- unexpected defect;
-- retry budget exhausted.
+- invalid credentials;
+- wrong endpoint;
+- missing permission;
+- broken deployment configuration.
 
 Action:
 
 ```text
-Fail job safely for user
-Preserve technical context
-Place message in DLQ
+Fail job safely
+Capture technical detail
+Dead-letter message
 Alert and investigate
 ```
 
-## Exponential Backoff
-
-Repeated retry delays should increase rather than remain fixed.
+## Invoice Manager Queue Topology
 
 ```text
-Attempt 1 → short wait
-Attempt 2 → longer wait
-Attempt 3 → longer again
+Durable PDF upload + SQL job state
+  ↓
+im-ocr-work
+  ↓
+Orchestrator → Text Extractor
+  ↓
+Blob OCR artifact + SQL OCR complete
+  ↓
+im-field-extraction-work
+  ↓
+Orchestrator → Data Extractor
+  ↓
+Durable prediction result + SQL ready-for-review state
 ```
 
-Reason: a struggling dependency needs time to recover; immediate repeated retries can make the outage worse.
+Separate OCR and field-extraction queues isolate their distinct dependencies, scaling behavior, retry pressure, backlog signals, and DLQ operations.
 
-## Dead Letter Queue and Replay
+## Explicitly Deferred
 
-DLQ is for messages requiring operational investigation or manual recovery. It is not a bucket for ordinary invalid user input.
-
-Messages in DLQ should retain operational context such as:
-
-```text
-JobId
-MessageId
-Stage
-AttemptCount
-FailureCategory
-Technical error detail
-CorrelationId
-Timestamp
-```
-
-Replay policy:
-
-1. Diagnose the root cause.
-2. Fix it.
-3. Replay intentionally in batches.
-4. Monitor outcomes and stop when the batch fails again.
-
-## User-Facing Failure Propagation
-
-The status API exposes safe, actionable data only.
-
-```json
-{
-  "jobId": "job-123",
-  "status": "Failed",
-  "stage": "TextExtraction",
-  "message": "We could not process this document.",
-  "canRetry": false
-}
-```
-
-Technical details belong in operational records and DLQ metadata, not browser responses.
-
-## Deferred Topics
-
-These are intentionally not explained here yet:
-
-- Azure Service Bus product mapping and SDK APIs;
-- product-specific completion/failure settlement names;
-- queue vs topic;
-- ordering and sessions;
-- Kafka/RabbitMQ comparison;
-- transactional messaging;
-- outbox/inbox;
-- saga.
+- transactional consistency between SQL stage updates and next-stage message publication;
+- outbox/inbox patterns;
+- detailed delayed-retry implementation;
+- backpressure implementation;
+- Service Bus sessions as a selected design;
+- multi-region queued-work recovery;
+- Kafka comparison.

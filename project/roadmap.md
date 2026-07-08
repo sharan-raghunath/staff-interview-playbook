@@ -71,17 +71,21 @@
 - [x] Failure classification
 - [x] DLQ and controlled replay policy
 - [x] Exponential backoff concept
-- [ ] Azure Service Bus mapping
-- [ ] Queue vs topic
-- [ ] Competing consumers and ordering
-- [ ] Idempotent consumers
+- [x] Queue completion, release-for-retry, and redelivery reconciliation
+- [x] Azure Service Bus mapping for current scope
+- [x] Queue vs topic
+- [x] Competing consumers and per-job ordering
+- [x] Atomic stage claim as an idempotent-consumer protection
+- [ ] Backpressure and concurrency control
+- [ ] Detailed delayed-retry mechanics
 - [ ] Transactional messaging
 - [ ] Outbox pattern
+- [ ] Inbox pattern
 - [ ] Multi-region queued-work recovery
 - [ ] CAP theorem
 - [ ] Consistency models
 - [ ] Eventual consistency
-- [ ] At-least-once vs exactly-once processing
+- [ ] At-least-once vs exactly-once processing as a formal guarantee model
 - [ ] Kafka
 - [ ] Saga pattern
 - [ ] CQRS
@@ -120,6 +124,8 @@
 - [x] Idempotency / retry / DLQ introduction
 - [x] Invoice Manager async redesign Part 1
 - [x] Queue lifecycle for Invoice Manager target state
+- [x] Service Bus mapping, queue choice, and stage topology
+- [x] Billing boundary after user-confirmed submission
 - [ ] Invoice Manager end-to-end async redesign
 - [ ] E-commerce
 - [ ] Chat system

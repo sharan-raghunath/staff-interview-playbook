@@ -28,6 +28,7 @@ Hard rules:
 
 - Separate current production behavior from target state.
 - Do not add uncovered concepts to documentation except as titles in roadmap/pending lists.
+- Follow the agreed curriculum in order. Do not cut planned sections short, skip items, or deviate unless the user explicitly asks.
 - The repository reflects the user’s learned understanding, not generic best-practice leakage.
 
 ## Session Structure
@@ -62,6 +63,7 @@ Use a Hint Ladder:
 | 6 | Maximum Average Subarray I | Fixed-size Sliding Window | Maintain window sum and max sum |
 | 7 | Find Pivot Index | Prefix Sum / Running Sum | Compare left/right using total sum |
 | 8 | Linked List Cycle | Fast & Slow Pointers | Floyd’s cycle detection, O(1) extra space |
+| 9 | Middle of the Linked List | Fast & Slow Pointers | Find second middle in one traversal |
 
 ## Backend Progress
 
@@ -71,7 +73,7 @@ Completed:
 - HTTP statelessness;
 - sessions, cookies and distributed sessions / Redis;
 - JWT, claims, JWKS, `kid`, key rotation, roles/scopes and RBAC/ABAC;
-- refresh-token lifecycle and revocation trade-offs;
+- refresh-token lifecycle, rotation/reuse-detection principles, and revocation trade-offs;
 - OAuth 2.0, OIDC, Authorization Code, Implicit, Client Credentials and OBO concepts;
 - logout, SSO/SLO and identity best practices;
 - Zero Trust identity principles.
@@ -108,13 +110,16 @@ It is **not** the system of record for invoice business data. The source system 
 ### Target-State Direction Learned So Far
 
 - The long-running business process should be decoupled from the browser HTTP request.
-- API returns `202 Accepted`, `jobId` and `statusUrl`.
-- SQL is the authority for processing job state.
+- API returns `202 Accepted`, `jobId`, and `statusUrl`.
+- SQL is the authority for processing job/stage state.
 - Redis is a distributed cache and not the correctness boundary.
-- Queue provides durable handoff to a consumer.
-- Orchestrator is the incremental target-state queue consumer and workflow owner.
+- Service Bus queues provide durable stage-work handoff to Orchestrator.
+- Orchestrator is the incremental target-state consumer and workflow owner for OCR and field extraction.
 - TE/DE stay HTTP services in the initial migration; they do not need queue awareness.
 - OCR artifacts should be persisted temporarily for recovery efficiency.
+- Separate OCR and field-extraction queues isolate distinct dependencies and operations.
+- Queue completion follows durable output and SQL state; redelivery reconciles before repeating work.
+- Billing follows user-confirmed submission and remains outside Orchestrator.
 - Failure propagation separates operational detail from user-facing status.
 
 ### Canonical Architecture
@@ -145,25 +150,28 @@ Important production details:
 - Azure SQL, Redis, Key Vault, App Configuration, App Insights, Log Analytics, Azure CV and Azure DI are platform dependencies.
 - Text Extractor abstracts Azure Computer Vision and Azure Document Intelligence.
 
-## Queue Fundamentals Learned
+## Queue / Messaging Concepts Learned
 
 - producer/consumer durable handoff;
-- temporary exclusive ownership;
-- visibility timeout;
-- ownership renewal for long-running work;
-- successful stage completion after required persistence;
-- retry with exponential backoff;
-- maximum retry count;
+- temporary exclusive ownership and renewal for healthy long-running work;
+- complete vs release-for-retry vs ownership renewal;
+- safe acknowledgement after durable result and SQL stage state;
+- redelivery reconciliation and ambiguous acknowledgement outcomes;
+- competing consumers and lease expiry;
+- atomic SQL stage claim for duplicate messages;
+- per-job stage ordering without global FIFO;
+- queue vs topic distinction;
+- Azure Service Bus Peek-Lock, lock renewal, complete, abandon/expiry, and DLQ mapping;
+- separate OCR and field-extraction queue topology;
 - business validation vs retryable dependency vs operational failure;
-- DLQ and controlled replay;
-- safe user-facing status vs technical operational details.
+- DLQ and controlled replay.
 
 ## Immediate Next Work
 
-- Map the learned queue model to Azure Service Bus.
-- Understand queue vs topic, competing consumers and ordering.
-- Finalize Invoice Manager queue placement/topology.
-- Continue the coding curriculum.
+- Continue coding curriculum: Variable-size Sliding Window.
+- Explore queue backpressure/concurrency control after its need is derived.
+- Cover transactional messaging and outbox when ready.
+- Derive detailed field-extraction output persistence and Billing execution topology later.
 
 ## User Strengths
 

@@ -2,7 +2,7 @@
 
 ## Scope
 
-This file records the target-state concepts that have been derived so far. It does not describe features already present in production.
+This file records target-state concepts that have been derived so far. It does not describe features already present in production.
 
 ## Core Problem
 
@@ -22,8 +22,6 @@ Staff-level summary:
 
 ## Async API Contract
 
-Target contract:
-
 ```http
 HTTP/1.1 202 Accepted
 ```
@@ -35,13 +33,13 @@ HTTP/1.1 202 Accepted
 }
 ```
 
-The browser uses the job reference to query processing status. Polling is the simplest initial option; push-notification approaches remain a later design decision.
+The browser polls status through IM Web/Edge. SQL is the authority for the status returned to the browser.
 
 ## Idempotency
 
 The client sends one idempotency key per logical upload.
 
-- Retry while the job is active → return the same `202`, `jobId` and status URL.
+- Retry while the job is active → return the same `202`, `jobId`, and status URL.
 - Retry after completion → return the same logical outcome/result location.
 - Same key with a different payload → reject as invalid reuse.
 
@@ -54,14 +52,14 @@ IM Web / Edge API
   → accepts user request and exposes status
 
 IM REST API
-  → validates request, creates job, produces initial work
+  → validates request, creates job, produces stage work
 
-Queue
-  → durably hands work to a consumer
+Service Bus queues
+  → durable OCR and field-extraction work handoff
 
 Orchestrator
-  → consumes work, owns workflow-level queue interaction,
-    updates workflow state and invokes TE/DE
+  → consumes stage work, owns queue interaction,
+    updates workflow state, invokes TE/DE
 
 Text Extractor
   → OCR and Azure AI abstraction
@@ -72,9 +70,9 @@ Data Extractor
 
 ## Processing State and Artifacts
 
-SQL is the authoritative store for future processing state. It should retain job lifecycle data and safe user-facing failure state.
+SQL is the authoritative store for future processing state. It retains job lifecycle data and safe user-facing failure state.
 
-Blob storage should hold temporary OCR artifacts. SQL stores the artifact reference and workflow metadata.
+Blob storage holds temporary OCR artifacts. SQL stores the artifact reference and workflow metadata.
 
 Target workflow states may include:
 
@@ -91,14 +89,30 @@ Completed
 Failed
 ```
 
-Do not mark a stage complete until its downstream work and the artifact required to advance/recover have both completed successfully.
+## Settlement and Recovery
+
+Orchestrator receives work under temporary ownership. It completes a message only after required durable output and SQL stage state are persisted.
+
+For OCR:
+
+```text
+Receive message
+→ TE returns output
+→ persist Blob artifact
+→ update SQL OCR state
+→ complete message
+```
+
+A failure to confirm completion does not cause OCR to rerun. On redelivery, Orchestrator checks SQL first, then the deterministic OCR artifact location, and only calls TE when neither proves success.
+
+Duplicate stage messages are protected by an atomic SQL claim such as `Pending → Processing` only when the stage is still pending.
 
 ## Failure Propagation
 
 Store two distinct views of failures:
 
-1. **Operational detail** for support/recovery: stage, attempts, category, technical error, correlation ID and timestamps.
-2. **User-facing job status**: safe message, current stage and whether retry is meaningful.
+1. **Operational detail** for support/recovery: stage, attempts, category, technical error, correlation ID, and timestamps.
+2. **User-facing job status**: safe message, current stage, and whether retry is meaningful.
 
 Examples:
 
@@ -109,16 +123,27 @@ Examples:
 | Temporary dependency failure | Yes | After retry limit | Processing is delayed or failed safely. |
 | Azure AI 401/403 | No normal retry | Yes | Processing failed safely. |
 
-## Current Open Boundary
+## Queue Placement and Ordering
 
-The incremental design retains synchronous Orchestrator-to-TE/DE HTTP calls. Orchestrator is the queue consumer, so it owns temporary message ownership and its renewal while TE is processing.
+```text
+PDF/job durable
+→ OCR queue
+→ OCR durable completion
+→ field-extraction queue
+→ predictions ready
+```
 
-Making TE or DE independent queue consumers is a larger architecture decision and remains open.
+The ordering requirement is per job, not global FIFO across invoices. SQL stage state governs whether field extraction is eligible.
+
+## Billing Boundary
+
+After field extraction, the user reviews/overrides predictions. IM REST API owns the user-confirmed submission transition. Billing is initiated after that transition and remains outside Orchestrator's OCR/field-extraction responsibility.
 
 ## Explicitly Deferred
 
 - transactional consistency between SQL updates and next-stage work creation;
-- product-specific queue configuration;
-- notification transport choice;
+- detailed delayed retry/backpressure implementation;
+- Service Bus sessions as a selected design;
 - multi-region queued-work recovery;
-- independent queue consumers for TE/DE.
+- independent queue consumers for TE/DE;
+- billing queue implementation.

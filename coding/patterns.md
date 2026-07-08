@@ -1,32 +1,6 @@
 # Coding Patterns
 
-This file tracks patterns, not just problems.
-
-## Completed Patterns
-
-| Pattern | Representative Problem | Day | Status |
-|---|---|---:|---|
-| Hash Lookup | Two Sum | Day 1 | ✅ |
-| Running Minimum | Best Time to Buy and Sell Stock | Day 2 | ✅ |
-| Frequency Counting | Valid Anagram | Day 3 | ✅ |
-| Prefix / Suffix | Product of Array Except Self | Day 4 | ✅ |
-| Two Pointers | Valid Palindrome | Day 5 | ✅ |
-| Fixed-size Sliding Window | Maximum Average Subarray I | Day 6 | ✅ |
-| Prefix Sum / Running Sum | Find Pivot Index | Day 7 | ✅ |
-| Fast & Slow Pointers | Linked List Cycle | Day 8 | ✅ |
-
-## Core Interview Process
-
-For every coding problem:
-
-1. Clarify the problem.
-2. State the brute-force approach.
-3. Analyze brute-force complexity.
-4. Identify repeated work / bottleneck.
-5. Derive the optimized pattern.
-6. Code cleanly.
-7. Analyze optimized complexity.
-8. Discuss edge cases and trade-offs.
+This file records patterns that have been learned through solved problems.
 
 ## Hash Lookup
 
@@ -34,7 +8,7 @@ Representative problem: Two Sum.
 
 Core idea:
 
-> Trade space for time by storing values in a hash map for O(1) average lookup.
+> Store previously seen values so a complement can be checked in constant expected time.
 
 Complexity:
 
@@ -49,7 +23,7 @@ Representative problem: Best Time to Buy and Sell Stock.
 
 Core idea:
 
-> Track the minimum price seen so far and compute the best profit at each position.
+> Keep the best candidate from the prefix seen so far, then evaluate the current item against it.
 
 Complexity:
 
@@ -64,13 +38,13 @@ Representative problem: Valid Anagram.
 
 Core idea:
 
-> Replace repeated searching with count storage.
+> Count occurrences, then compare counts rather than repeatedly searching.
 
 Complexity:
 
 ```text
 Time: O(n)
-Space: O(1) for a fixed alphabet; O(k) otherwise
+Space: O(1) for a fixed alphabet
 ```
 
 ## Prefix / Suffix Computation
@@ -147,18 +121,22 @@ Space: O(1)
 
 ## Fast & Slow Pointers
 
-Representative problem: Linked List Cycle.
+Representative problems:
+
+- Linked List Cycle
+- Middle of the Linked List
 
 Recognition clues:
 
 - linked list or sequence traversal;
-- cycle detection;
 - need to avoid storing every visited node;
 - one traversal can move at a different rate than another.
 
-Core idea:
+Core uses:
 
 > In a finite cycle, two pointers moving at different speeds eventually meet. Without a cycle, the fast pointer reaches the end.
+
+> When one pointer moves twice as fast as another from the same head, the slower pointer reaches the middle when the fast pointer reaches or passes the end.
 
 Complexity:
 

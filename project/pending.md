@@ -6,15 +6,16 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Messaging / Distributed Systems
 
-- Azure Service Bus mapping for the queue model learned on Day 8.
-- Queue vs topic.
-- Competing consumers and ordering.
-- Finalize Invoice Manager queue topology.
-- Product-specific settlement behavior.
+- Backpressure and concurrency control.
+- Detailed delayed-retry implementation.
 - Transactional messaging.
 - Outbox pattern.
-- Idempotent consumer design.
+- Inbox pattern.
 - Multi-region recovery for queued work.
+- Detailed field-extraction result persistence.
+- Billing execution topology.
+- Service Bus sessions: when the existing SQL stage dependency is insufficient.
+- Topics/subscriptions for future broadcast lifecycle events, only if a real independent-consumer need arises.
 
 ### Backend / Networking
 

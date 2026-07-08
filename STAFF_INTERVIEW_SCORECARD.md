@@ -2,35 +2,39 @@
 
 This is a living review document. It tracks readiness by competency rather than topic count.
 
-## Day 8 Snapshot
+## Day 9 Snapshot
 
 | Competency | Current Level | Evidence |
 |---|---:|---|
 | Backend fundamentals | 9.3/10 | Strong HTTP, session, cookie, JWT, OAuth and OIDC understanding |
 | Authentication and authorization | 9.5/10 | Can reason about scopes, OBO, service identity, Zero Trust and blast radius |
-| Coding patterns | 8/10 | Eight foundational problems; structured brute-force-to-optimization flow is becoming consistent |
-| System design | 8.6/10 | Strong ownership and current-vs-target-state discipline |
-| Distributed systems | 7.6/10 | Derived queue lifecycle, retries, failure classification and DLQ replay policy |
-| Cloud architecture | 8.2/10 | Strong Azure/AKS context; Azure messaging product mapping remains pending |
-| Interview communication | 8.1/10 | Strong reasoning; keep answers concise and complete |
+| Coding patterns | 8.2/10 | Nine foundational problems; fast/slow pointers used for cycle detection and midpoint finding |
+| System design | 8.9/10 | Strong current-vs-target-state discipline; can derive durable workflow boundaries and stage ownership |
+| Distributed systems | 8.2/10 | Can reason about acknowledgement ambiguity, redelivery, competing consumers, atomic stage claims, and per-job ordering |
+| Cloud architecture | 8.4/10 | Mapped first-principles queue model to Service Bus and selected target queue topology |
+| Interview communication | 8.3/10 | Increasingly concise and accurate; keep stating assumptions and ownership boundaries |
 
-## Notable Improvements Since Day 7
+## Notable Improvements Since Day 8
 
-- Derived queue primitives from failure modes rather than memorizing a cloud product.
-- Identified that queue ownership belongs to the message consumer.
-- Correctly challenged whether TE should be queue-aware in the incremental architecture.
-- Improved failure taxonomy beyond a simplistic transient/permanent split.
-- Added operational distinction: Azure AI 401/403 should be investigated and can go to DLQ even though retry is not useful.
-- Added fast/slow pointer pattern with linked-list cycle detection.
+- Distinguished lease renewal, release-for-retry, and successful message completion.
+- Explained why completion must follow durable output and SQL stage state.
+- Correctly handled ambiguous acknowledgement outcomes without rerunning expensive work.
+- Derived competing consumers and identified that queue ownership alone is insufficient for duplicate stage messages.
+- Added atomic SQL stage claims alongside idempotency and durable-state reconciliation.
+- Distinguished per-job sequencing from unnecessary global FIFO.
+- Mapped the learned model to Azure Service Bus terminology.
+- Finalized separate OCR and field-extraction queues and preserved Billing outside Orchestrator.
+- Added a second fast/slow-pointer application: middle of linked list.
 
 ## Current Weak Spots
 
-- Azure Service Bus mapping and queue topology.
-- Remaining queue concepts: topic/queue usage, ordering and competing consumers.
+- Backpressure/concurrency control and detailed delayed retry.
+- Transactional messaging/outbox.
+- Multi-region queued-work recovery.
 - Trees, graphs, heaps and DP.
 - Networking module.
 - Behavioral STAR stories.
 
 ## Coaching Notes
 
-The user learns best when concepts are derived from problems and then mapped to Invoice Manager. Avoid vendor implementation details until the underlying abstraction is complete. Do not add future concepts to learned documentation before they are covered.
+The user learns best when concepts are derived from problems and then mapped to Invoice Manager. Follow the agreed curriculum in order; do not cut planned sections short or introduce future concepts as learned content.

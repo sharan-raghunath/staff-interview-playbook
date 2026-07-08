@@ -157,3 +157,37 @@
 - Added ADR-008 and ADR-009
 - Updated context, roadmap, pending items, scorecard and skills matrix
 - Removed premature queue-topic leakage from learned-content documents
+
+
+---
+
+## Day 9
+
+### System Design — Queue Settlement and Recovery
+- Distinguished ownership renewal, release-for-retry, and successful message completion.
+- Derived durable-success-before-completion rule.
+- Derived ambiguous acknowledgement recovery and redelivery reconciliation.
+- Added competing consumers, lease expiry, atomic SQL stage claim, and per-job ordering.
+- Clarified scaling responsibility across Orchestrator, TE, and external OCR dependencies.
+
+### Azure Service Bus
+- Mapped learned model to Peek-Lock, message locks, lock renewal, Complete, Abandon/expiry, and DLQ.
+- Covered queue versus topic for the current scope.
+- Deliberately did not select Service Bus sessions.
+
+### Invoice Manager Target Topology
+- Selected separate OCR and field-extraction queues.
+- Defined OCR → durable artifact/SQL state → field extraction progression.
+- Added browser polling through IM Web/Edge from authoritative SQL state.
+- Recorded Billing boundary after user-reviewed submission; Orchestrator does not own Billing.
+- Added ADR-010 and ADR-011.
+
+### Coding
+- Middle of the Linked List.
+- Fast & Slow Pointers used to locate the second middle node in O(n) time and O(1) space.
+
+### Repository
+- Added comprehensive Day 9 journal.
+- Added coding notes for LeetCode 876.
+- Updated queue fundamentals, Invoice Manager target-state notes, context, roadmap, pending list, scorecard, README, and start-here context.
+- Removed future-only terms from learned vocabulary.

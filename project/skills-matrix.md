@@ -25,7 +25,7 @@ This is a living assessment based on completed sessions.
 | Two Pointers | 8.5/10 | Solved Valid Palindrome optimally |
 | Fixed Sliding Window | 8/10 | Solved Maximum Average Subarray I; corrected indexing bug |
 | Prefix Sum / Running Sum | 8/10 | Solved Find Pivot Index with O(n)/O(1) solution |
-| Fast & Slow Pointers | 8/10 | Derived Floyd’s cycle detection and wrote near-correct first implementation |
+| Fast & Slow Pointers | 8.5/10 | Solved Linked List Cycle and Middle of the Linked List with O(n)/O(1) solutions |
 | Trees / Graphs | Not started | User expects rustiness due to long gap |
 | Dynamic Programming | Not started | Future topic |
 
@@ -33,19 +33,22 @@ This is a living assessment based on completed sessions.
 
 | Area | Current Level | Evidence |
 |---|---:|---|
-| Component Responsibility | 9/10 | Can explain Edge API/API Service/Orchestrator/TE/DE boundaries |
+| Component Responsibility | 9/10 | Can explain Edge API/API Service/Orchestrator/TE/DE/Billing boundaries |
 | Authentication Architecture | 9/10 | Can reason about registrations and security boundaries |
 | Async Motivation | 8.5/10 | Can explain why long-running HTTP is a smell |
-| Idempotency | 7.5/10 | Understands idempotency key and retry behavior |
-| Queue Lifecycle | 8/10 | Derived ownership, visibility timeout, renewal, completion and retry reasoning |
+| Idempotency | 8/10 | Uses idempotency with durable-state reconciliation and atomic stage claims |
+| Queue Lifecycle | 8.7/10 | Can distinguish renewal, release-for-retry, completion, lock expiry and redelivery |
+| Competing Consumers / Ordering | 8.3/10 | Understands queue ownership, duplicate stage messages, SQL claims and per-job dependency |
+| Azure Service Bus Mapping | 8/10 | Mapped Peek-Lock, renew, complete, abandon/expiry and DLQ to the learned model |
 | Failure Classification / DLQ | 8/10 | Distinguishes business validation from operational failures and controlled replay |
-| Full Async Redesign | 7/10 | Queue lifecycle now covered; topology/product mapping still pending |
+| Invoice Manager Async Topology | 8.2/10 | Selected separate OCR/field-extraction queues; Billing stays outside Orchestrator |
+| Transactional Messaging / Outbox | Not started | Explicitly deferred |
 
 ## Communication
 
 | Area | Current Level | Notes |
 |---|---:|---|
 | First-principles reasoning | Strong | User asks why technologies exist before choosing products |
-| Trade-off articulation | Strong | Especially clear in Redis vs SQL, DLQ policy and service ownership |
-| Concise interview answers | Needs practice | Continue refining answers into complete 30–60 second explanations |
+| Trade-off articulation | Strong | Especially clear in SQL/Blob recovery, queue isolation and service ownership |
+| Concise interview answers | Improving | Can now articulate durable success before acknowledgement and per-job ordering; continue refining into 30–60 second answers |
 | Coding narration | Improving | Continue explaining invariants while coding |

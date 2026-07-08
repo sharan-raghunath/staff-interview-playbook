@@ -21,7 +21,6 @@
 - Durable State
 - Checkpointing
 - Recovery
-- Back Pressure
 
 ## Authentication / Authorization
 
@@ -52,7 +51,6 @@
 - Key Identifier (`kid`)
 - Bearer Token
 - Token Revocation
-- Token Introspection
 - Single Sign-On
 - Single Logout
 - Public Client
@@ -68,15 +66,32 @@
 - Job ID
 - Retry
 - Transient Failure
-- Permanent Failure
+- Business Validation Failure
+- Operational Failure
 - Exponential Backoff
-- Jitter
 - Dead Letter Queue
-- Poison Message
 - Replay
-- At-least-once Processing
-- Exactly-once Processing
-- Eventual Consistency
+- Queue Message
+- Producer
+- Consumer
+- Temporary Ownership
+- Visibility Timeout
+- Ownership Renewal
+- Message Completion
+- Release for Retry
+- Redelivery
+- Durable Artifact
+- Atomic Stage Claim
+- Competing Consumers
+- Per-job Ordering
+- Queue
+- Topic
+- Subscription
+- Peek-Lock
+- Message Lock
+- CompleteMessage
+- AbandonMessage
+- Dead-lettering
 
 ## Coding
 
@@ -95,21 +110,31 @@
 - Auxiliary Space
 - Space-Time Trade-off
 - Readability vs Optimization
+- Fast Pointer
+- Slow Pointer
 
-
-## Day 7 Terms
+## Definitions Learned
 
 ### Processing Artifact
+
 Intermediate data produced by one workflow stage and needed by later stages or recovery. Example: OCR JSON output.
 
 ### Source of Truth
+
 The authoritative store used for correctness. In the future Invoice Manager async design, SQL is the source of truth for processing state.
 
 ### Distributed Cache
+
 A shared cache used across application replicas. Redis can reduce latency and avoid instance affinity, but should not own recovery-critical state.
 
 ### Message Ownership
-The idea that once a consumer takes work from a queue, the system must track whether that work is still in progress, completed, failed, or should be retried.
 
-### Queue Lock / Visibility Timeout
-A queue mechanism that prevents multiple consumers from processing the same message at the same time while allowing redelivery if the consumer crashes.
+A consumer has temporary exclusive responsibility for a received message. The message remains recoverable until the consumer proves successful completion or loses/releases ownership.
+
+### Atomic Stage Claim
+
+A conditional SQL transition that allows only one worker to move a given job stage from pending to processing. It protects a workflow stage when duplicate work messages exist.
+
+### Redelivery Reconciliation
+
+When a message is delivered again, the consumer checks durable SQL state and any durable output first, then performs only the work that remains missing.

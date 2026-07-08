@@ -42,34 +42,33 @@ Create work item
 Return 202 Accepted + jobId + statusUrl
 ```
 
-## Queue Placement
+## Queue Placement and Stage Topology
 
-The queue must align with service responsibility rather than merely being placed at the earliest possible point.
-
-### Queue after IM Web
-
-This keeps the public request short, but IM Web should not own workflow-level progress.
-
-### Queue after IM REST API — tentative direction
+The target direction is now:
 
 ```text
 IM Web / Edge API
   ↓
 IM REST API
   ↓
-Queue
+Create durable job / uploaded-document reference
   ↓
-Orchestrator
+im-ocr-work
   ↓
-TE / DE
+Orchestrator → TE
+  ↓
+Blob OCR artifact + SQL OCR complete
+  ↓
+im-field-extraction-work
+  ↓
+Orchestrator → DE
+  ↓
+SQL prediction-ready state
 ```
 
-Why this direction is currently preferred:
+The queues are placed after IM REST API because the internal API owns request validation and job creation, while Orchestrator owns asynchronous workflow execution.
 
-- IM REST API is close to business validation and job creation.
-- IM Web remains a thin public boundary.
-- Orchestrator remains workflow owner.
-- A queue decouples the browser request from long-running work.
+Separate OCR and field-extraction queues give stage-level isolation for scaling, dependencies, retry pressure, backlog metrics, and DLQ handling.
 
 ## Job State Store
 
@@ -88,6 +87,7 @@ SQL
 - OCR artifact URI
 - timestamps
 - failure metadata
+- stage claim/attempt metadata
 
 Blob storage
 - OCR JSON
@@ -95,19 +95,33 @@ Blob storage
 - extracted text
 ```
 
-## Queue Lifecycle Learned So Far
+## Queue Lifecycle
 
 - one consumer temporarily owns one received message;
 - the message remains recoverable until processing is successfully completed;
-- ownership must be renewed for long-running OCR;
-- successful handling occurs only after the stage result required for recovery has been persisted;
-- worker failures are classified before deciding between direct job failure, retry, or DLQ;
-- operational replay must be deliberate and controlled.
+- ownership is renewed for healthy long-running work;
+- a retryable failed attempt is released for retry rather than treated as success;
+- successful handling occurs only after the stage result required for recovery and SQL state are persisted;
+- redelivery reconciles durable state before repeating expensive processing;
+- atomic SQL stage claims prevent duplicate stage messages from starting the same stage concurrently.
+
+## User Review and Billing
+
+Field extraction prepares predictions for user review. User overrides are persisted and used for pricing.
+
+```text
+Predictions ready
+→ user review / overrides
+→ IM REST API persists submitted state
+→ Billing initiated independently
+```
+
+Orchestrator does not own Billing.
 
 ## Open Questions
 
-- Which Azure messaging product best fits the target design?
-- Should one work item represent a whole job or a processing stage?
-- How should product-specific queue settlement be configured?
-- Should TE/DE later become independent queue consumers?
 - How should the system make database state and next-stage work creation consistent?
+- What detailed delayed-retry and backpressure policy should apply?
+- Should TE/DE later become independent queue consumers?
+- What durable representation should field-extraction results use?
+- What is the Billing execution topology?

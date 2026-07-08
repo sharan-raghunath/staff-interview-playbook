@@ -30,6 +30,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Maximum Average Subarray I — Fixed-size Sliding Window
 - ✅ Find Pivot Index — Prefix Sum / Running Sum
 - ✅ Linked List Cycle — Fast & Slow Pointers
+- ✅ Middle of the Linked List — Fast & Slow Pointers
 
 ### Backend / Security
 
@@ -64,10 +65,12 @@ These files are the canonical context for the Interview Prep project.
 - ✅ SQL as target-state processing-state authority
 - ✅ OCR artifact persistence rationale
 - ✅ Queue lifecycle from first principles
-- ✅ Visibility timeout and ownership renewal concepts
-- ✅ Failure classification, DLQ policy and controlled replay
-- 🟡 Azure Service Bus mapping and queue topology
-- ⬜ Transactional messaging
+- ✅ Message completion, retry release and redelivery reconciliation
+- ✅ Competing consumers, stage claims and per-job ordering
+- ✅ Azure Service Bus mapping for current scope
+- ✅ Separate OCR and field-extraction queues
+- ✅ Billing boundary after user-confirmed submission
+- ⬜ Transactional messaging / outbox
 - ⬜ Multi-region async DR design
 
 ## Repository Structure
@@ -98,4 +101,4 @@ Each topic should answer:
 
 Authentication and authorization are complete for Senior / Staff interview purposes.
 
-The current architecture focus is the Invoice Manager transition from synchronous fail-fast processing toward an asynchronous, durable workflow. Queue concepts are now understood at the abstraction level; vendor mapping is the next step.
+The current architecture focus is the Invoice Manager transition from synchronous fail-fast processing toward an asynchronous, durable workflow. Queue fundamentals, Service Bus mapping, competing consumers, queue-vs-topic, and the OCR/field-extraction topology are complete for the current scope. The next distributed-systems topic is backpressure/concurrency control.
