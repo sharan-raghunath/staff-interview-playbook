@@ -64,6 +64,7 @@ Use a Hint Ladder:
 | 7 | Find Pivot Index | Prefix Sum / Running Sum | Compare left/right using total sum |
 | 8 | Linked List Cycle | Fast & Slow Pointers | Floyd’s cycle detection, O(1) extra space |
 | 9 | Middle of the Linked List | Fast & Slow Pointers | Find second middle in one traversal |
+| 10 | Reverse Linked List | Pointer Manipulation | Iterative and recursive reversal |
 
 ## Backend Progress
 
@@ -164,13 +165,17 @@ Important production details:
 - Azure Service Bus Peek-Lock, lock renewal, complete, abandon/expiry, and DLQ mapping;
 - separate OCR and field-extraction queue topology;
 - business validation vs retryable dependency vs operational failure;
-- DLQ and controlled replay.
+- DLQ and controlled replay;
+- SQL update + queue publish gap;
+- Transactional Outbox for durable publish intent;
+- at-least-once publishing and idempotent consumer protection;
+- full staged Invoice Manager pipeline including PDF preparation before OCR.
 
 ## Immediate Next Work
 
 - Continue coding curriculum: Variable-size Sliding Window.
 - Explore queue backpressure/concurrency control after its need is derived.
-- Cover transactional messaging and outbox when ready.
+- Cover Inbox pattern when ready.
 - Derive detailed field-extraction output persistence and Billing execution topology later.
 
 ## User Strengths

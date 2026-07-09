@@ -54,7 +54,7 @@
 - [ ] Stack
 - [ ] Queue
 - [ ] Binary Search
-- [ ] Linked List: reversal and manipulation
+- [x] Linked List: reversal and manipulation
 - [ ] Trees
 - [ ] BST
 - [ ] Heap
@@ -78,8 +78,8 @@
 - [x] Atomic stage claim as an idempotent-consumer protection
 - [ ] Backpressure and concurrency control
 - [ ] Detailed delayed-retry mechanics
-- [ ] Transactional messaging
-- [ ] Outbox pattern
+- [x] Transactional messaging problem: SQL update + queue publish gap
+- [x] Outbox pattern
 - [ ] Inbox pattern
 - [ ] Multi-region queued-work recovery
 - [ ] CAP theorem
@@ -126,7 +126,8 @@
 - [x] Queue lifecycle for Invoice Manager target state
 - [x] Service Bus mapping, queue choice, and stage topology
 - [x] Billing boundary after user-confirmed submission
-- [ ] Invoice Manager end-to-end async redesign
+- [x] Invoice Manager full staged async pipeline through billing boundary
+- [ ] Invoice Manager end-to-end async redesign with backpressure and DR
 - [ ] E-commerce
 - [ ] Chat system
 - [ ] File upload system

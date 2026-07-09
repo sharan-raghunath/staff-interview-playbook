@@ -92,6 +92,11 @@
 - CompleteMessage
 - AbandonMessage
 - Dead-lettering
+- SQL update + queue publish gap
+- Transactional Outbox
+- Outbox Publisher
+- At-least-once Publishing
+- Idempotent Consumer
 
 ## Coding
 
@@ -112,6 +117,11 @@
 - Readability vs Optimization
 - Fast Pointer
 - Slow Pointer
+- Previous Pointer
+- Current Pointer
+- Next Pointer
+- Pointer Reversal
+- Recursive Base Case
 
 ## Definitions Learned
 
@@ -138,3 +148,16 @@ A conditional SQL transition that allows only one worker to move a given job sta
 ### Redelivery Reconciliation
 
 When a message is delivered again, the consumer checks durable SQL state and any durable output first, then performs only the work that remains missing.
+
+
+### Transactional Outbox
+
+A pattern where a service records the message it needs to publish in an Outbox table in the same database transaction as the business state change. A separate publisher later sends the message to the queue. It prevents lost publish intent but can publish duplicates, so consumers must be idempotent.
+
+### Idempotent Consumer
+
+A consumer that can safely receive the same logical message more than once without repeating business work incorrectly. In the Invoice Manager target design this is achieved through SQL stage checks, atomic stage claims, idempotency keys and durable-output reconciliation.
+
+### Durable Output Before Stage Completion
+
+A workflow stage is marked complete only after its recovery-critical output is stored durably and SQL points to it.

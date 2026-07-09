@@ -6,7 +6,7 @@ This file records target-state concepts that have been derived so far. It does n
 
 ## Core Problem
 
-Current Invoice Manager processing is synchronous and fail-fast. Long-running OCR and prediction are tied to the HTTP request that initiated them.
+Current Invoice Manager processing is synchronous and fail-fast. Long-running document preparation, OCR and prediction are tied to the HTTP request that initiated them.
 
 Consequences:
 
@@ -52,10 +52,14 @@ IM Web / Edge API
   → accepts user request and exposes status
 
 IM REST API
-  → validates request, creates job, produces stage work
+  → validates request, stores original PDF reference, creates job,
+    and records first async work through the outbox
 
 Service Bus queues
-  → durable OCR and field-extraction work handoff
+  → durable stage-work handoff
+
+Outbox publisher
+  → publishes pending outbox rows to queues
 
 Orchestrator
   → consumes stage work, owns queue interaction,
@@ -68,26 +72,72 @@ Data Extractor
   → field prediction
 ```
 
-## Processing State and Artifacts
-
-SQL is the authoritative store for future processing state. It retains job lifecycle data and safe user-facing failure state.
-
-Blob storage holds temporary OCR artifacts. SQL stores the artifact reference and workflow metadata.
-
-Target workflow states may include:
+## Full Staged Workflow
 
 ```text
-Accepted
-Queued
-OCRInProgress
-OCRComplete
-FieldInferenceInProgress
-PredictionComplete
-ReadyForUserReview
-Submitted
-Completed
-Failed
+Upload accepted
+→ original PDF stored
+→ PDF preparation / page-image generation
+→ OCR
+→ field extraction
+→ user review / override
+→ user submit
+→ billing
 ```
+
+The exact artifact format/path for PDF preparation and the exact field-extraction persistence model remain deferred.
+
+## Durable Stage Completion Rule
+
+A stage is completed only after its durable output exists and SQL points to it.
+
+Common sequence:
+
+```text
+service returns result
+→ durable output is stored
+→ SQL transaction updates stage state and output references
+→ outbox row is inserted for next async action, if any
+→ current queue message is completed
+```
+
+Examples:
+
+```text
+PDF preparation completed
+→ page images/artifacts stored + SQL references exist
+
+OCR completed
+→ OCR artifact stored + SQL OCR reference exists
+
+Field extraction completed
+→ prediction output stored + SQL ReadyForUserReview state exists
+```
+
+## Transactional Outbox
+
+The outbox handles the reliability gap between SQL updates and publishing the next queue message.
+
+Naive failure:
+
+```text
+SQL stage update commits
+↓ crash
+next queue message is never published
+```
+
+Outbox solution:
+
+```text
+Same SQL transaction:
+- update stage state
+- store durable output reference
+- insert outbox row for the next message
+```
+
+A background publisher later sends the outbox message to Service Bus and marks the outbox row as published.
+
+The outbox gives at-least-once publishing, so consumers must remain idempotent.
 
 ## Settlement and Recovery
 
@@ -99,8 +149,12 @@ For OCR:
 Receive message
 → TE returns output
 → persist Blob artifact
-→ update SQL OCR state
-→ complete message
+→ SQL transaction:
+   - OCR = Completed
+   - artifact reference stored
+   - FieldExtraction = Pending
+   - Outbox row = FieldExtractionRequested
+→ complete OCR message
 ```
 
 A failure to confirm completion does not cause OCR to rerun. On redelivery, Orchestrator checks SQL first, then the deterministic OCR artifact location, and only calls TE when neither proves success.
@@ -125,25 +179,30 @@ Examples:
 
 ## Queue Placement and Ordering
 
+Accepted queues for current scope:
+
 ```text
-PDF/job durable
-→ OCR queue
-→ OCR durable completion
-→ field-extraction queue
-→ predictions ready
+im-ocr-work
+im-field-extraction-work
 ```
 
-The ordering requirement is per job, not global FIFO across invoices. SQL stage state governs whether field extraction is eligible.
+A PDF-preparation work item exists conceptually before OCR, but exact queue naming/topology remains deferred.
+
+The ordering requirement is per job, not global FIFO across invoices. SQL stage state governs whether the next stage is eligible.
 
 ## Billing Boundary
 
 After field extraction, the user reviews/overrides predictions. IM REST API owns the user-confirmed submission transition. Billing is initiated after that transition and remains outside Orchestrator's OCR/field-extraction responsibility.
 
+If billing is asynchronous, the user-submission transaction should insert `BillingRequested` into the outbox.
+
 ## Explicitly Deferred
 
-- transactional consistency between SQL updates and next-stage work creation;
+- Inbox pattern;
 - detailed delayed retry/backpressure implementation;
 - Service Bus sessions as a selected design;
 - multi-region queued-work recovery;
 - independent queue consumers for TE/DE;
+- exact PDF-preparation artifact format/storage path;
+- detailed field-extraction output persistence;
 - billing queue implementation.

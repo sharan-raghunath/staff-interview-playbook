@@ -4,7 +4,11 @@
 
 Move long-running invoice processing away from a purely synchronous request-response model while preserving a clear separation between Invoice Manager processing state and source-system invoice ownership.
 
-## Proposed Direction So Far
+This file describes the target-state direction learned so far. It is not current production behavior.
+
+## Target Workflow Learned So Far
+
+The workflow is staged. It does not jump directly from upload to OCR; there is also a PDF preparation / page-image generation stage before OCR.
 
 ```text
 User
@@ -13,19 +17,25 @@ IM Web / Edge API
   ↓
 IM REST API
   ↓
-Create durable job state in SQL
+Store original PDF durably + create SQL job state
   ↓
-OCR work queue
+Transactional Outbox: PdfPreparationRequested
+  ↓
+PDF preparation / page-image generation
+  ↓
+Durable page/image artifacts + SQL references
+  ↓
+Transactional Outbox: OCRRequested
   ↓
 Orchestrator → Text Extractor
   ↓
-Persist OCR artifact and OCR-stage progress
+Blob OCR artifact + SQL OCR-complete state
   ↓
-Field-extraction work queue
+Transactional Outbox: FieldExtractionRequested
   ↓
 Orchestrator → Data Extractor
   ↓
-Persist prediction result and ReadyForUserReview state
+Durable prediction output + ReadyForUserReview state
   ↓
 User reviews predictions / overrides values
   ↓
@@ -33,8 +43,6 @@ IM REST API persists final submission
   ↓
 Billing initiated independently of Orchestrator
 ```
-
-This is a target-state direction, not current production behavior.
 
 ## API Experience
 
@@ -52,22 +60,25 @@ SQL should be authoritative for:
 - artifact references;
 - safe user-facing failure status;
 - operational failure metadata required for recovery;
-- atomic stage claim state where duplicate work messages are possible.
+- atomic stage claim state where duplicate work messages are possible;
+- outbox rows representing messages that must be published.
 
 Redis can cache status reads but cannot be the recovery authority.
 
 ## Queue and Consumer Boundary
 
-The target work queues are:
+The accepted target work queues so far are:
 
 ```text
 im-ocr-work
 im-field-extraction-work
 ```
 
-Orchestrator consumes both queues and invokes TE/DE synchronously over HTTP in the incremental design. It owns message lock renewal and settlement because it is the queue consumer. TE/DE remain business-processing services rather than queue-aware workers.
+A PDF-preparation work item also exists conceptually, but exact queue naming/topology for that stage has not yet been finalized.
 
-Separate queues were selected because OCR and field extraction have distinct dependencies, scaling behavior, retry pressure, and operational visibility needs.
+Orchestrator consumes document-processing queues and invokes TE/DE synchronously over HTTP in the incremental design. It owns message lock renewal and settlement because it is the queue consumer. TE/DE remain business-processing services rather than queue-aware workers.
+
+Separate OCR and field-extraction queues were selected because OCR and field extraction have distinct dependencies, scaling behavior, retry pressure, and operational visibility needs.
 
 ## Stage Success and Recovery
 
@@ -78,21 +89,71 @@ Receive message under temporary ownership
 → atomically claim stage where applicable
 → process work
 → persist required durable output
-→ update SQL stage state
+→ SQL transaction:
+   - update stage state and output references
+   - create next-stage outbox row, if another async action is required
 → complete queue message
+```
+
+A stage is not complete just because a service returns a response. It is complete only when the stage's durable output exists and SQL points to it.
+
+Examples:
+
+```text
+PDF preparation complete
+→ page images/artifacts stored + SQL references exist
+
+OCR complete
+→ OCR artifact stored + SQL OCR reference exists
+
+Field extraction complete
+→ prediction output stored + SQL prediction-ready state exists
 ```
 
 A redelivery first reconciles SQL state and durable output. It repeats processing only when neither proves the stage completed.
 
-OCR is the concrete stage fully derived so far: its durable output is a Blob artifact referenced by SQL. The same stage-recovery principle applies to field extraction, but its exact persisted-result representation will be derived separately.
+## Transactional Outbox
+
+The outbox solves the failure gap between a SQL update and publishing the next queue message.
+
+Example failure without outbox:
+
+```text
+OCR artifact stored
+→ SQL says OCR completed
+→ crash before FieldExtractionRequested is published
+```
+
+The OCR output is not lost, but the trigger for field extraction is missing.
+
+With outbox:
+
+```text
+Same SQL transaction:
+- OCR = Completed
+- store OCR artifact reference
+- FieldExtraction = Pending
+- Outbox row = FieldExtractionRequested
+```
+
+A background outbox publisher sends pending outbox messages to Service Bus and marks them as published.
+
+The outbox gives at-least-once publishing. If the publisher sends a message but crashes before marking the row published, the message may be sent again. Consumers remain safe through SQL stage checks, atomic stage claims and idempotency keys.
+
+Key line:
+
+> Outbox prevents lost messages. Idempotent consumers protect against duplicate messages.
 
 ## Ordering
 
 The required order is per job:
 
 ```text
-OCR completed and artifact durable
-→ field extraction eligible.
+PDF preparation complete
+→ OCR eligible
+→ OCR completed and artifact durable
+→ field extraction eligible
+→ predictions ready for review
 ```
 
 No global FIFO order across invoices is required. SQL stage state and atomic stage claims enforce workflow progression.
@@ -101,7 +162,18 @@ No global FIFO order across invoices is required. SQL stage state and atomic sta
 
 Billing is not an Orchestrator stage.
 
-Pricing depends on final user-reviewed values and overrides, so it is initiated only after the user submits through IM REST API. A dedicated Billing queue is a plausible future command boundary when billing needs asynchronous execution/retries, but its implementation is not yet designed.
+Pricing depends on final user-reviewed values and overrides, so it is initiated only after the user submits through IM REST API.
+
+When billing is asynchronous, the submit transaction should use the same outbox rule:
+
+```text
+Same SQL transaction:
+- persist final submitted invoice/override state
+- Billing = Pending
+- Outbox row = BillingRequested
+```
+
+Billing queue implementation details remain deferred.
 
 ## Failure Policy
 
@@ -124,10 +196,10 @@ Dead-letter → operational investigation path
 
 ## Deferred Decisions
 
-- transactional messaging between SQL updates and next-stage publication;
-- outbox/inbox patterns;
+- Inbox pattern;
 - detailed delayed-retry/backpressure design;
 - Service Bus sessions as a selected ordering mechanism;
+- exact PDF-preparation artifact format/storage path;
 - detailed field-extraction output persistence;
 - billing queue implementation;
 - multi-region recovery.

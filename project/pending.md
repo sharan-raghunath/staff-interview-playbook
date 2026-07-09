@@ -8,10 +8,10 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 - Backpressure and concurrency control.
 - Detailed delayed-retry implementation.
-- Transactional messaging.
-- Outbox pattern.
 - Inbox pattern.
 - Multi-region recovery for queued work.
+- Exact PDF-preparation queue naming/topology.
+- Exact PDF image artifact format/storage path.
 - Detailed field-extraction result persistence.
 - Billing execution topology.
 - Service Bus sessions: when the existing SQL stage dependency is insufficient.
@@ -35,7 +35,6 @@ This file tracks intentionally pending topics. A pending topic may be named here
 - Container With Most Water.
 - Binary Search intro.
 - Valid Parentheses.
-- Reverse Linked List.
 - Maximum Depth of Binary Tree.
 - Number of Islands.
 

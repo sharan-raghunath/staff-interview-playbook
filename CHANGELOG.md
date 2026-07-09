@@ -191,3 +191,32 @@
 - Added coding notes for LeetCode 876.
 - Updated queue fundamentals, Invoice Manager target-state notes, context, roadmap, pending list, scorecard, README, and start-here context.
 - Removed future-only terms from learned vocabulary.
+
+---
+
+## Day 10
+
+### Coding
+- Reverse Linked List.
+- Iterative pointer manipulation using `prev`, `curr`, and `next`.
+- Recursive reverse linked list for interview readiness.
+- Base case: `head == null || head.next == null`.
+- Recursive unwinding: `head.next.next = head` and `head.next = null`.
+
+### Distributed Systems
+- Identified the SQL update + queue publish reliability gap.
+- Learned the Transactional Outbox pattern.
+- Covered outbox row lifecycle: pending, published, retained, cleaned up later.
+- Covered at-least-once publishing and duplicate publish risk.
+- Connected outbox duplicates to idempotent consumer design and atomic SQL stage claims.
+
+### Invoice Manager
+- Expanded target pipeline to include PDF preparation / page-image generation before OCR.
+- Applied the durable-output-before-stage-completion rule to:
+  - original PDF upload;
+  - PDF preparation artifacts;
+  - OCR artifacts;
+  - field-extraction prediction output;
+  - user submit → billing request.
+- Added ADR-012 for Transactional Outbox stage handoffs.
+- Added ADR-013 for marking stages complete only after durable output exists.

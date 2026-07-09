@@ -144,3 +144,42 @@ Complexity:
 Time: O(n)
 Space: O(1)
 ```
+
+
+## Linked List Pointer Manipulation
+
+Representative problem: Reverse Linked List.
+
+Core idea:
+
+> Preserve the next reference before changing the current node's pointer, then move through the list while maintaining the already-reversed part.
+
+Iterative reversal step:
+
+```text
+next = curr.next
+curr.next = prev
+prev = curr
+curr = next
+```
+
+Recursive reversal key step:
+
+```text
+head.next.next = head
+head.next = null
+```
+
+Complexity for iterative solution:
+
+```text
+Time: O(n)
+Space: O(1)
+```
+
+Complexity for recursive solution:
+
+```text
+Time: O(n)
+Space: O(n) due to call stack
+```

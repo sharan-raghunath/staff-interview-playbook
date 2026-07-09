@@ -2,39 +2,39 @@
 
 This is a living review document. It tracks readiness by competency rather than topic count.
 
-## Day 9 Snapshot
+## Day 10 Snapshot
 
 | Competency | Current Level | Evidence |
 |---|---:|---|
 | Backend fundamentals | 9.3/10 | Strong HTTP, session, cookie, JWT, OAuth and OIDC understanding |
 | Authentication and authorization | 9.5/10 | Can reason about scopes, OBO, service identity, Zero Trust and blast radius |
-| Coding patterns | 8.2/10 | Nine foundational problems; fast/slow pointers used for cycle detection and midpoint finding |
-| System design | 8.9/10 | Strong current-vs-target-state discipline; can derive durable workflow boundaries and stage ownership |
-| Distributed systems | 8.2/10 | Can reason about acknowledgement ambiguity, redelivery, competing consumers, atomic stage claims, and per-job ordering |
+| Coding patterns | 8.4/10 | Ten foundational problems; linked-list cycle, middle and reversal covered |
+| System design | 9.0/10 | Strong current-vs-target-state discipline; can derive durable workflow boundaries, stage ownership and outbox handoff |
+| Distributed systems | 8.5/10 | Can reason about acknowledgement ambiguity, redelivery, competing consumers, atomic stage claims, outbox and idempotent consumers |
 | Cloud architecture | 8.4/10 | Mapped first-principles queue model to Service Bus and selected target queue topology |
-| Interview communication | 8.3/10 | Increasingly concise and accurate; keep stating assumptions and ownership boundaries |
+| Interview communication | 8.4/10 | Good self-correction and assumption stating; keep tightening wording around recoverable vs stuck states |
 
-## Notable Improvements Since Day 8
+## Notable Improvements Since Day 9
 
-- Distinguished lease renewal, release-for-retry, and successful message completion.
-- Explained why completion must follow durable output and SQL stage state.
-- Correctly handled ambiguous acknowledgement outcomes without rerunning expensive work.
-- Derived competing consumers and identified that queue ownership alone is insufficient for duplicate stage messages.
-- Added atomic SQL stage claims alongside idempotency and durable-state reconciliation.
-- Distinguished per-job sequencing from unnecessary global FIFO.
-- Mapped the learned model to Azure Service Bus terminology.
-- Finalized separate OCR and field-extraction queues and preserved Billing outside Orchestrator.
-- Added a second fast/slow-pointer application: middle of linked list.
+- Solved Reverse Linked List iteratively with correct pointer preservation and O(1) extra space.
+- Brushed up recursive reverse linked list, especially the base case and `head.next.next = head` unwinding step.
+- Identified the SQL commit + queue publish failure window.
+- Understood Transactional Outbox as durable publish intent stored in SQL.
+- Understood outbox row lifecycle: Pending → Published → retained/archived/deleted later.
+- Understood that outbox gives at-least-once publishing, not exactly-once publishing.
+- Connected duplicate outbox publishes to idempotent consumers and atomic SQL stage claims.
+- Corrected the Invoice Manager pipeline to include PDF preparation / page-image generation before OCR.
+- Clarified that every stage completes only after durable output exists and SQL points to it.
 
 ## Current Weak Spots
 
 - Backpressure/concurrency control and detailed delayed retry.
-- Transactional messaging/outbox.
-- Multi-region queued-work recovery.
+- Inbox pattern.
+- Multi-region queued-work recovery, including outbox behavior.
 - Trees, graphs, heaps and DP.
 - Networking module.
 - Behavioral STAR stories.
 
 ## Coaching Notes
 
-The user learns best when concepts are derived from problems and then mapped to Invoice Manager. Follow the agreed curriculum in order; do not cut planned sections short or introduce future concepts as learned content.
+The user learns best when concepts are derived from concrete failure windows and then mapped to Invoice Manager. Follow the agreed curriculum in order; do not cut planned sections short or introduce future concepts as learned content.

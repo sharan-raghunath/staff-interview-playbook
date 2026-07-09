@@ -31,6 +31,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Find Pivot Index — Prefix Sum / Running Sum
 - ✅ Linked List Cycle — Fast & Slow Pointers
 - ✅ Middle of the Linked List — Fast & Slow Pointers
+- ✅ Reverse Linked List — Pointer Manipulation
 
 ### Backend / Security
 
@@ -70,7 +71,8 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Azure Service Bus mapping for current scope
 - ✅ Separate OCR and field-extraction queues
 - ✅ Billing boundary after user-confirmed submission
-- ⬜ Transactional messaging / outbox
+- ✅ Transactional Outbox for reliable stage handoff
+- ✅ Full staged Invoice Manager pipeline including PDF preparation
 - ⬜ Multi-region async DR design
 
 ## Repository Structure
@@ -101,4 +103,4 @@ Each topic should answer:
 
 Authentication and authorization are complete for Senior / Staff interview purposes.
 
-The current architecture focus is the Invoice Manager transition from synchronous fail-fast processing toward an asynchronous, durable workflow. Queue fundamentals, Service Bus mapping, competing consumers, queue-vs-topic, and the OCR/field-extraction topology are complete for the current scope. The next distributed-systems topic is backpressure/concurrency control.
+The current architecture focus is the Invoice Manager transition from synchronous fail-fast processing toward an asynchronous, durable workflow. Queue fundamentals, Service Bus mapping, competing consumers, queue-vs-topic, the OCR/field-extraction topology, and the Transactional Outbox pattern are complete for the current scope. The next distributed-systems topic is backpressure/concurrency control.

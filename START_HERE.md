@@ -49,6 +49,7 @@ Coaching rules:
 | 7 | Find Pivot Index | Prefix Sum / Running Sum | ✅ |
 | 8 | Linked List Cycle | Fast & Slow Pointers | ✅ |
 | 9 | Middle of the Linked List | Fast & Slow Pointers | ✅ |
+| 10 | Reverse Linked List | Pointer Manipulation | ✅ |
 
 ## Completed Backend Topics
 
@@ -100,28 +101,34 @@ Orchestrator
 ## Target-State Direction Learned So Far
 
 ```text
-IM REST API creates durable SQL job state and PDF reference
+IM REST API stores original PDF and creates durable SQL job state
   ↓
-im-ocr-work
+Transactional Outbox: PdfPreparationRequested
+  ↓
+PDF preparation / page-image generation
+  ↓
+durable page/image artifacts + SQL references
+  ↓
+Transactional Outbox: OCRRequested
   ↓
 Orchestrator → TE
   ↓
 Blob OCR artifact + SQL OCR-complete state
   ↓
-im-field-extraction-work
+Transactional Outbox: FieldExtractionRequested
   ↓
 Orchestrator → DE
   ↓
-Prediction-ready state
+durable prediction output + ReadyForUserReview state
   ↓
 User review / override / submit
   ↓
-IM REST API initiates Billing independently
+IM REST API initiates Billing independently, using final user-confirmed data
 ```
 
 SQL is authoritative for target-state job/stage state. Redis remains a distributed cache, not a correctness boundary.
 
-## Queue Concepts Learned on Days 8–9
+## Queue and Outbox Concepts Learned on Days 8–10
 
 - HTTP lifetime and business-process lifetime should be independent.
 - A long-running operation needs a Job ID and persistent SQL stage state.
@@ -137,11 +144,15 @@ SQL is authoritative for target-state job/stage state. Redis remains a distribut
 - Azure Service Bus mapping: Peek-Lock, lock renewal, Complete, Abandon/expiry, and DLQ.
 - Business validation failures do not enter DLQ; operational failures and exhausted retry attempts can.
 - DLQ replay follows root-cause remediation and runs in controlled batches.
+- The SQL update + queue publish gap can lose the trigger for the next stage.
+- Transactional Outbox records the next message-to-publish in the same SQL transaction as the stage-state update.
+- Outbox gives at-least-once publishing; idempotent consumers protect against duplicate messages.
+- Invoice Manager includes a PDF preparation / page-image generation stage before OCR.
 
 ## Where to Continue Next
 
 Continue the coding curriculum with **Variable-size Sliding Window**.
 
-For distributed systems, next derive **backpressure/concurrency control**, then address transactional messaging/outbox only after the problem has been stated precisely.
+For distributed systems, next derive **backpressure/concurrency control**. Inbox pattern, detailed delayed-retry mechanics, Service Bus sessions as a selected design, and multi-region queued-work recovery remain deferred.
 
-Do not mark those future topics as learned until covered.
+Do not mark future topics as learned until covered.

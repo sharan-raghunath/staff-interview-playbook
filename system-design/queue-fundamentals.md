@@ -259,10 +259,45 @@ Separate OCR and field-extraction queues isolate their distinct dependencies, sc
 
 ## Explicitly Deferred
 
-- transactional consistency between SQL stage updates and next-stage message publication;
-- outbox/inbox patterns;
+- Inbox pattern;
 - detailed delayed-retry implementation;
 - backpressure implementation;
 - Service Bus sessions as a selected design;
 - multi-region queued-work recovery;
 - Kafka comparison.
+
+## SQL Update + Queue Publish Gap
+
+A queue message may need to be created after a SQL state change.
+
+Example:
+
+```text
+OCR artifact stored
+→ SQL updated: OCR = Completed
+→ field-extraction message should be published
+```
+
+If the service crashes after SQL commit but before queue publish, the next-stage trigger can be lost.
+
+This is not solved by message acknowledgement alone because the missing message was never published.
+
+## Transactional Outbox
+
+The Transactional Outbox pattern records the intent to publish in SQL in the same transaction as the business state change.
+
+```text
+Same SQL transaction:
+- update workflow state
+- insert Outbox row for next message
+```
+
+A background publisher later reads pending outbox rows, publishes them to the queue, and marks them published.
+
+This makes message publishing recoverable after service crashes.
+
+Important trade-off:
+
+> Outbox prevents lost messages, but publishing is at-least-once. Consumers must still be idempotent.
+
+Duplicate messages are handled by checking SQL stage state and atomically claiming the stage before doing work.

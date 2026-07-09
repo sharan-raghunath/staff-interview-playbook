@@ -26,6 +26,7 @@ This is a living assessment based on completed sessions.
 | Fixed Sliding Window | 8/10 | Solved Maximum Average Subarray I; corrected indexing bug |
 | Prefix Sum / Running Sum | 8/10 | Solved Find Pivot Index with O(n)/O(1) solution |
 | Fast & Slow Pointers | 8.5/10 | Solved Linked List Cycle and Middle of the Linked List with O(n)/O(1) solutions |
+| Linked List Pointer Manipulation | 8.5/10 | Solved Reverse Linked List iteratively; also covered recursive version and base case |
 | Trees / Graphs | Not started | User expects rustiness due to long gap |
 | Dynamic Programming | Not started | Future topic |
 
@@ -42,7 +43,7 @@ This is a living assessment based on completed sessions.
 | Azure Service Bus Mapping | 8/10 | Mapped Peek-Lock, renew, complete, abandon/expiry and DLQ to the learned model |
 | Failure Classification / DLQ | 8/10 | Distinguishes business validation from operational failures and controlled replay |
 | Invoice Manager Async Topology | 8.2/10 | Selected separate OCR/field-extraction queues; Billing stays outside Orchestrator |
-| Transactional Messaging / Outbox | Not started | Explicitly deferred |
+| Transactional Outbox | 8/10 | Can explain SQL update + queue publish gap, durable publish intent, duplicate publish and idempotent consumers |
 
 ## Communication
 
@@ -52,3 +53,13 @@ This is a living assessment based on completed sessions.
 | Trade-off articulation | Strong | Especially clear in SQL/Blob recovery, queue isolation and service ownership |
 | Concise interview answers | Improving | Can now articulate durable success before acknowledgement and per-job ordering; continue refining into 30–60 second answers |
 | Coding narration | Improving | Continue explaining invariants while coding |
+
+
+## Day 10 Additions
+
+| Skill | Status | Notes |
+|---|---|---|
+| Reverse linked list | Learned | Iterative O(1) solution and recursive interview version covered. |
+| SQL update + queue publish gap | Learned | Can explain how a stage can get stuck when SQL commits but the next message is not published. |
+| Transactional Outbox | Learned | Can explain durable publish intent, publisher lifecycle, duplicate publish, and idempotent consumer protection. |
+| Full staged Invoice Manager pipeline | Learned | Upload/original PDF, PDF preparation, OCR, field extraction, user review/submit, billing boundary. |
