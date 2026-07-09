@@ -183,3 +183,27 @@ Complexity for recursive solution:
 Time: O(n)
 Space: O(n) due to call stack
 ```
+
+
+## Linked List Merge / Dummy Head
+
+Representative problem: Merge Two Sorted Lists.
+
+Core idea:
+
+> Use a dummy head and a tail pointer so the first append and later appends follow the same logic. Compare the current heads of both sorted lists, attach the smaller node, and advance only that source list.
+
+Dummy-head return rule:
+
+```text
+return dummy.next
+```
+
+The dummy node is not part of the real result.
+
+Complexity:
+
+```text
+Time: O(n + m)
+Space: O(1)
+```

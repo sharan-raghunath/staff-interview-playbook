@@ -161,6 +161,21 @@ A failure to confirm completion does not cause OCR to rerun. On redelivery, Orch
 
 Duplicate stage messages are protected by an atomic SQL claim such as `Pending → Processing` only when the stage is still pending.
 
+Day 11 clarified the duplicate-safety split:
+
+```text
+Initial job creation
+→ Jobs table unique constraint: UNIQUE(TenantId, IdempotencyKey)
+
+Existing stage processing
+→ atomic claim on normalized JobStages state
+
+Generic message-level deduplication
+→ optional Inbox table when business tables are not enough
+```
+
+Target schema direction: normalize per-stage status and metadata into `JobStages` rather than adding one set of columns per stage to `Jobs`.
+
 ## Failure Propagation
 
 Store two distinct views of failures:
@@ -198,7 +213,7 @@ If billing is asynchronous, the user-submission transaction should insert `Billi
 
 ## Explicitly Deferred
 
-- Inbox pattern;
+- deeper Inbox implementation details, if needed beyond the Day 11 concept;
 - detailed delayed retry/backpressure implementation;
 - Service Bus sessions as a selected design;
 - multi-region queued-work recovery;

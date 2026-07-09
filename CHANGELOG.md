@@ -1,5 +1,16 @@
 # Changelog
 
+## Day 11
+
+- Added Day 11 journal.
+- Added `coding/merge-two-sorted-lists.md`.
+- Added `system-design/idempotent-consumer-inbox.md`.
+- Added ADR-014 for normalizing job stage state.
+- Added ADR-015 for idempotent consumer strategy.
+- Updated Invoice Manager docs with `Jobs` + `JobStages` target schema decision.
+- Updated roadmap, context, scorecard, vocabulary, coding patterns and pending items.
+
+
 ## Day 1
 
 ### Coding

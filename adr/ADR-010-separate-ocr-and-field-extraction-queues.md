@@ -44,4 +44,4 @@ Orchestrator pods consume each queue. SQL stage state and atomic stage claims en
 - exact Service Bus configuration values;
 - sessions;
 - detailed delayed-retry mechanism;
-- Inbox pattern and multi-region message recovery.
+- deeper Inbox implementation details and multi-region message recovery.

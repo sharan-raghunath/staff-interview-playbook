@@ -2,6 +2,28 @@
 
 This is a living review document. It tracks readiness by competency rather than topic count.
 
+## Day 11 Snapshot
+
+| Competency | Current Level | Evidence |
+|---|---:|---|
+| Backend fundamentals | 9.3/10 | Strong HTTP, session, cookie, JWT, OAuth and OIDC understanding |
+| Authentication and authorization | 9.5/10 | Can reason about scopes, OBO, service identity, Zero Trust and blast radius |
+| Coding patterns | 8.5/10 | Eleven foundational problems; linked-list cycle, middle, reversal and merge covered |
+| System design | 9.1/10 | Can derive durable workflow boundaries, stage ownership, outbox, idempotent consumers and normalized stage state |
+| Distributed systems | 8.7/10 | Can reason about outbox, duplicate delivery, unique constraints, atomic claims, optional Inbox and at-least-once behavior |
+| Cloud architecture | 8.4/10 | Mapped queue model to Service Bus and selected target queue topology |
+| Interview communication | 8.5/10 | Good correction of schema assumptions and clearer distinction between creation vs existing-stage processing |
+
+## Notable Improvements Since Day 10
+
+- Learned that first-time job creation needs a database-enforced unique idempotency key.
+- Clarified that atomic updates protect existing rows/stages but not insert races where no row exists yet.
+- Distinguished business-table uniqueness from the Inbox pattern.
+- Accepted normalized `Jobs` + `JobStages` target schema for Invoice Manager stage state.
+- Solved Merge Two Sorted Lists and learned the dummy-head technique.
+- Practiced mock interview explanation for duplicate queue messages.
+
+
 ## Day 10 Snapshot
 
 | Competency | Current Level | Evidence |
@@ -29,7 +51,7 @@ This is a living review document. It tracks readiness by competency rather than 
 ## Current Weak Spots
 
 - Backpressure/concurrency control and detailed delayed retry.
-- Inbox pattern.
+- Deeper Inbox implementation details only if needed beyond the Day 11 concept.
 - Multi-region queued-work recovery, including outbox behavior.
 - Trees, graphs, heaps and DP.
 - Networking module.

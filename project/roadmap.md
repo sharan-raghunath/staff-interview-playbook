@@ -55,6 +55,7 @@
 - [ ] Queue
 - [ ] Binary Search
 - [x] Linked List: reversal and manipulation
+- [x] Linked List: merge with dummy head
 - [ ] Trees
 - [ ] BST
 - [ ] Heap
@@ -80,7 +81,9 @@
 - [ ] Detailed delayed-retry mechanics
 - [x] Transactional messaging problem: SQL update + queue publish gap
 - [x] Outbox pattern
-- [ ] Inbox pattern
+- [x] Unique constraint for first-time idempotent creation
+- [x] Normalized job/stage state schema decision
+- [x] Idempotent consumer / Inbox pattern concept
 - [ ] Multi-region queued-work recovery
 - [ ] CAP theorem
 - [ ] Consistency models

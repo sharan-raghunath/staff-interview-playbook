@@ -97,6 +97,15 @@
 - Outbox Publisher
 - At-least-once Publishing
 - Idempotent Consumer
+- Inbox Pattern
+- Durable Uniqueness
+- Unique Constraint
+- Duplicate Message
+- Duplicate Business Processing
+- Business-table Idempotency
+- Message-level Deduplication
+- JobStages
+- Normalized Stage State
 
 ## Coding
 
@@ -122,6 +131,9 @@
 - Next Pointer
 - Pointer Reversal
 - Recursive Base Case
+- Dummy Head
+- Tail Pointer
+- Linked List Merge
 
 ## Definitions Learned
 
@@ -161,3 +173,20 @@ A consumer that can safely receive the same logical message more than once witho
 ### Durable Output Before Stage Completion
 
 A workflow stage is marked complete only after its recovery-critical output is stored durably and SQL points to it.
+
+
+### Inbox Pattern
+
+A consumer-side pattern that records received or processed messages in durable storage, usually with a unique key such as `(ConsumerName, MessageId)` or `(ConsumerName, IdempotencyKey)`. It is useful when business tables do not naturally provide enough duplicate protection.
+
+### Durable Uniqueness
+
+A duplicate-safety principle where durable storage enforces that only one record can exist for the same logical business operation or message. Examples include `UNIQUE(TenantId, IdempotencyKey)` for job creation and a unique Inbox key for message-level deduplication.
+
+### Normalized Stage State
+
+A target-state schema decision where per-stage status, attempts, owner, timestamps, errors and artifact references are stored in a `JobStages` table rather than as many columns on `Jobs`. This was introduced and accepted on Day 11.
+
+### Dummy Head
+
+A temporary linked-list node used to simplify list construction. It is not part of the final answer; the real result starts at `dummy.next`.

@@ -65,6 +65,7 @@ Use a Hint Ladder:
 | 8 | Linked List Cycle | Fast & Slow Pointers | Floyd’s cycle detection, O(1) extra space |
 | 9 | Middle of the Linked List | Fast & Slow Pointers | Find second middle in one traversal |
 | 10 | Reverse Linked List | Pointer Manipulation | Iterative and recursive reversal |
+| 11 | Merge Two Sorted Lists | Linked List Merge / Dummy Head | Reused nodes, dummy head, O(n+m)/O(1) |
 
 ## Backend Progress
 
@@ -121,6 +122,7 @@ It is **not** the system of record for invoice business data. The source system 
 - Separate OCR and field-extraction queues isolate distinct dependencies and operations.
 - Queue completion follows durable output and SQL state; redelivery reconciles before repeating work.
 - Billing follows user-confirmed submission and remains outside Orchestrator.
+- Target schema now normalizes workflow stage state into `JobStages`; this was introduced and decided on Day 11.
 - Failure propagation separates operational detail from user-facing status.
 
 ### Canonical Architecture
@@ -169,13 +171,16 @@ Important production details:
 - SQL update + queue publish gap;
 - Transactional Outbox for durable publish intent;
 - at-least-once publishing and idempotent consumer protection;
-- full staged Invoice Manager pipeline including PDF preparation before OCR.
+- full staged Invoice Manager pipeline including PDF preparation before OCR;
+- unique constraint for first-time job creation idempotency;
+- Inbox pattern as optional generic message-level deduplication;
+- normalized `Jobs` + `JobStages` target schema decision.
 
 ## Immediate Next Work
 
-- Continue coding curriculum: Variable-size Sliding Window.
+- Continue coding curriculum after Merge Two Sorted Lists: Variable-size Sliding Window.
 - Explore queue backpressure/concurrency control after its need is derived.
-- Cover Inbox pattern when ready.
+- Inbox pattern is covered conceptually; revisit only for deeper implementation detail if needed.
 - Derive detailed field-extraction output persistence and Billing execution topology later.
 
 ## User Strengths

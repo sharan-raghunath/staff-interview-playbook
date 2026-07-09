@@ -80,7 +80,7 @@ Therefore:
 
 > Outbox gives at-least-once publishing, not exactly-once publishing.
 
-Consumers must be idempotent.
+Consumers must be idempotent. Day 11 covered the idempotent-consumer strategy in more detail: unique constraints for first-time creation, atomic stage claims for existing stages, and optional Inbox tables for generic message-level deduplication.
 
 ## Consumer Safety
 
@@ -116,4 +116,4 @@ One row updated means the worker owns the stage. Zero rows updated means another
 
 ## Deferred
 
-This document covers the outbox pattern only. The Inbox pattern, event sourcing, Kafka, exactly-once semantics, and multi-region outbox recovery remain deferred.
+This document covers the outbox pattern only. Inbox is covered conceptually in `system-design/idempotent-consumer-inbox.md`; deeper implementation details, event sourcing, Kafka, exactly-once semantics, and multi-region outbox recovery remain deferred.

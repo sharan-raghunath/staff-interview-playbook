@@ -50,6 +50,7 @@ Coaching rules:
 | 8 | Linked List Cycle | Fast & Slow Pointers | ✅ |
 | 9 | Middle of the Linked List | Fast & Slow Pointers | ✅ |
 | 10 | Reverse Linked List | Pointer Manipulation | ✅ |
+| 11 | Merge Two Sorted Lists | Linked List Merge / Dummy Head | ✅ |
 
 ## Completed Backend Topics
 
@@ -149,10 +150,18 @@ SQL is authoritative for target-state job/stage state. Redis remains a distribut
 - Outbox gives at-least-once publishing; idempotent consumers protect against duplicate messages.
 - Invoice Manager includes a PDF preparation / page-image generation stage before OCR.
 
+## Day 11 Additions
+
+- Idempotent consumer strategy is now covered.
+- First-time job creation uses a database-enforced unique idempotency key, such as `UNIQUE(TenantId, IdempotencyKey)`.
+- Existing stage processing uses an atomic `Pending → Processing` stage claim.
+- Inbox pattern is understood as optional generic message-level deduplication when business tables are not sufficient.
+- `JobStages` is now an accepted target-state schema decision for normalized stage state. This was introduced on Day 11; it was not assumed in earlier days.
+
 ## Where to Continue Next
 
-Continue the coding curriculum with **Variable-size Sliding Window**.
+Continue the coding curriculum with **Variable-size Sliding Window** after completing the current linked-list block.
 
-For distributed systems, next derive **backpressure/concurrency control**. Inbox pattern, detailed delayed-retry mechanics, Service Bus sessions as a selected design, and multi-region queued-work recovery remain deferred.
+For distributed systems, next derive **backpressure/concurrency control**. Detailed delayed-retry mechanics, Service Bus sessions as a selected design, and multi-region queued-work recovery remain deferred.
 
 Do not mark future topics as learned until covered.

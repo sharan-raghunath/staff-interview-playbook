@@ -63,6 +63,57 @@ SQL should be authoritative for:
 - atomic stage claim state where duplicate work messages are possible;
 - outbox rows representing messages that must be published.
 
+## Target SQL Shape Learned on Day 11
+
+Earlier sessions established authoritative stage state in SQL. Day 11 added the physical schema decision to normalize stage state rather than widening the `Jobs` table for every stage.
+
+Conceptual `Jobs` table:
+
+```text
+Jobs
+- JobId
+- TenantId
+- IdempotencyKey
+- OriginalPdfReference
+- OverallStatus
+- CreatedAt
+- UpdatedAt
+- SubmittedAt
+```
+
+Important uniqueness:
+
+```text
+UNIQUE(TenantId, IdempotencyKey)
+```
+
+Conceptual `JobStages` table:
+
+```text
+JobStages
+- JobStageId
+- JobId
+- StageName
+- Status
+- ArtifactReference
+- AttemptCount
+- ProcessingOwner
+- StartedAt
+- CompletedAt
+- LastErrorCode
+- LastErrorMessage
+- CreatedAt
+- UpdatedAt
+```
+
+Current uniqueness:
+
+```text
+UNIQUE(JobId, StageName)
+```
+
+`JobStages` was introduced and accepted on Day 11. It was not assumed in earlier days.
+
 Redis can cache status reads but cannot be the recovery authority.
 
 ## Queue and Consumer Boundary
@@ -138,7 +189,7 @@ Same SQL transaction:
 
 A background outbox publisher sends pending outbox messages to Service Bus and marks them as published.
 
-The outbox gives at-least-once publishing. If the publisher sends a message but crashes before marking the row published, the message may be sent again. Consumers remain safe through SQL stage checks, atomic stage claims and idempotency keys.
+The outbox gives at-least-once publishing. If the publisher sends a message but crashes before marking the row published, the message may be sent again. Consumers remain safe through SQL stage checks, atomic stage claims, idempotency keys and, where needed, an Inbox table.
 
 Key line:
 
@@ -196,7 +247,7 @@ Dead-letter → operational investigation path
 
 ## Deferred Decisions
 
-- Inbox pattern;
+- deeper Inbox implementation details, if needed beyond the Day 11 concept;
 - detailed delayed-retry/backpressure design;
 - Service Bus sessions as a selected ordering mechanism;
 - exact PDF-preparation artifact format/storage path;

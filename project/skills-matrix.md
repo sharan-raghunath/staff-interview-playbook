@@ -26,7 +26,7 @@ This is a living assessment based on completed sessions.
 | Fixed Sliding Window | 8/10 | Solved Maximum Average Subarray I; corrected indexing bug |
 | Prefix Sum / Running Sum | 8/10 | Solved Find Pivot Index with O(n)/O(1) solution |
 | Fast & Slow Pointers | 8.5/10 | Solved Linked List Cycle and Middle of the Linked List with O(n)/O(1) solutions |
-| Linked List Pointer Manipulation | 8.5/10 | Solved Reverse Linked List iteratively; also covered recursive version and base case |
+| Linked List Pointer Manipulation | 8.7/10 | Solved Reverse Linked List and Merge Two Sorted Lists; learned dummy-head merge pattern |
 | Trees / Graphs | Not started | User expects rustiness due to long gap |
 | Dynamic Programming | Not started | Future topic |
 
@@ -37,7 +37,7 @@ This is a living assessment based on completed sessions.
 | Component Responsibility | 9/10 | Can explain Edge API/API Service/Orchestrator/TE/DE/Billing boundaries |
 | Authentication Architecture | 9/10 | Can reason about registrations and security boundaries |
 | Async Motivation | 8.5/10 | Can explain why long-running HTTP is a smell |
-| Idempotency | 8/10 | Uses idempotency with durable-state reconciliation and atomic stage claims |
+| Idempotency | 8.5/10 | Distinguishes unique constraints for creation, atomic stage claims for existing work, and optional Inbox for message-level dedupe |
 | Queue Lifecycle | 8.7/10 | Can distinguish renewal, release-for-retry, completion, lock expiry and redelivery |
 | Competing Consumers / Ordering | 8.3/10 | Understands queue ownership, duplicate stage messages, SQL claims and per-job dependency |
 | Azure Service Bus Mapping | 8/10 | Mapped Peek-Lock, renew, complete, abandon/expiry and DLQ to the learned model |
@@ -63,3 +63,14 @@ This is a living assessment based on completed sessions.
 | SQL update + queue publish gap | Learned | Can explain how a stage can get stuck when SQL commits but the next message is not published. |
 | Transactional Outbox | Learned | Can explain durable publish intent, publisher lifecycle, duplicate publish, and idempotent consumer protection. |
 | Full staged Invoice Manager pipeline | Learned | Upload/original PDF, PDF preparation, OCR, field extraction, user review/submit, billing boundary. |
+
+
+## Day 11 Additions
+
+| Area | Status | Evidence |
+|---|---|---|
+| Idempotent Consumer | Learned | Can explain duplicate delivery and how durable uniqueness prevents duplicate business work. |
+| Unique constraint for initial creation | Learned | Can distinguish first-time insert races from existing-stage atomic updates. |
+| Inbox pattern | Learned conceptually | Understands Inbox as optional generic message-level dedupe, distinct from business-table uniqueness. |
+| Normalized job/stage schema | Learned decision | Chose `JobStages` to avoid widening `Jobs` for every stage and metadata field. |
+| Merge Two Sorted Lists | Learned | Solved linked-list merge and learned dummy head / `dummy.next` return pattern. |

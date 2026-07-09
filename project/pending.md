@@ -8,11 +8,12 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 - Backpressure and concurrency control.
 - Detailed delayed-retry implementation.
-- Inbox pattern.
+- Deeper Inbox implementation details, only if needed beyond the Day 11 concept.
 - Multi-region recovery for queued work.
 - Exact PDF-preparation queue naming/topology.
 - Exact PDF image artifact format/storage path.
 - Detailed field-extraction result persistence.
+- Exact physical schema details beyond the Day 11 `Jobs` + `JobStages` target model.
 - Billing execution topology.
 - Service Bus sessions: when the existing SQL stage dependency is insufficient.
 - Topics/subscriptions for future broadcast lifecycle events, only if a real independent-consumer need arises.
