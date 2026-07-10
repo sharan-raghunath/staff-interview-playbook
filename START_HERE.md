@@ -51,6 +51,7 @@ Coaching rules:
 | 9 | Middle of the Linked List | Fast & Slow Pointers | ✅ |
 | 10 | Reverse Linked List | Pointer Manipulation | ✅ |
 | 11 | Merge Two Sorted Lists | Linked List Merge / Dummy Head | ✅ |
+| 12 | Remove Nth Node From End | Two Pointers / Dummy Head | ✅ |
 
 ## Completed Backend Topics
 
@@ -158,10 +159,21 @@ SQL is authoritative for target-state job/stage state. Redis remains a distribut
 - Inbox pattern is understood as optional generic message-level deduplication when business tables are not sufficient.
 - `JobStages` is now an accepted target-state schema decision for normalized stage state. This was introduced on Day 11; it was not assumed in earlier days.
 
+## Day 12 Additions
+
+- Backpressure and bottleneck-oriented scaling are covered.
+- Per-pod bounded concurrency is understood conceptually; global concurrency remains deferred.
+- LeetCode 19 was completed with brute-force and one-pass reasoning.
+- The Friday mock reinforced Job ID/Correlation ID investigation, stage timelines, metrics → traces → logs, and durable-artifact reconciliation.
+- TE/DE Gunicorn settings were discussed only as production context; KEDA and Gunicorn internals are not yet covered.
+
 ## Where to Continue Next
 
-Continue the coding curriculum with **Variable-size Sliding Window** after completing the current linked-list block.
+Day 13 begins in the next session.
 
-For distributed systems, next derive **backpressure/concurrency control**. Detailed delayed-retry mechanics, Service Bus sessions as a selected design, and multi-region queued-work recovery remain deferred.
+- Restore the original daily balance by including a dedicated .NET/backend topic; `async`/`await` internals is the next proposed backend topic.
+- Continue the coding roadmap after the linked-list block.
+- Keep KEDA internals, Gunicorn internals, global concurrency and distributed rate limiting in **mentioned but not covered** status until dedicated sessions.
+- Detailed delayed-retry mechanics, Service Bus sessions and multi-region queued-work recovery remain deferred.
 
 Do not mark future topics as learned until covered.

@@ -66,6 +66,7 @@ Use a Hint Ladder:
 | 9 | Middle of the Linked List | Fast & Slow Pointers | Find second middle in one traversal |
 | 10 | Reverse Linked List | Pointer Manipulation | Iterative and recursive reversal |
 | 11 | Merge Two Sorted Lists | Linked List Merge / Dummy Head | Reused nodes, dummy head, O(n+m)/O(1) |
+| 12 | Remove Nth Node From End | Two Pointers / Dummy Head | Brute force and one-pass gap; one pass does not mean one loop |
 
 ## Backend Progress
 
@@ -176,10 +177,21 @@ Important production details:
 - Inbox pattern as optional generic message-level deduplication;
 - normalized `Jobs` + `JobStages` target schema decision.
 
+## Day 12 Progress
+
+- Backpressure and bottleneck-oriented scaling are covered.
+- Per-pod bounded concurrency is understood conceptually through an async concurrency gate; strict global concurrency remains deferred.
+- TE sync and DE `gthread` configuration were discussed as production evidence only. Gunicorn itself is not yet formally covered.
+- KEDA was mentioned as a possible scaling mechanism but not studied.
+- LeetCode 19 was completed.
+- Friday mock covered stage-wise investigation, Job ID/Correlation ID, metrics → traces → logs, and reconciliation when Blob output exists but SQL is stale.
+
 ## Immediate Next Work
 
-- Continue coding curriculum after Merge Two Sorted Lists: Variable-size Sliding Window.
-- Explore queue backpressure/concurrency control after its need is derived.
+- Day 13 starts in the next session.
+- Reintroduce a dedicated .NET/backend topic; proposed next topic: `async`/`await` internals.
+- Continue the coding roadmap after the linked-list block.
+- Keep global concurrency, distributed rate limiting, KEDA internals and Gunicorn internals pending until dedicated coverage.
 - Inbox pattern is covered conceptually; revisit only for deeper implementation detail if needed.
 - Derive detailed field-extraction output persistence and Billing execution topology later.
 

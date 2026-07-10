@@ -2,6 +2,25 @@
 
 This is a living review document. It tracks readiness by competency rather than topic count.
 
+## Day 12 Snapshot
+
+| Competency | Current Level | Evidence |
+|---|---:|---|
+| Backend fundamentals | 9.3/10 | Strong identity/backend foundation; dedicated .NET internals need to resume from Day 13 |
+| Coding patterns | 8.6/10 | Twelve foundational problems; Remove Nth Node From End completed with one-pass reasoning |
+| System design | 9.2/10 | Can investigate stage-wise, isolate bottlenecks and reason about backpressure |
+| Distributed systems | 8.9/10 | Strong queue/outbox/idempotency/reconciliation foundation; global concurrency remains pending |
+| Cloud architecture | 8.4/10 | Correctly separates internal saturation from external-provider rate limiting |
+| Interview communication | 8.6/10 | Asked for Job ID/Correlation ID before investigating and explained branch decisions clearly |
+
+## Notable Improvements Since Day 11
+
+- Learned backpressure and bottleneck-oriented scaling.
+- Completed Remove Nth Node From End and clarified that one pass does not mean one loop.
+- Practiced metrics → traces → logs for production incident investigation.
+- Reinforced reconciliation when durable Blob output exists but SQL state is stale.
+- Explicitly separated production mentions of KEDA/Gunicorn from formal coverage.
+
 ## Day 11 Snapshot
 
 | Competency | Current Level | Evidence |
@@ -50,7 +69,7 @@ This is a living review document. It tracks readiness by competency rather than 
 
 ## Current Weak Spots
 
-- Backpressure/concurrency control and detailed delayed retry.
+- Global concurrency control, distributed rate limiting and detailed delayed retry/jitter.
 - Deeper Inbox implementation details only if needed beyond the Day 11 concept.
 - Multi-region queued-work recovery, including outbox behavior.
 - Trees, graphs, heaps and DP.

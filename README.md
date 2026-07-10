@@ -33,6 +33,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Middle of the Linked List — Fast & Slow Pointers
 - ✅ Reverse Linked List — Pointer Manipulation
 - ✅ Merge Two Sorted Lists — Linked List Merge / Dummy Head
+- ✅ Remove Nth Node From End — Two Pointers / Dummy Head
 
 ### Backend / Security
 
@@ -76,6 +77,9 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Idempotent consumer strategy for duplicate message safety
 - ✅ Normalized Jobs + JobStages target schema decision
 - ✅ Full staged Invoice Manager pipeline including PDF preparation
+- ✅ Backpressure and bottleneck-oriented scaling
+- 🟡 Per-pod bounded concurrency concept
+- ⬜ Global concurrency management
 - ⬜ Multi-region async DR design
 
 ## Repository Structure

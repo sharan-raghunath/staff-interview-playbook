@@ -106,6 +106,15 @@
 - Message-level Deduplication
 - JobStages
 - Normalized Stage State
+- Backpressure
+- Bounded Concurrency
+- In-flight Requests
+- Bottleneck
+- Queue Backlog
+- Oldest Message Age
+- Arrival Rate
+- Completion Rate
+- Reconciliation
 
 ## Coding
 
@@ -134,6 +143,8 @@
 - Dummy Head
 - Tail Pointer
 - Linked List Merge
+- Fixed Pointer Gap
+- One-pass Traversal
 
 ## Definitions Learned
 
@@ -190,3 +201,16 @@ A target-state schema decision where per-stage status, attempts, owner, timestam
 ### Dummy Head
 
 A temporary linked-list node used to simplify list construction. It is not part of the final answer; the real result starts at `dummy.next`.
+
+
+### Backpressure
+
+A system's response when incoming work exceeds the rate at which a downstream component can safely process it. A queue can absorb a burst, but capacity still has to be managed at the constrained dependency.
+
+### Bounded Concurrency
+
+A limit on how many operations may run at the same time. A per-pod limit protects one process, but it is not automatically a strict global limit across all replicas.
+
+### One-pass Traversal
+
+A traversal that does not restart from the beginning after first computing some intermediate result. It can use more than one loop as long as the pointer continues from its current position.

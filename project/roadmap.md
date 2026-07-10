@@ -163,3 +163,18 @@
 - [ ] Nutanix
 - [ ] Dassault Systèmes
 - [ ] Google
+
+
+## Day 12 — Completed
+
+- Backpressure and bottleneck-oriented scaling.
+- Per-pod bounded concurrency concept.
+- Production-context discussion of TE sync and DE `gthread` worker choices.
+- LeetCode 19: Remove Nth Node From End.
+- Friday production-incident mock.
+
+## Day 13 — Next Session
+
+- Dedicated .NET/backend topic: proposed `async`/`await` internals.
+- Next coding problem from the roadmap.
+- System-design work without treating KEDA, Gunicorn or global concurrency as already learned.

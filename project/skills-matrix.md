@@ -74,3 +74,16 @@ This is a living assessment based on completed sessions.
 | Inbox pattern | Learned conceptually | Understands Inbox as optional generic message-level dedupe, distinct from business-table uniqueness. |
 | Normalized job/stage schema | Learned decision | Chose `JobStages` to avoid widening `Jobs` for every stage and metadata field. |
 | Merge Two Sorted Lists | Learned | Solved linked-list merge and learned dummy head / `dummy.next` return pattern. |
+
+
+## Day 12 Additions
+
+| Area | Status | Evidence |
+|---|---|---|
+| Backpressure | Learned | Can distinguish burst absorption from downstream capacity and branch by the actual bottleneck. |
+| Per-pod bounded concurrency | Learned conceptually | Understands that an async gate can cap in-flight calls in one pod and that pod count multiplies total concurrency. |
+| Global concurrency | Pending | Raised but intentionally deferred for dedicated coverage. |
+| Remove Nth Node From End | Learned | Derived brute-force and one-pass two-pointer solutions; implemented with dummy head. |
+| Production incident investigation | Practiced | Used Job ID/Correlation ID, stage state, queue signals and metrics → traces → logs. |
+| Artifact/state reconciliation | Reinforced | Can identify Blob-written/SQL-stale failure window and avoid repeating OCR. |
+| KEDA and Gunicorn | Mentioned, not covered | Only production context was discussed; internals remain pending. |

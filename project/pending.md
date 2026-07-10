@@ -6,7 +6,9 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Messaging / Distributed Systems
 
-- Backpressure and concurrency control.
+- Global concurrency management beyond per-pod limits.
+- Distributed rate limiting.
+- Retry jitter and detailed delayed-retry implementation.
 - Detailed delayed-retry implementation.
 - Deeper Inbox implementation details, only if needed beyond the Day 11 concept.
 - Multi-region recovery for queued work.
@@ -17,6 +19,22 @@ This file tracks intentionally pending topics. A pending topic may be named here
 - Billing execution topology.
 - Service Bus sessions: when the existing SQL stage dependency is insufficient.
 - Topics/subscriptions for future broadcast lifecycle events, only if a real independent-consumer need arises.
+
+### Backend / .NET
+
+- `async` / `await` internals.
+- ThreadPool and Task scheduling.
+- `Task` vs `ValueTask`.
+- Cancellation and async failure handling.
+- ASP.NET Core pipeline internals revisit at interview depth.
+
+### Platform Topics Mentioned but Not Covered
+
+- KEDA internals and scaling model.
+- Gunicorn architecture and worker classes.
+- AKS internals.
+- Traefik internals.
+- OpenTelemetry.
 
 ### Backend / Networking
 
@@ -31,6 +49,7 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Coding
 
+- Continue the coding roadmap after the linked-list block.
 - Variable-size Sliding Window.
 - Two Sum II.
 - Container With Most Water.

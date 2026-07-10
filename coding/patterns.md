@@ -207,3 +207,23 @@ Complexity:
 Time: O(n + m)
 Space: O(1)
 ```
+
+
+## Fixed-gap Two Pointers
+
+Representative problem: Remove Nth Node From End of List.
+
+Core idea:
+
+> Move one pointer ahead to create a fixed gap, then advance both pointers without restarting traversal. A dummy head lets the slower pointer land immediately before the deletion target, including when the original head must be removed.
+
+Interview clarification:
+
+> One pass does not mean one loop; it means the traversal is not restarted from the head after first computing the full length.
+
+Complexity:
+
+```text
+Time: O(n)
+Space: O(1)
+```

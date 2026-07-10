@@ -231,3 +231,31 @@
   - user submit → billing request.
 - Added ADR-012 for Transactional Outbox stage handoffs.
 - Added ADR-013 for marking stages complete only after durable output exists.
+
+
+---
+
+## Day 12
+
+### Distributed Systems / Backend
+- Learned backpressure and bottleneck-oriented scaling.
+- Distinguished internal service saturation from external-provider rate limiting.
+- Introduced per-pod bounded concurrency conceptually through `SemaphoreSlim`.
+- Deferred strict global concurrency and distributed rate limiting.
+- Recorded TE sync and DE `gthread` production choices without marking Gunicorn internals as covered.
+
+### Coding
+- Completed Remove Nth Node From End of List.
+- Derived two-pass brute force and one-pass fixed-gap pointer solution.
+- Reinforced dummy-head handling for head deletion.
+- Clarified that one pass does not require a single loop.
+
+### Friday Mock
+- Investigated a delayed 2,500-page document using Job ID and Correlation ID.
+- Practiced stage timeline analysis and metrics → traces → logs.
+- Reinforced artifact/state reconciliation when Blob output exists but SQL remains `Processing`.
+
+### Repository
+- Added Day 12 journal, coding note and backpressure note.
+- Updated context, roadmap, pending topics, skills matrix, scorecard, vocabulary, README and start-here context.
+- Added explicit “mentioned but not covered” status for KEDA, Gunicorn and global concurrency.
