@@ -217,3 +217,12 @@ Important production details:
 3. Assistant removes archive/OS/git artifacts from the deliverable.
 4. Assistant verifies the documentation does not introduce uncovered concepts as learned content.
 5. Assistant returns a replacement ZIP for the user to push to GitHub.
+
+## Day 13 Progress
+
+- Completed .NET `async`/`await` internals from first principles.
+- Covered Task versus Thread versus Process, incomplete versus already-completed awaits, compiler-generated state machine, state field, awaiter, `MoveNext()` and `AsyncTaskMethodBuilder`.
+- Covered independent I/O initiation, `Task.WhenAll`, SynchronizationContext, ASP.NET Core's lack of request context, ConfigureAwait, `.Result`/`.Wait()` deadlocks and TaskScheduler.
+- Completed LeetCode 3 using a HashSet-backed variable-size sliding window.
+- Reinforced algorithm validation against counterexamples before declaring complexity.
+- System design and mock interview were explicitly deferred by the user and remain incomplete.

@@ -22,8 +22,6 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Backend / .NET
 
-- `async` / `await` internals.
-- ThreadPool and Task scheduling.
 - `Task` vs `ValueTask`.
 - Cancellation and async failure handling.
 - ASP.NET Core pipeline internals revisit at interview depth.
@@ -49,8 +47,7 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Coding
 
-- Continue the coding roadmap after the linked-list block.
-- Variable-size Sliding Window.
+- Continue the coding roadmap after Variable-size Sliding Window.
 - Two Sum II.
 - Container With Most Water.
 - Binary Search intro.

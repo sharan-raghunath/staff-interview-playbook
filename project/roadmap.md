@@ -38,7 +38,7 @@
 - [ ] Dependency Injection
 - [ ] Garbage Collection
 - [ ] Threading
-- [ ] async/await internals
+- [x] async/await internals
 
 ## Phase 2 — Coding Patterns
 
@@ -50,7 +50,7 @@
 - [x] Fixed-size Sliding Window
 - [x] Prefix Sum / Running Sum
 - [x] Fast & Slow Pointers
-- [ ] Variable-size Sliding Window
+- [x] Variable-size Sliding Window
 - [ ] Stack
 - [ ] Queue
 - [ ] Binary Search
@@ -77,7 +77,8 @@
 - [x] Queue vs topic
 - [x] Competing consumers and per-job ordering
 - [x] Atomic stage claim as an idempotent-consumer protection
-- [ ] Backpressure and concurrency control
+- [x] Backpressure and per-pod bounded concurrency
+- [ ] Global concurrency control
 - [ ] Detailed delayed-retry mechanics
 - [x] Transactional messaging problem: SQL update + queue publish gap
 - [x] Outbox pattern
@@ -173,8 +174,8 @@
 - LeetCode 19: Remove Nth Node From End.
 - Friday production-incident mock.
 
-## Day 13 — Next Session
+## Day 13 — Completed / Partially Deferred
 
-- Dedicated .NET/backend topic: proposed `async`/`await` internals.
-- Next coding problem from the roadmap.
-- System-design work without treating KEDA, Gunicorn or global concurrency as already learned.
+- Completed `async`/`await` internals, state machine, `MoveNext()`, SynchronizationContext, ConfigureAwait, blocking deadlocks and TaskScheduler.
+- Completed LeetCode 3: Longest Substring Without Repeating Characters.
+- System design and mock interview were explicitly deferred by the user to a possible Sunday continuation.

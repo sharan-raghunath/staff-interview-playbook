@@ -34,6 +34,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Reverse Linked List — Pointer Manipulation
 - ✅ Merge Two Sorted Lists — Linked List Merge / Dummy Head
 - ✅ Remove Nth Node From End — Two Pointers / Dummy Head
+- ✅ Longest Substring Without Repeating Characters — Variable-size Sliding Window
 
 ### Backend / Security
 
@@ -49,6 +50,8 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Token Lifecycle
 - ✅ Logout, SSO and SLO
 - ✅ Zero Trust identity principles
+- ✅ `async` / `await` internals
+- ✅ SynchronizationContext, ConfigureAwait and TaskScheduler
 - 🟡 API Gateway / Ingress
 - ⬜ SAML
 - ⬜ TLS
@@ -110,4 +113,4 @@ Each topic should answer:
 
 Authentication and authorization are complete for Senior / Staff interview purposes.
 
-The current architecture focus is the Invoice Manager transition from synchronous fail-fast processing toward an asynchronous, durable workflow. Queue fundamentals, Service Bus mapping, competing consumers, queue-vs-topic, the OCR/field-extraction topology, the Transactional Outbox pattern, idempotent consumer strategy, and normalized job/stage schema decision are complete for the current scope. The next distributed-systems topic is backpressure/concurrency control.
+The current architecture focus is the Invoice Manager transition from synchronous fail-fast processing toward an asynchronous, durable workflow. Queue fundamentals, Service Bus mapping, competing consumers, queue-vs-topic, the OCR/field-extraction topology, the Transactional Outbox pattern, idempotent consumer strategy, normalized job/stage schema decision, backpressure, and per-pod bounded concurrency are complete for the current scope. Day 13 also completed .NET async/await internals and variable-size sliding window. Global concurrency and multi-region queued-work recovery remain pending.

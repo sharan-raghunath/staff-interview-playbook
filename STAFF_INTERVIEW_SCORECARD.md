@@ -2,6 +2,26 @@
 
 This is a living review document. It tracks readiness by competency rather than topic count.
 
+## Day 13 Snapshot
+
+| Competency | Current Level | Evidence |
+|---|---:|---|
+| Backend fundamentals | 9.5/10 | Can explain async I/O, state-machine transformation, `MoveNext()`, continuation scheduling, SynchronizationContext, ConfigureAwait and blocking risks |
+| Coding patterns | 8.7/10 | Thirteen foundational problems; variable-size sliding window completed with HashSet and two forward-only pointers |
+| System design | 9.2/10 | No new Day 13 system-design section; explicitly deferred rather than rushed |
+| Distributed systems | 8.9/10 | Existing backpressure, outbox and idempotency foundation retained |
+| Cloud architecture | 8.4/10 | Connected ASP.NET Core continuation behavior to ThreadPool scalability |
+| Interview communication | 8.7/10 | Strong first-principles answers on ConfigureAwait and thread affinity; coding validation should be more systematic |
+
+## Notable Improvements Since Day 12
+
+- Built a detailed mental model of the compiler-generated async state machine.
+- Distinguished Task, TaskScheduler, SynchronizationContext, ThreadPool and asynchronous I/O.
+- Explained why ASP.NET Core has no request SynchronizationContext.
+- Learned when independent I/O should be initiated before awaiting.
+- Completed Longest Substring Without Repeating Characters using variable-size sliding window.
+- Identified the need to validate algorithms with counterexamples before declaring complexity.
+
 ## Day 12 Snapshot
 
 | Competency | Current Level | Evidence |

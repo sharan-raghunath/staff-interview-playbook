@@ -1,5 +1,14 @@
 # Changelog
 
+## Day 13
+
+- Added Day 13 journal.
+- Added `backend/async-await-internals.md`.
+- Added `coding/longest-substring-without-repeating-characters.md`.
+- Added Variable-size Sliding Window to coding patterns.
+- Updated README progress, roadmap and pending items.
+- Recorded that system design and mock interview were explicitly deferred.
+
 ## Day 11
 
 - Added Day 11 journal.

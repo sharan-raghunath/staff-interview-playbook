@@ -92,6 +92,26 @@ Time: O(n)
 Space: O(1)
 ```
 
+
+## Variable-Size Sliding Window
+
+Representative problem: Longest Substring Without Repeating Characters.
+
+Core idea:
+
+> Expand the right boundary while the window is valid. When a constraint is violated, move the left boundary until the invariant is restored.
+
+For the longest unique-character substring, maintain a set containing exactly the characters in the current window.
+
+Complexity:
+
+```text
+Time: O(n)
+Space: O(k), O(n) worst case
+```
+
+A nested shrinking loop can still be linear when each element enters and leaves the window at most once.
+
 ## Prefix Sum / Running Sum
 
 Representative problem: Find Pivot Index.
