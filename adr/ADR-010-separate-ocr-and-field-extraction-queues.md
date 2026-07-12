@@ -1,7 +1,7 @@
 # ADR-010: Use Separate OCR and Field-Extraction Queues
 
 - **Status:** Accepted
-- **Date:** Day 9
+- **Date:** Session 9
 
 ## Context
 

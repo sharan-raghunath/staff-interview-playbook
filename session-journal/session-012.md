@@ -1,0 +1,173 @@
+# Session 12 — Backpressure, Bounded Concurrency, Linked Lists and Friday Mock
+
+## Session goals
+
+- Understand backpressure and why queue depth alone does not justify scaling.
+- Apply bounded concurrency reasoning to the Invoice Manager OCR pipeline.
+- Complete LeetCode 19: Remove Nth Node From End of List.
+- Run the Friday production-incident mock.
+
+## Backpressure
+
+A queue absorbs bursts, but it does not create downstream capacity.
+
+The first question when backlog grows is not simply “what should we scale?” It is:
+
+> Which component is actually constrained?
+
+The branching model learned today:
+
+- If the Orchestrator/consumer layer is saturated, scale consumers.
+- If TE is internally saturated and its downstream dependency still has capacity, scale TE.
+- If Azure Computer Vision or another external dependency is returning `429`, do not blindly scale callers. Reduce pressure, delay retries and apply exponential backoff.
+
+Useful signals discussed:
+
+- queue depth and oldest-message age;
+- arrival rate versus completion rate;
+- requests in flight;
+- stage latency;
+- CPU and memory;
+- pod restarts;
+- TE versus external-provider `429` responses.
+
+The investigation rule reinforced in the mock was:
+
+> Use metrics to understand what is happening, traces to locate where it is happening, and logs to understand why.
+
+## Bounded concurrency
+
+A `.NET` service can use an asynchronous concurrency gate such as `SemaphoreSlim` to cap in-flight calls within one process or pod.
+
+A per-pod limit is not automatically a global limit. If each pod permits ten concurrent calls and five pods are running, the service may generate roughly fifty concurrent calls in total.
+
+Global concurrency management was raised but intentionally deferred for a dedicated future session. Only the distinction between per-pod control and global control was established today.
+
+## Production discussion: TE and DE worker configuration
+
+This was a production-context discussion, not a complete Gunicorn lesson.
+
+- TE uses Gunicorn sync workers to keep heavy OCR/image work tightly controlled.
+- DE moved from multiple sync workers to `gthread` with one worker and four threads.
+- Multiple sync worker processes caused the model/runtime to be loaded into multiple process workspaces, increasing pod memory pressure.
+- One worker with four threads allowed the model to be loaded once while still permitting bounded concurrency.
+
+KEDA and Gunicorn internals remain topics mentioned but not formally covered.
+
+## Coding — LeetCode 19: Remove Nth Node From End of List
+
+### Brute force
+
+- First pass: count the linked-list nodes.
+- Compute the zero-based index to remove as `length - n`.
+- Second pass: reconnect the previous node to the target node's next node.
+- If `n == length`, remove the head.
+
+Complexity:
+
+```text
+Time: O(n)
+Space: O(1)
+```
+
+### Optimized approach
+
+Use a dummy node and two pointers with a fixed gap.
+
+The important realization was:
+
+> One pass does not mean one loop. It means traversal is not restarted from the head after first computing the full length.
+
+The user's implementation creates the gap while moving `fast`, then starts moving `slow`. When `fast` reaches the last node, `slow` is immediately before the node to remove.
+
+```csharp
+public class Solution
+{
+    public ListNode RemoveNthFromEnd(ListNode head, int n)
+    {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode slow = dummy;
+        ListNode fast = head;
+        int count = 1;
+
+        while (fast.next != null)
+        {
+            fast = fast.next;
+
+            if (count < n)
+            {
+                count++;
+                continue;
+            }
+
+            slow = slow.next;
+        }
+
+        slow.next = slow.next.next;
+        return dummy.next;
+    }
+}
+```
+
+Complexity:
+
+```text
+Time: O(n)
+Space: O(1)
+```
+
+A later variation reused `head` as the fast pointer. It saves one local reference but is not materially more memory-efficient; the clearer `fast` variable is preferable in interviews and production code.
+
+## Friday mock — delayed large-document processing
+
+Scenario: a customer uploads a 2,500-page PDF and reports that processing sometimes takes an hour or never completes.
+
+The investigation flow developed today:
+
+1. Ask for the Job ID and Correlation ID.
+2. Read the job and stage state.
+3. Build a stage timeline using distributed tracing.
+4. Identify whether the job is waiting, actively processing, retrying, or stuck.
+5. Inspect the relevant queue and downstream service only after locating the delayed stage.
+6. Compare traffic and arrival/completion rates against the baseline.
+7. Scale only the constrained internal component.
+8. If the external provider is rate limiting, delay retries and reduce pressure rather than scaling callers.
+
+User communication should acknowledge the delay and provide a stable Job ID/status URL. Notification should only be promised if that capability actually exists.
+
+### Recovery scenario
+
+If TE completed OCR and the artifact exists in Blob Storage but SQL still says `Processing`, the worker likely failed after persisting the artifact but before updating SQL.
+
+This is primarily a reconciliation/idempotent-consumer scenario:
+
+- verify the existing durable artifact;
+- avoid repeating OCR;
+- update the stage state;
+- create the next outbox entry in the same SQL transaction;
+- complete the queue message.
+
+Transactional Outbox addresses the later failure window where SQL is committed but the next-stage message has not yet been published.
+
+## Newly learned today
+
+- Backpressure and bottleneck-oriented scaling.
+- Per-pod bounded concurrency as a concept.
+- One pass is about traversal, not number of loops.
+- Remove Nth Node From End using a dummy node and two-pointer gap.
+- Metrics → traces → logs investigation order.
+- Reconciliation when a durable artifact exists but SQL state is stale.
+
+## Mentioned but not formally covered
+
+- Global concurrency enforcement.
+- Distributed rate limiting.
+- KEDA internals.
+- Gunicorn internals.
+- Retry jitter was introduced briefly as an extension to exponential backoff, but not studied in depth.
+
+## Session 12 status
+
+Session 12 is complete. Session 13 starts in the next session, not today.

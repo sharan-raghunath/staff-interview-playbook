@@ -1,4 +1,4 @@
-# Invoice Manager Architecture Addendum — Day 7
+# Invoice Manager Architecture Addendum — Session 7
 
 This document captures architectural relationships derived from a proprietary service diagram without reproducing the diagram itself.
 

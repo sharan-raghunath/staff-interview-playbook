@@ -2,7 +2,7 @@
 
 ## Status
 
-Covered on Day 11.
+Covered on Session 11.
 
 ## Problem
 

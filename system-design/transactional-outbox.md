@@ -2,7 +2,7 @@
 
 ## Status
 
-Covered on Day 10.
+Covered on Session 10.
 
 ## Problem
 
@@ -80,7 +80,7 @@ Therefore:
 
 > Outbox gives at-least-once publishing, not exactly-once publishing.
 
-Consumers must be idempotent. Day 11 covered the idempotent-consumer strategy in more detail: unique constraints for first-time creation, atomic stage claims for existing stages, and optional Inbox tables for generic message-level deduplication.
+Consumers must be idempotent. Session 11 covered the idempotent-consumer strategy in more detail: unique constraints for first-time creation, atomic stage claims for existing stages, and optional Inbox tables for generic message-level deduplication.
 
 ## Consumer Safety
 

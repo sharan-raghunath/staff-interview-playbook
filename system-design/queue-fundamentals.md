@@ -259,7 +259,7 @@ Separate OCR and field-extraction queues isolate their distinct dependencies, sc
 
 ## Explicitly Deferred
 
-- deeper Inbox implementation details, if needed beyond the Day 11 concept;
+- deeper Inbox implementation details, if needed beyond the Session 11 concept;
 - detailed delayed-retry implementation;
 - backpressure implementation;
 - Service Bus sessions as a selected design;

@@ -63,9 +63,9 @@ SQL should be authoritative for:
 - atomic stage claim state where duplicate work messages are possible;
 - outbox rows representing messages that must be published.
 
-## Target SQL Shape Learned on Day 11
+## Target SQL Shape Learned on Session 11
 
-Earlier sessions established authoritative stage state in SQL. Day 11 added the physical schema decision to normalize stage state rather than widening the `Jobs` table for every stage.
+Earlier sessions established authoritative stage state in SQL. Session 11 added the physical schema decision to normalize stage state rather than widening the `Jobs` table for every stage.
 
 Conceptual `Jobs` table:
 
@@ -112,7 +112,7 @@ Current uniqueness:
 UNIQUE(JobId, StageName)
 ```
 
-`JobStages` was introduced and accepted on Day 11. It was not assumed in earlier days.
+`JobStages` was introduced and accepted on Session 11. It was not assumed in earlier days.
 
 Redis can cache status reads but cannot be the recovery authority.
 
@@ -247,7 +247,7 @@ Dead-letter → operational investigation path
 
 ## Deferred Decisions
 
-- deeper Inbox implementation details, if needed beyond the Day 11 concept;
+- deeper Inbox implementation details, if needed beyond the Session 11 concept;
 - detailed delayed-retry/backpressure design;
 - Service Bus sessions as a selected ordering mechanism;
 - exact PDF-preparation artifact format/storage path;

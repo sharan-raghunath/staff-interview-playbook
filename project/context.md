@@ -33,17 +33,17 @@ Hard rules:
 
 ## Session Structure
 
-Preferred daily structure:
+Sustainable structure:
 
-- one backend/theory topic;
-- one coding problem;
-- one system-design discussion;
-- interview-quality wording;
-- end-of-day repository update.
+- Monday–Thursday: guided theory/coding/system design without overloading one sitting.
+- Friday: interview simulation and weekly review.
+- Saturday–Sunday: optional.
+- A session closes only when planned work is complete or explicitly deferred.
+- Read `CURRICULUM.md` before coaching.
 
 ## Coding Coaching
 
-Use a Hint Ladder:
+Always ask for brute force and complexity before optimization. Use a Hint Ladder:
 
 - Hint 0: no hints;
 - Hint 1: clarification;
@@ -53,7 +53,7 @@ Use a Hint Ladder:
 
 ## Completed Coding Problems
 
-| Day | Problem | Pattern | Notes |
+| Session | Problem | Pattern | Notes |
 |---:|---|---|---|
 | 1 | Two Sum | Hash Lookup | Complement lookup, dictionary, O(n) |
 | 2 | Best Time to Buy and Sell Stock | Running Minimum | Track minimum price so far |
@@ -123,7 +123,7 @@ It is **not** the system of record for invoice business data. The source system 
 - Separate OCR and field-extraction queues isolate distinct dependencies and operations.
 - Queue completion follows durable output and SQL state; redelivery reconciles before repeating work.
 - Billing follows user-confirmed submission and remains outside Orchestrator.
-- Target schema now normalizes workflow stage state into `JobStages`; this was introduced and decided on Day 11.
+- Target schema now normalizes workflow stage state into `JobStages`; this was introduced and decided on Session 11.
 - Failure propagation separates operational detail from user-facing status.
 
 ### Canonical Architecture
@@ -177,7 +177,7 @@ Important production details:
 - Inbox pattern as optional generic message-level deduplication;
 - normalized `Jobs` + `JobStages` target schema decision.
 
-## Day 12 Progress
+## Session 12 Progress
 
 - Backpressure and bottleneck-oriented scaling are covered.
 - Per-pod bounded concurrency is understood conceptually through an async concurrency gate; strict global concurrency remains deferred.
@@ -188,7 +188,7 @@ Important production details:
 
 ## Immediate Next Work
 
-- Day 13 starts in the next session.
+- Session 13 was completed; its deferred system-design work continued as the guided Notification Service in Session 14.
 - Reintroduce a dedicated .NET/backend topic; proposed next topic: `async`/`await` internals.
 - Continue the coding roadmap after the linked-list block.
 - Keep global concurrency, distributed rate limiting, KEDA internals and Gunicorn internals pending until dedicated coverage.
@@ -218,7 +218,7 @@ Important production details:
 4. Assistant verifies the documentation does not introduce uncovered concepts as learned content.
 5. Assistant returns a replacement ZIP for the user to push to GitHub.
 
-## Day 13 Progress
+## Session 13 Progress
 
 - Completed .NET `async`/`await` internals from first principles.
 - Covered Task versus Thread versus Process, incomplete versus already-completed awaits, compiler-generated state machine, state field, awaiter, `MoveNext()` and `AsyncTaskMethodBuilder`.
@@ -226,3 +226,18 @@ Important production details:
 - Completed LeetCode 3 using a HashSet-backed variable-size sliding window.
 - Reinforced algorithm validation against counterexamples before declaring complexity.
 - System design and mock interview were explicitly deferred by the user and remain incomplete.
+
+
+## Session 14 Progress
+
+- Guided design of a multi-tenant Notification Service.
+- Producer sends a channel-neutral event; Notification Service resolves tenant policy, recipients, preferences, templates and channels.
+- One independent delivery/outbox record is created per selected channel.
+- At-least-once attempts were separated from the wider resilience set of outbox, inbox, idempotency and reconciliation.
+- Scheduling uses UTC execution time and atomic claiming plus outbox publication.
+- Observability uses business identifiers as well as technical correlation IDs.
+- Invoice Manager API Service owns final prediction mapping/overrides and emits the completion event after final business data is persisted. Orchestrator remains responsible for coordinating TE/DE.
+- Detailed DR and circuit breaker remain pending and must not be used as learned concepts.
+- Longest Repeating Character Replacement was implemented correctly but after the assistant revealed the optimal structure; record it as excessively guided.
+- Friday is the preferred interview-simulation day; weekends are optional.
+- `CURRICULUM.md` is now the authoritative coaching contract.

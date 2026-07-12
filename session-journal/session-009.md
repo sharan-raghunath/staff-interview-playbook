@@ -1,0 +1,404 @@
+# Session 9 Journal
+
+## Theme
+
+Message settlement, duplicate-safe consumer behavior, competing consumers, ordering, Azure Service Bus mapping, and the first concrete Invoice Manager queue topology.
+
+The session continued from Session 8's vendor-neutral model. We first derived the consumer actions and recovery rules, then mapped the model to Azure Service Bus. The target-state design remains distinct from current synchronous production behavior.
+
+---
+
+## 1. Three Different Consumer Actions
+
+A consumer that owns a message under a temporary lease has three fundamentally different actions:
+
+```text
+Renew ownership
+→ Current attempt is still healthy and making progress.
+
+Release for retry
+→ Current attempt failed and should be tried later.
+
+Complete
+→ Required durable work and workflow state are safely persisted.
+```
+
+### Renew ownership
+
+Use renewal when the current attempt still has a reasonable chance of succeeding but needs more time. Example: Text Extractor is still processing a large document.
+
+Do not use renewal merely because an attempt already failed.
+
+### Release for retry
+
+For a retryable failure such as a temporary timeout or a `429`, holding the work invisibly does not help. The worker should record the attempt as needed and make the work eligible for a later retry under the selected backoff policy.
+
+### Complete
+
+Completion removes the work item only after durable state proves the stage succeeded. It must never happen before the recovery-critical result and SQL stage state are persisted.
+
+Staff-level wording:
+
+> Renew when the current attempt is still progressing, release when the attempt failed and should retry later, and complete only after the durable result and workflow state prove success.
+
+---
+
+## 2. OCR Completion, Acknowledgement, and Ambiguous Outcomes
+
+For the OCR stage, the order is:
+
+```text
+1. Receive OCR message under temporary ownership.
+2. Call Text Extractor.
+3. Persist OCR output to Blob Storage.
+4. Update authoritative SQL stage state with the OCR artifact reference.
+5. Complete the OCR queue message.
+```
+
+This ordering prefers duplicate-safe processing over silent work loss.
+
+### Why completion must be last
+
+If the message were completed before Text Extractor and persistence finish, a worker crash could leave:
+
+```text
+Queue: work removed
+SQL: OCR not complete
+Blob: no OCR artifact
+```
+
+There would be no queued trigger to recover the missing work.
+
+### Ambiguous completion timeout
+
+A timeout from the queue completion call does not prove whether the queue removed the message. The queue may have completed it while the worker lost the response, or it may not have received the completion request.
+
+Safe behavior:
+
+```text
+- Retry completion only while the worker still owns the message lease.
+- Do not rerun OCR, Blob persistence, or SQL updates.
+- If completion remains uncertain, stop processing.
+- If the message redelivers, reconcile durable state before doing work.
+```
+
+On redelivery:
+
+```text
+SQL says OCR complete
+→ do not call Text Extractor
+→ complete the redelivered message only.
+```
+
+The queue may deliver a message more than once. The consumer remains correct because durable state, not the acknowledgement outcome, is the proof of completed business work.
+
+---
+
+## 3. Reconciliation and Recovery for OCR
+
+The concrete OCR recovery path is:
+
+```text
+1. Receive OCR message.
+2. Read SQL OCR-stage state.
+
+   OCR already complete
+   → complete the message; do not call TE.
+
+   OCR incomplete / processing
+   → check deterministic OCR artifact location in Blob Storage.
+
+      Artifact exists and is usable
+      → reconcile SQL to OCR complete with artifact reference
+      → complete the message.
+
+      Artifact absent
+      → call TE
+      → persist artifact
+      → update SQL OCR state
+      → complete the message.
+```
+
+The deterministic Blob path is conceptually based on job, stage, and idempotency identity, allowing a later worker to discover that a previous worker persisted output but crashed before SQL bookkeeping completed.
+
+Key principle:
+
+> Redelivery means reconcile durable state first, then do only the missing work. It does not automatically mean repeat the expensive work.
+
+---
+
+## 4. Competing Consumers and Lease Expiry
+
+Several Orchestrator pods can consume from the same queue. Once one pod receives a visible message, the queue hides it from other consumers for the ownership period.
+
+```text
+Visible message
+→ Orchestrator A receives it
+→ hidden from B and C while A holds the lease
+→ A completes, releases, or loses ownership
+```
+
+If A freezes or crashes and cannot renew ownership, the lease expires and the message becomes visible to another worker. That worker follows reconciliation before processing.
+
+A previously frozen worker can theoretically resume after lease expiry, so leases reduce simultaneous duplicate processing but do not create an exactly-once guarantee. Durable state checks, atomic claims, and idempotency remain necessary.
+
+---
+
+## 5. Stage Ordering and Duplicate Stage Messages
+
+Invoice processing has a dependency per job:
+
+```text
+PDF uploaded
+→ OCR
+→ durable OCR artifact and OCR-complete state
+→ field extraction
+```
+
+It does not require global FIFO across all invoices. Different jobs may run independently and in parallel.
+
+The rule is:
+
+> Ordering is per job and per workflow stage, not globally across all messages.
+
+### Preventing duplicate field-extraction work
+
+An idempotency key identifies repeated attempts for the same logical operation, but it cannot alone stop two duplicate messages from arriving at nearly the same time.
+
+The consumer must atomically claim the stage in SQL:
+
+```text
+Field extraction stage:
+Pending → Processing
+only when it is still Pending.
+```
+
+Conceptually:
+
+```sql
+UPDATE JobStages
+SET Status = 'Processing',
+    ProcessingOwner = @workerId,
+    ProcessingStartedAt = @now
+WHERE JobId = @jobId
+  AND Stage = 'FieldExtraction'
+  AND Status = 'Pending';
+```
+
+One worker updates one row and owns the attempt. A second worker updates zero rows, does not invoke Data Extractor, and reconciles/completes its duplicate message as appropriate.
+
+The queue lease, atomic SQL stage claim, idempotency key, and durable-output checks are complementary protections:
+
+```text
+Queue lease
+→ protects one queue message from simultaneous consumers.
+
+Atomic SQL claim
+→ protects one workflow stage from duplicate messages.
+
+Idempotency and durable-state checks
+→ make retries and redelivery safe after crashes or ambiguous outcomes.
+```
+
+---
+
+## 6. Scaling and Bottleneck Ownership
+
+Queue depth alone is not sufficient evidence to scale. Useful signals include:
+
+- queue depth increasing over time;
+- oldest-message age increasing;
+- processing latency exceeding target;
+- consumer utilization;
+- downstream capacity.
+
+Scale the constrained component, not automatically the queue or every service:
+
+```text
+Orchestrator constrained
+→ add Orchestrator pods consuming work.
+
+Text Extractor constrained internally
+→ add TE capacity, subject to its CPU/GPU/resource limits.
+
+External OCR provider throttling or returning 429
+→ do not blindly add TE or Orchestrator pods.
+→ cap concurrency, back off retries, and address provider capacity/throttling.
+```
+
+A queue absorbs bursts. Concurrency limits protect downstream dependencies. Detailed backpressure design remains a later topic.
+
+---
+
+## 7. Queue vs Topic
+
+A queue is appropriate for a command/work item that exactly one logical worker should perform:
+
+```text
+Perform OCR for Job 123.
+Extract fields for Job 123.
+Calculate billing for submitted Job 123.
+```
+
+A topic is appropriate when one published event must be independently delivered to several interested subscribers. We discussed the concept, but did not add a topic to the OCR/field-extraction pipeline because these are commands, not broadcast events.
+
+For the current Invoice Manager scope:
+
+```text
+OCR and field extraction
+→ queues
+
+No topic is introduced merely because a downstream service exists.
+```
+
+---
+
+## 8. Azure Service Bus Mapping
+
+The vendor-neutral model maps to Azure Service Bus as follows:
+
+| Learned concept | Azure Service Bus mapping |
+|---|---|
+| durable work queue | Service Bus queue |
+| receive without immediate removal | Peek-Lock mode |
+| temporary ownership lease | message lock |
+| extend ownership while healthy work continues | lock renewal (`RenewMessageLock`) |
+| durable success; remove message | `CompleteMessage` |
+| retryable attempt failed | `AbandonMessage` or allow the lock to expire, then retry under policy |
+| operationally unprocessable message | dead-letter the message / DLQ |
+| multiple worker replicas sharing work | competing consumers on one queue |
+
+For this target design, the consumer should use the explicit-lock model rather than receive-and-delete semantics because the stage must not disappear before its durable result and SQL state are recorded.
+
+Azure Service Bus also supports sessions for ordered, exclusive handling of related message sequences. We did not select sessions because the currently derived Invoice Manager requirement is stage dependency enforced through SQL state and atomic stage claims, not strict Service Bus session ordering.
+
+---
+
+## 9. Finalized Invoice Manager Queue Topology for the Current Scope
+
+### OCR and field extraction
+
+The target topology uses separate queues:
+
+```text
+Durable PDF upload + SQL job created
+  ↓
+im-ocr-work
+  ↓
+Orchestrator pod claims OCR stage
+  ↓
+Text Extractor
+  ↓
+Blob OCR artifact + SQL OCR complete
+  ↓
+im-field-extraction-work
+  ↓
+Orchestrator pod claims field-extraction stage
+  ↓
+Data Extractor
+  ↓
+Durable prediction result + SQL ReadyForUserReview state
+```
+
+Separate queues were selected over one mixed processing queue because OCR and field extraction have different dependencies, latency/compute characteristics, retry pressure, backlog signals, scaling constraints, and DLQ/alerting needs. An OCR outage or provider throttling should not obscure field-extraction backlog and operations.
+
+### Browser status
+
+The browser polls IM Web/Edge for job status. IM Web reads authoritative processing state from SQL. Orchestrator does not need a separate live notification to IM Web for correctness.
+
+```text
+Browser
+→ GET /jobs/{jobId}
+→ IM Web / Edge
+→ SQL job state
+```
+
+### Billing boundary
+
+Billing is not an Orchestrator responsibility.
+
+```text
+OCR and field extraction
+→ predictions ready
+→ user reviews / overrides
+→ user submits
+→ IM REST API persists final submitted state
+→ Billing is initiated independently
+```
+
+Because pricing uses user overrides, Billing is triggered after the user-confirmed submission, not immediately after prediction. A dedicated Billing queue is an appropriate future command boundary if billing is asynchronous or needs independent retries; its exact implementation remains outside the OCR/field-extraction topology derived today.
+
+---
+
+## 10. Coding — LeetCode 876: Middle of the Linked List
+
+### Problem
+
+Return the middle node of a singly linked list. For an even number of nodes, return the second middle node.
+
+### Brute-force approach
+
+1. Traverse the list to count nodes.
+2. Start from head again and move `n / 2` zero-based hops.
+3. Return the current node.
+
+```text
+Time: O(n)
+Space: O(1)
+```
+
+### Optimal fast/slow-pointer approach
+
+```text
+slow moves one node per iteration
+fast moves two nodes per iteration
+```
+
+When `fast` reaches the end (odd length) or passes it (even length), `slow` is at the required middle. Starting both pointers at head returns the second middle for an even-length list.
+
+```csharp
+public ListNode MiddleNode(ListNode head)
+{
+    if (head == null)
+        return null;
+
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while (fast != null && fast.next != null)
+    {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    return slow;
+}
+```
+
+```text
+Time: O(n)
+Space: O(1)
+```
+
+### Pattern connection
+
+- Linked List Cycle: different speeds reveal that a finite cycle causes pointers to meet.
+- Middle of the Linked List: different speeds place `slow` halfway through one traversal.
+
+---
+
+## Session 9 Interview Summary
+
+> “For long-running invoice stages, I consume messages under a temporary lock and complete them only after durable output and SQL stage state prove success. A completion timeout is ambiguous, so I never repeat work solely because acknowledgement is uncertain; a redelivered message reconciles SQL and durable artifacts first. Multiple Orchestrator pods can compete for queue messages, while an atomic SQL stage claim prevents duplicate messages from starting the same stage. OCR and field extraction use separate queues because their scaling, dependency, and failure behavior differ. Their ordering is enforced per job through durable stage state, not global FIFO.”
+
+---
+
+## Explicitly Deferred
+
+- transactional consistency between SQL changes and next-stage message publication;
+- outbox/inbox patterns;
+- detailed delayed-retry mechanics and backpressure implementation;
+- Service Bus sessions as a selected solution;
+- multi-region queued-work recovery;
+- topics/events beyond the scope of OCR and field extraction;
+- Billing queue implementation details.

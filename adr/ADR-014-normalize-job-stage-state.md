@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted as target-state direction on Day 11.
+Accepted as target-state direction on Session 11.
 
 ## Context
 
@@ -85,4 +85,4 @@ JobStages: UNIQUE(JobId, StageName)
 
 ## Important Note
 
-`JobStages` was introduced and accepted as a Day 11 schema decision. It was not an assumed design in Days 8–10.
+`JobStages` was introduced and accepted as a Session 11 schema decision. It was not an assumed design in Sessions 8–10.

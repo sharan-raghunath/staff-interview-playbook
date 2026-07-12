@@ -1,7 +1,7 @@
 # ADR-011: Keep Billing Outside the OCR and Field-Extraction Orchestrator
 
 - **Status:** Accepted
-- **Date:** Day 9
+- **Date:** Session 9
 
 ## Context
 

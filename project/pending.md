@@ -6,16 +6,20 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Messaging / Distributed Systems
 
+- Dedicated Disaster Recovery topic before using detailed DR terminology in designs.
+- Circuit breaker pattern; mentioned but not covered.
+- Provider idempotency/reconciliation details beyond the Session 14 concept.
+
 - Global concurrency management beyond per-pod limits.
 - Distributed rate limiting.
 - Retry jitter and detailed delayed-retry implementation.
 - Detailed delayed-retry implementation.
-- Deeper Inbox implementation details, only if needed beyond the Day 11 concept.
+- Deeper Inbox implementation details, only if needed beyond the Session 11 concept.
 - Multi-region recovery for queued work.
 - Exact PDF-preparation queue naming/topology.
 - Exact PDF image artifact format/storage path.
 - Detailed field-extraction result persistence.
-- Exact physical schema details beyond the Day 11 `Jobs` + `JobStages` target model.
+- Exact physical schema details beyond the Session 11 `Jobs` + `JobStages` target model.
 - Billing execution topology.
 - Service Bus sessions: when the existing SQL stage dependency is insufficient.
 - Topics/subscriptions for future broadcast lifecycle events, only if a real independent-consumer need arises.
@@ -47,6 +51,8 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Coding
 
+- Revisit replacement-budget sliding window with a fresh problem using brute force and the full hint ladder; Session 14 was excessively guided.
+
 - Continue the coding roadmap after Variable-size Sliding Window.
 - Two Sum II.
 - Container With Most Water.
@@ -71,3 +77,11 @@ This file tracks intentionally pending topics. A pending topic may be named here
 - Add ADRs as decisions are actually made.
 - Add STAR stories after behavioral sessions begin.
 - Add company-specific interview sections after the core curriculum matures.
+
+
+## Coaching / Interview Practice
+
+- Run coding and system-design simulations preferably on Friday.
+- Continue guided system-design practice before evaluating independent interview performance.
+- Use `CURRICULUM.md` as the mandatory coaching contract.
+- Do not introduce pending concepts as learned content.

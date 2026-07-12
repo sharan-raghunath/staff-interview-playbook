@@ -44,6 +44,7 @@ This is a living assessment based on completed sessions.
 | Failure Classification / DLQ | 8/10 | Distinguishes business validation from operational failures and controlled replay |
 | Invoice Manager Async Topology | 8.2/10 | Selected separate OCR/field-extraction queues; Billing stays outside Orchestrator |
 | Transactional Outbox | 8/10 | Can explain SQL update + queue publish gap, durable publish intent, duplicate publish and idempotent consumers |
+| Notification Service design | Guided completion | Can explain producer/platform boundaries, tenant policy, per-channel fan-out, scheduling and observability; independent mock pending |
 
 ## Communication
 
@@ -55,7 +56,7 @@ This is a living assessment based on completed sessions.
 | Coding narration | Improving | Continue explaining invariants while coding |
 
 
-## Day 10 Additions
+## Session 10 Additions
 
 | Skill | Status | Notes |
 |---|---|---|
@@ -65,7 +66,7 @@ This is a living assessment based on completed sessions.
 | Full staged Invoice Manager pipeline | Learned | Upload/original PDF, PDF preparation, OCR, field extraction, user review/submit, billing boundary. |
 
 
-## Day 11 Additions
+## Session 11 Additions
 
 | Area | Status | Evidence |
 |---|---|---|
@@ -76,7 +77,7 @@ This is a living assessment based on completed sessions.
 | Merge Two Sorted Lists | Learned | Solved linked-list merge and learned dummy head / `dummy.next` return pattern. |
 
 
-## Day 12 Additions
+## Session 12 Additions
 
 | Area | Status | Evidence |
 |---|---|---|
@@ -87,3 +88,17 @@ This is a living assessment based on completed sessions.
 | Production incident investigation | Practiced | Used Job ID/Correlation ID, stage state, queue signals and metrics → traces → logs. |
 | Artifact/state reconciliation | Reinforced | Can identify Blob-written/SQL-stale failure window and avoid repeating OCR. |
 | KEDA and Gunicorn | Mentioned, not covered | Only production context was discussed; internals remain pending. |
+
+
+## Session 14 Additions
+
+| Area | Status | Evidence |
+|---|---|---|
+| Notification Service | Guided completion | Produced an end-to-end workflow covering Invoice Manager event ownership, policy resolution, per-channel deliveries, reliability, scheduling and observability. |
+| At-least-once vs resilience mechanisms | Clarified | Distinguished retry/redelivery/DLQ from outbox/inbox/idempotency/reconciliation. |
+| Distributed scheduler | Learned conceptually | Identified duplicate selection, short atomic claims and transactional outbox creation. |
+| Observability introduction | Learned conceptually | Proposed throughput, failure grouping and latency; expanded to queue depth, retry/DLQ and business identifiers. |
+| Longest Repeating Character Replacement | Guided | Correct O(n)/O(1) code, but assistant revealed the optimal structure too early. |
+| System-design interview process | Learning framework established | Requirement clarification → summary → assumptions → approach → responsibilities → architecture → deep dives → trade-offs → recap. |
+| Detailed DR | Pending | Only high-level critical-state identification was discussed. |
+| Circuit breaker | Not covered | Mentioned prematurely and explicitly parked. |

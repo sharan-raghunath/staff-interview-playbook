@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted on Day 11.
+Accepted on Session 11.
 
 ## Context
 

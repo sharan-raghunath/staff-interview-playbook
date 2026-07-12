@@ -19,7 +19,7 @@ Target companies include Atlassian, Microsoft, Adobe, SAP, Nutanix, Dassault Sys
 
 The repository is the durable source of truth. The chat is a working session.
 
-Preferred daily rhythm:
+Preferred session rhythm:
 
 1. Backend / theory topic.
 2. One coding pattern and one LeetCode problem.
@@ -34,11 +34,14 @@ Coaching rules:
 - Keep current production behavior separate from proposed target state.
 - Do not document a concept as learned until it has actually been covered.
 - Follow the agreed plan in order; do not cut, skip, or deviate unless explicitly requested.
-- Use a hint ladder for coding; do not give the algorithm too early.
+- Use the full hint ladder for coding; do not reveal the optimal invariant, formula or algorithm early.
+- Teach the system-design interview process before judging interview performance.
+- Feedback must cite concrete evidence.
+- Do not introduce uncovered topics inside the current lesson.
 
 ## Completed Coding Problems
 
-| Day | Problem | Pattern | Status |
+| Session | Problem | Pattern | Status |
 |---:|---|---|---|
 | 1 | Two Sum | Hash Lookup | ✅ |
 | 2 | Best Time to Buy and Sell Stock | Running Minimum | ✅ |
@@ -52,6 +55,8 @@ Coaching rules:
 | 10 | Reverse Linked List | Pointer Manipulation | ✅ |
 | 11 | Merge Two Sorted Lists | Linked List Merge / Dummy Head | ✅ |
 | 12 | Remove Nth Node From End | Two Pointers / Dummy Head | ✅ |
+| 13 | Longest Substring Without Repeating Characters | Variable-size Sliding Window | ✅ |
+| 14 | Longest Repeating Character Replacement | Variable-size Sliding Window | 🟡 Excessively guided |
 
 ## Completed Backend Topics
 
@@ -130,7 +135,7 @@ IM REST API initiates Billing independently, using final user-confirmed data
 
 SQL is authoritative for target-state job/stage state. Redis remains a distributed cache, not a correctness boundary.
 
-## Queue and Outbox Concepts Learned on Days 8–10
+## Queue and Outbox Concepts Learned on Sessions 8–10
 
 - HTTP lifetime and business-process lifetime should be independent.
 - A long-running operation needs a Job ID and persistent SQL stage state.
@@ -151,15 +156,15 @@ SQL is authoritative for target-state job/stage state. Redis remains a distribut
 - Outbox gives at-least-once publishing; idempotent consumers protect against duplicate messages.
 - Invoice Manager includes a PDF preparation / page-image generation stage before OCR.
 
-## Day 11 Additions
+## Session 11 Additions
 
 - Idempotent consumer strategy is now covered.
 - First-time job creation uses a database-enforced unique idempotency key, such as `UNIQUE(TenantId, IdempotencyKey)`.
 - Existing stage processing uses an atomic `Pending → Processing` stage claim.
 - Inbox pattern is understood as optional generic message-level deduplication when business tables are not sufficient.
-- `JobStages` is now an accepted target-state schema decision for normalized stage state. This was introduced on Day 11; it was not assumed in earlier days.
+- `JobStages` is now an accepted target-state schema decision for normalized stage state. This was introduced on Session 11; it was not assumed in earlier days.
 
-## Day 12 Additions
+## Session 12 Additions
 
 - Backpressure and bottleneck-oriented scaling are covered.
 - Per-pod bounded concurrency is understood conceptually; global concurrency remains deferred.
@@ -169,11 +174,26 @@ SQL is authoritative for target-state job/stage state. Redis remains a distribut
 
 ## Where to Continue Next
 
-Day 13 begins in the next session.
-
-- Restore the original daily balance by including a dedicated .NET/backend topic; `async`/`await` internals is the next proposed backend topic.
+Session 14 is complete. Session 15 is the next session. Read `CURRICULUM.md`, `project/pending.md`, and `session-journal/session-014.md` before choosing its scope.
 - Continue the coding roadmap after the linked-list block.
 - Keep KEDA internals, Gunicorn internals, global concurrency and distributed rate limiting in **mentioned but not covered** status until dedicated sessions.
 - Detailed delayed-retry mechanics, Service Bus sessions and multi-region queued-work recovery remain deferred.
 
 Do not mark future topics as learned until covered.
+
+
+## Session 14 Additions
+
+- Guided design of a reusable multi-tenant Notification Service.
+- Producer remains channel-agnostic; Notification Service owns policy and delivery.
+- Invoice Manager API Service, not Orchestrator, emits the completion event because API owns final mapped/overridden business data.
+- One independent delivery/outbox record per selected channel.
+- Retry/DLQ separated from broader outbox/inbox/idempotency/reconciliation resilience.
+- Scheduling uses UTC execution time with local/time-zone context retained when needed.
+- Observability begins from business identifiers as well as technical correlation IDs.
+- Detailed DR and circuit breaker remain pending.
+- Coding problem completed correctly but marked excessively guided.
+- Friday is the preferred mock-interview day; weekends are optional.
+- `CURRICULUM.md` is mandatory operating context.
+
+Next session should begin only after reading the latest journal and pending list.

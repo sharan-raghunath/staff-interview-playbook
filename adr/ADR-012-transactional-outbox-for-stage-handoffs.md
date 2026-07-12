@@ -1,7 +1,7 @@
 # ADR-012: Use Transactional Outbox for Asynchronous Stage Handoffs
 
 - **Status:** Accepted
-- **Date:** Day 10
+- **Date:** Session 10
 
 ## Context
 
@@ -46,4 +46,4 @@ A separate outbox publisher reads pending outbox rows, publishes messages to the
 - exact outbox table schema;
 - publisher batch size and scheduling;
 - multi-region outbox behavior;
-- deeper Inbox implementation details only if needed beyond the Day 11 concept.
+- deeper Inbox implementation details only if needed beyond the Session 11 concept.

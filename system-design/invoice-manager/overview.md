@@ -48,7 +48,7 @@ Retry/replay history
 
 This remains workflow state, not invoice business ownership.
 
-## Day 7 Architecture Notes
+## Session 7 Architecture Notes
 
 The following architecture relationships were captured from a proprietary diagram without reproducing the image:
 

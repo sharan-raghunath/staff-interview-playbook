@@ -1,17 +1,31 @@
 # Changelog
 
-## Day 13
+## Session 14
 
-- Added Day 13 journal.
+- Migrated journal and curriculum terminology from Day to Session.
+- Renamed `daily-journal/` to `session-journal/` and historical journal files accordingly.
+- Added `CURRICULUM.md` as the coaching contract and repository authority.
+- Added reusable `system-design/interview-process.md`.
+- Added guided `system-design/notification-service.md`.
+- Added `coding/longest-repeating-character-replacement.md`, accurately marked as excessively guided.
+- Added Session 14 journal.
+- Clarified Invoice Manager API Service as owner of the final mapped business state and completion notification event.
+- Recorded Friday as preferred simulation day and weekends as optional.
+- Kept detailed DR and circuit breaker pending rather than learned.
+- Updated README, START_HERE, context, roadmap, pending list, skills matrix and scorecard.
+
+## Session 13
+
+- Added Session 13 journal.
 - Added `backend/async-await-internals.md`.
 - Added `coding/longest-substring-without-repeating-characters.md`.
 - Added Variable-size Sliding Window to coding patterns.
 - Updated README progress, roadmap and pending items.
 - Recorded that system design and mock interview were explicitly deferred.
 
-## Day 11
+## Session 11
 
-- Added Day 11 journal.
+- Added Session 11 journal.
 - Added `coding/merge-two-sorted-lists.md`.
 - Added `system-design/idempotent-consumer-inbox.md`.
 - Added ADR-014 for normalizing job stage state.
@@ -20,7 +34,7 @@
 - Updated roadmap, context, scorecard, vocabulary, coding patterns and pending items.
 
 
-## Day 1
+## Session 1
 
 ### Coding
 - Two Sum
@@ -34,7 +48,7 @@
 
 ---
 
-## Day 2
+## Session 2
 
 ### Coding
 - Best Time to Buy and Sell Stock
@@ -50,7 +64,7 @@
 
 ---
 
-## Day 3
+## Session 3
 
 ### Coding
 - Valid Anagram
@@ -68,7 +82,7 @@
 
 ---
 
-## Day 4
+## Session 4
 
 ### Coding
 - Product of Array Except Self
@@ -87,7 +101,7 @@
 
 ---
 
-## Day 5
+## Session 5
 
 ### Backend
 - Distributed Sessions using Redis
@@ -104,7 +118,7 @@
 
 ---
 
-## Day 6
+## Session 6
 
 ### Backend / Security
 - OAuth 2.0 and OIDC from first principles
@@ -123,7 +137,7 @@
 
 ---
 
-## Day 7
+## Session 7
 
 ### Rapid-Fire Interview
 - Browser-to-Invoice-Manager request lifecycle
@@ -148,7 +162,7 @@
 
 ---
 
-## Day 8
+## Session 8
 
 ### System Design — Queue Fundamentals
 - Derived why long-running business operations must outlive HTTP requests
@@ -170,7 +184,7 @@
 - Optimized pointers: O(n) time, O(1) space
 
 ### Repository
-- Added comprehensive Day 8 journal
+- Added comprehensive Session 8 journal
 - Added queue fundamentals as a canonical document
 - Added failure-propagation design note
 - Added linked-list-cycle coding note
@@ -181,7 +195,7 @@
 
 ---
 
-## Day 9
+## Session 9
 
 ### System Design — Queue Settlement and Recovery
 - Distinguished ownership renewal, release-for-retry, and successful message completion.
@@ -207,14 +221,14 @@
 - Fast & Slow Pointers used to locate the second middle node in O(n) time and O(1) space.
 
 ### Repository
-- Added comprehensive Day 9 journal.
+- Added comprehensive Session 9 journal.
 - Added coding notes for LeetCode 876.
 - Updated queue fundamentals, Invoice Manager target-state notes, context, roadmap, pending list, scorecard, README, and start-here context.
 - Removed future-only terms from learned vocabulary.
 
 ---
 
-## Day 10
+## Session 10
 
 ### Coding
 - Reverse Linked List.
@@ -244,7 +258,7 @@
 
 ---
 
-## Day 12
+## Session 12
 
 ### Distributed Systems / Backend
 - Learned backpressure and bottleneck-oriented scaling.
@@ -265,6 +279,6 @@
 - Reinforced artifact/state reconciliation when Blob output exists but SQL remains `Processing`.
 
 ### Repository
-- Added Day 12 journal, coding note and backpressure note.
+- Added Session 12 journal, coding note and backpressure note.
 - Updated context, roadmap, pending topics, skills matrix, scorecard, vocabulary, README and start-here context.
 - Added explicit “mentioned but not covered” status for KEDA, Gunicorn and global concurrency.

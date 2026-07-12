@@ -247,3 +247,16 @@ Complexity:
 Time: O(n)
 Space: O(1)
 ```
+
+
+## Variable-size Sliding Window with Replacement Budget
+
+Representative problem: Longest Repeating Character Replacement.
+
+Core condition:
+
+```text
+window length - maximum frequency <= replacement budget
+```
+
+This Session 14 problem was completed with excessive guidance and should be revisited through a fresh problem using the full hint ladder.

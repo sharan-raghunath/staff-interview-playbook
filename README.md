@@ -10,6 +10,7 @@ The goal is not to memorize interview answers. The goal is to understand why tec
 
 For a new chat or a fresh working session, read:
 
+- [`CURRICULUM.md`](CURRICULUM.md)
 - [`START_HERE.md`](START_HERE.md)
 - [`project/context.md`](project/context.md)
 - [`project/roadmap.md`](project/roadmap.md)
@@ -35,6 +36,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Merge Two Sorted Lists — Linked List Merge / Dummy Head
 - ✅ Remove Nth Node From End — Two Pointers / Dummy Head
 - ✅ Longest Substring Without Repeating Characters — Variable-size Sliding Window
+- 🟡 Longest Repeating Character Replacement — Correct solution, but excessively guided
 
 ### Backend / Security
 
@@ -81,6 +83,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Normalized Jobs + JobStages target schema decision
 - ✅ Full staged Invoice Manager pipeline including PDF preparation
 - ✅ Backpressure and bottleneck-oriented scaling
+- ✅ Notification Service guided design: boundaries, fan-out, retries, scheduling and observability
 - 🟡 Per-pod bounded concurrency concept
 - ⬜ Global concurrency management
 - ⬜ Multi-region async DR design
@@ -95,7 +98,8 @@ system-design/invoice-manager/
                           Invoice Manager architecture and target-state notes
 architecture/             General architecture principles
 adr/                      Architecture Decision Records
-daily-journal/            Daily learning logs
+session-journal/            Session learning logs
+CURRICULUM.md              Coaching contract and curriculum rules
 project/                  Roadmap, context, pending items and skills matrix
 ```
 
@@ -113,4 +117,4 @@ Each topic should answer:
 
 Authentication and authorization are complete for Senior / Staff interview purposes.
 
-The current architecture focus is the Invoice Manager transition from synchronous fail-fast processing toward an asynchronous, durable workflow. Queue fundamentals, Service Bus mapping, competing consumers, queue-vs-topic, the OCR/field-extraction topology, the Transactional Outbox pattern, idempotent consumer strategy, normalized job/stage schema decision, backpressure, and per-pod bounded concurrency are complete for the current scope. Day 13 also completed .NET async/await internals and variable-size sliding window. Global concurrency and multi-region queued-work recovery remain pending.
+Session 14 completed a guided multi-tenant Notification Service design and added the reusable system-design interview process. Invoice Manager API Service was confirmed as the owner of the final mapped business result and therefore the emitter of the completion notification event. Longest Repeating Character Replacement was implemented correctly but is marked excessively guided. Detailed DR, circuit breaker, global concurrency and multi-region queued-work recovery remain pending.

@@ -97,7 +97,8 @@
 - [ ] Distributed locking
 - [ ] Leader election
 - [ ] Service mesh
-- [ ] Observability
+- [x] Observability introduction through Notification Service
+- [ ] Observability dedicated backend topic
 
 ## Phase 4 — Cloud Architecture
 
@@ -132,6 +133,9 @@
 - [x] Billing boundary after user-confirmed submission
 - [x] Invoice Manager full staged async pipeline through billing boundary
 - [ ] Invoice Manager end-to-end async redesign with backpressure and DR
+- [x] Notification Service guided design
+- [x] Reusable system-design interview process
+- [ ] Friday system-design simulation
 - [ ] E-commerce
 - [ ] Chat system
 - [ ] File upload system
@@ -166,7 +170,7 @@
 - [ ] Google
 
 
-## Day 12 — Completed
+## Session 12 — Completed
 
 - Backpressure and bottleneck-oriented scaling.
 - Per-pod bounded concurrency concept.
@@ -174,8 +178,22 @@
 - LeetCode 19: Remove Nth Node From End.
 - Friday production-incident mock.
 
-## Day 13 — Completed / Partially Deferred
+## Session 13 — Completed / Partially Deferred
 
 - Completed `async`/`await` internals, state machine, `MoveNext()`, SynchronizationContext, ConfigureAwait, blocking deadlocks and TaskScheduler.
 - Completed LeetCode 3: Longest Substring Without Repeating Characters.
-- System design and mock interview were explicitly deferred by the user to a possible Sunday continuation.
+- System design was explicitly deferred and then continued as guided Notification Service work in Session 14. Mock interview remained deferred.
+
+
+## Session 14 — Completed
+
+- Guided multi-tenant Notification Service design.
+- Clarified Invoice Manager API Service as owner of the final business result and completion event.
+- Fan-out into one delivery/outbox record per channel.
+- Retry, DLQ, inbox/outbox, idempotency and reconciliation distinctions.
+- Scheduling and distributed scheduler claim/outbox flow.
+- Observability introduction through logs and metrics.
+- High-level regional-failure boundary only; detailed DR remains pending.
+- Longest Repeating Character Replacement completed with excessive guidance.
+- Added reusable system-design interview process and coaching contract.
+- Friday selected as preferred interview-simulation day; weekends optional.

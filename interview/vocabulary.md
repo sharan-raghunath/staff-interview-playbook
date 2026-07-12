@@ -196,7 +196,7 @@ A duplicate-safety principle where durable storage enforces that only one record
 
 ### Normalized Stage State
 
-A target-state schema decision where per-stage status, attempts, owner, timestamps, errors and artifact references are stored in a `JobStages` table rather than as many columns on `Jobs`. This was introduced and accepted on Day 11.
+A target-state schema decision where per-stage status, attempts, owner, timestamps, errors and artifact references are stored in a `JobStages` table rather than as many columns on `Jobs`. This was introduced and accepted on Session 11.
 
 ### Dummy Head
 

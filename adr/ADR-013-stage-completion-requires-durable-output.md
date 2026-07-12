@@ -1,7 +1,7 @@
 # ADR-013: Mark a Stage Complete Only After Durable Output Exists
 
 - **Status:** Accepted
-- **Date:** Day 10
+- **Date:** Session 10
 
 ## Context
 
