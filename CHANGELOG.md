@@ -1,5 +1,25 @@
 # Changelog
 
+## Session 15
+
+### Backend
+
+- Added `Task<T>` versus `ValueTask<T>` fundamentals.
+- Recorded hot-path, synchronous-completion and profiling criteria.
+- Kept advanced `ValueTask<T>` topics explicitly pending.
+
+### Coding
+
+- Added Stack/LIFO fundamentals.
+- Added Valid Parentheses with an optimal O(n) solution.
+- Recorded C# review improvements: `TryGetValue`, `TryPop`, and `Count == 0`.
+
+### Curriculum and Repository
+
+- Updated normal weekday cadence to backend theory + coding + one small system-design building block + journal reconciliation.
+- Retained Friday as interview-simulation and weekly-review day.
+- Reconciled README, START_HERE, context, roadmap, pending topics, skills matrix, scorecard and coding patterns.
+
 ## Session 14
 
 - Migrated journal and curriculum terminology from Day to Session.

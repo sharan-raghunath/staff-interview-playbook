@@ -33,10 +33,8 @@ Hard rules:
 
 ## Session Structure
 
-Sustainable structure:
-
-- Monday–Thursday: guided theory/coding/system design without overloading one sitting.
-- Friday: interview simulation and weekly review.
+- Monday–Thursday: one backend topic, one coding problem, one small system-design building block, and repository/journal reconciliation.
+- Friday: coding interview, system-design interview, behavioral practice and weekly review.
 - Saturday–Sunday: optional.
 - A session closes only when planned work is complete or explicitly deferred.
 - Read `CURRICULUM.md` before coaching.
@@ -67,6 +65,9 @@ Always ask for brute force and complexity before optimization. Use a Hint Ladder
 | 10 | Reverse Linked List | Pointer Manipulation | Iterative and recursive reversal |
 | 11 | Merge Two Sorted Lists | Linked List Merge / Dummy Head | Reused nodes, dummy head, O(n+m)/O(1) |
 | 12 | Remove Nth Node From End | Two Pointers / Dummy Head | Brute force and one-pass gap; one pass does not mean one loop |
+| 13 | Longest Substring Without Repeating Characters | Variable-size Sliding Window | HashSet and two forward-only pointers |
+| 14 | Longest Repeating Character Replacement | Replacement-budget Sliding Window | Correct but excessively guided |
+| 15 | Valid Parentheses | Stack / LIFO | Independently derived optimal algorithm |
 
 ## Backend Progress
 
@@ -79,7 +80,9 @@ Completed:
 - refresh-token lifecycle, rotation/reuse-detection principles, and revocation trade-offs;
 - OAuth 2.0, OIDC, Authorization Code, Implicit, Client Credentials and OBO concepts;
 - logout, SSO/SLO and identity best practices;
-- Zero Trust identity principles.
+- Zero Trust identity principles;
+- `async`/`await` internals, SynchronizationContext, ConfigureAwait and TaskScheduler;
+- `Task<T>` versus `ValueTask<T>` fundamentals.
 
 Pending:
 
@@ -188,10 +191,11 @@ Important production details:
 
 ## Immediate Next Work
 
-- Session 13 was completed; its deferred system-design work continued as the guided Notification Service in Session 14.
-- Reintroduce a dedicated .NET/backend topic; proposed next topic: `async`/`await` internals.
-- Continue the coding roadmap after the linked-list block.
-- Keep global concurrency, distributed rate limiting, KEDA internals and Gunicorn internals pending until dedicated coverage.
+- Session 15 is complete. Session 16 should follow the normal cadence: backend topic, coding problem, small system-design building block and journal update.
+- Continue advanced `ValueTask<T>` only within the explicit pending scope.
+- Continue the stack roadmap with a fresh problem.
+- Begin the first dedicated small system-design building block.
+- Keep global concurrency, distributed rate limiting, KEDA internals, Gunicorn internals, circuit breaker and detailed DR pending until dedicated coverage.
 - Inbox pattern is covered conceptually; revisit only for deeper implementation detail if needed.
 - Derive detailed field-extraction output persistence and Billing execution topology later.
 
@@ -241,3 +245,13 @@ Important production details:
 - Longest Repeating Character Replacement was implemented correctly but after the assistant revealed the optimal structure; record it as excessively guided.
 - Friday is the preferred interview-simulation day; weekends are optional.
 - `CURRICULUM.md` is now the authoritative coaching contract.
+
+
+## Session 15 Progress
+
+- Covered `Task<T>` versus `ValueTask<T>` fundamentals from first principles.
+- Default remains `Task<T>`; `ValueTask<T>` is considered only for profiled hot paths with frequent synchronous completion.
+- Advanced `ValueTask<T>` semantics remain pending.
+- Completed Valid Parentheses independently using a stack and a closing-to-opening dictionary.
+- Added stack/LIFO as a coding pattern.
+- Revised normal weekday cadence to include one small system-design building block every session; Friday remains simulation/application day.

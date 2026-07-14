@@ -24,8 +24,9 @@ Preferred session rhythm:
 1. Backend / theory topic.
 2. One coding pattern and one LeetCode problem.
 3. System design using Invoice Manager.
-4. Interview-quality wording.
-5. End-of-day repository update.
+4. One small system-design building block.
+5. Interview-quality wording.
+6. End-of-session repository update.
 
 Coaching rules:
 
@@ -57,6 +58,7 @@ Coaching rules:
 | 12 | Remove Nth Node From End | Two Pointers / Dummy Head | ✅ |
 | 13 | Longest Substring Without Repeating Characters | Variable-size Sliding Window | ✅ |
 | 14 | Longest Repeating Character Replacement | Variable-size Sliding Window | 🟡 Excessively guided |
+| 15 | Valid Parentheses | Stack / LIFO | ✅ |
 
 ## Completed Backend Topics
 
@@ -174,10 +176,11 @@ SQL is authoritative for target-state job/stage state. Redis remains a distribut
 
 ## Where to Continue Next
 
-Session 14 is complete. Session 15 is the next session. Read `CURRICULUM.md`, `project/pending.md`, and `session-journal/session-014.md` before choosing its scope.
-- Continue the coding roadmap after the linked-list block.
-- Keep KEDA internals, Gunicorn internals, global concurrency and distributed rate limiting in **mentioned but not covered** status until dedicated sessions.
-- Detailed delayed-retry mechanics, Service Bus sessions and multi-region queued-work recovery remain deferred.
+Session 15 is complete. Session 16 is the next session. Read `CURRICULUM.md`, `project/pending.md`, and `session-journal/session-015.md` before choosing its scope.
+- Continue advanced `ValueTask<T>` only within the pending boundaries.
+- Continue the stack coding pattern with a fresh problem.
+- Begin the first small system-design building block under the revised cadence.
+- Keep KEDA internals, Gunicorn internals, global concurrency, circuit breaker, detailed DR and distributed rate limiting in **mentioned but not covered** status until dedicated sessions.
 
 Do not mark future topics as learned until covered.
 
@@ -197,3 +200,12 @@ Do not mark future topics as learned until covered.
 - `CURRICULUM.md` is mandatory operating context.
 
 Next session should begin only after reading the latest journal and pending list.
+
+
+## Session 15 Additions
+
+- `ValueTask<T>` fundamentals are covered; advanced usage restrictions remain pending.
+- Valid Parentheses completed independently using a stack and closing-to-opening mapping.
+- Stack/LIFO is now a learned coding pattern.
+- Normal weekday sessions now include backend theory, coding, a small system-design building block and journal reconciliation.
+- Friday remains interview-simulation and weekly-review day; weekends remain optional.

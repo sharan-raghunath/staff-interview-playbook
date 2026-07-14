@@ -12,8 +12,8 @@ The goal is not to maximize topics covered per sitting. The goal is durable inte
 
 - Use **Session N**, not calendar-day numbering.
 - A session remains open until every planned item is completed or explicitly deferred by the user.
-- Monday–Thursday are normal guided-learning days.
-- Friday is the preferred interview-simulation and weekly-review day.
+- Monday–Thursday are normal guided-learning days. Each normal session should contain one backend topic, one coding problem, one small system-design building block, and repository/journal reconciliation unless the user explicitly changes scope.
+- Friday is the preferred interview-simulation and weekly-review day: coding interview, system-design interview, behavioral practice and weekly review.
 - Saturday and Sunday are optional.
 - Do not create backlog pressure because a weekend is skipped.
 - Do not overload one session merely to preserve an old daily checklist.
@@ -131,7 +131,8 @@ Before closing a session:
 
 - [ ] Planned theory completed or explicitly deferred.
 - [ ] Coding completed, or marked guided/deferred accurately.
-- [ ] System design completed to the agreed guided depth, or deferred.
+- [ ] One system-design building block completed to the agreed guided depth, or explicitly deferred.
+- [ ] On Friday, simulation status recorded separately from teaching status.
 - [ ] Mock interview status recorded accurately.
 - [ ] Journal updated.
 - [ ] Roadmap, pending list, skills matrix, scorecard, README and changelog reconciled.

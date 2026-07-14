@@ -260,3 +260,41 @@ window length - maximum frequency <= replacement budget
 ```
 
 This Session 14 problem was completed with excessive guidance and should be revisited through a fresh problem using the full hint ladder.
+
+
+## Stack / LIFO
+
+Representative problem: Valid Parentheses.
+
+Core idea:
+
+> Use a stack when the most recently seen unfinished item must be handled first.
+
+For nested delimiters:
+
+```text
+opening bracket -> push
+closing bracket -> pop and compare
+end             -> stack must be empty
+```
+
+Recognition signals:
+
+- nested structures;
+- reverse-order completion;
+- expression parsing;
+- undo/redo;
+- DFS or recursion simulation.
+
+Complexity for Valid Parentheses:
+
+```text
+Time: O(n)
+Space: O(n)
+```
+
+C# review habit:
+
+- use `TryGetValue` for bracket mapping;
+- use `TryPop` when the value is immediately consumed;
+- use `Count == 0` for the final emptiness check.

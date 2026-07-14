@@ -39,6 +39,8 @@
 - [ ] Garbage Collection
 - [ ] Threading
 - [x] async/await internals
+- [x] Task<T> vs ValueTask<T> fundamentals
+- [ ] Advanced ValueTask usage semantics
 
 ## Phase 2 — Coding Patterns
 
@@ -51,7 +53,7 @@
 - [x] Prefix Sum / Running Sum
 - [x] Fast & Slow Pointers
 - [x] Variable-size Sliding Window
-- [ ] Stack
+- [x] Stack
 - [ ] Queue
 - [ ] Binary Search
 - [x] Linked List: reversal and manipulation
@@ -197,3 +199,13 @@
 - Longest Repeating Character Replacement completed with excessive guidance.
 - Added reusable system-design interview process and coaching contract.
 - Friday selected as preferred interview-simulation day; weekends optional.
+
+
+## Session 15 — Completed
+
+- `Task<T>` versus `ValueTask<T>` fundamentals.
+- Profiling-driven criteria for considering `ValueTask<T>`.
+- Valid Parentheses completed using Stack/LIFO.
+- Added durable notes for `ValueTask`, stack fundamentals and Valid Parentheses.
+- Revised Monday–Thursday cadence to include one small system-design building block per session.
+- Friday retained as interview-simulation and weekly-review day.

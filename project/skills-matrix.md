@@ -13,6 +13,8 @@ This is a living assessment based on completed sessions.
 | OAuth 2.0 | 8.5/10 | Can derive delegation, auth code, client credentials and OBO concept |
 | OIDC | 8.5/10 | Can distinguish ID token from access token |
 | Zero Trust Identity | 9/10 | Can reason about service identity vs user identity |
+| Async/Await Internals | 9/10 | Can explain state machine, MoveNext, context capture and scheduling |
+| ValueTask Fundamentals | Introductory | Can explain why it exists, when synchronous completion helps and why Task remains default |
 
 ## Coding
 
@@ -27,6 +29,7 @@ This is a living assessment based on completed sessions.
 | Prefix Sum / Running Sum | 8/10 | Solved Find Pivot Index with O(n)/O(1) solution |
 | Fast & Slow Pointers | 8.5/10 | Solved Linked List Cycle and Middle of the Linked List with O(n)/O(1) solutions |
 | Linked List Pointer Manipulation | 8.7/10 | Solved Reverse Linked List and Merge Two Sorted Lists; learned dummy-head merge pattern |
+| Stack / LIFO | 8/10 | Independently derived and implemented Valid Parentheses optimally |
 | Trees / Graphs | Not started | User expects rustiness due to long gap |
 | Dynamic Programming | Not started | Future topic |
 
@@ -102,3 +105,14 @@ This is a living assessment based on completed sessions.
 | System-design interview process | Learning framework established | Requirement clarification → summary → assumptions → approach → responsibilities → architecture → deep dives → trade-offs → recap. |
 | Detailed DR | Pending | Only high-level critical-state identification was discussed. |
 | Circuit breaker | Not covered | Mentioned prematurely and explicitly parked. |
+
+
+## Session 15 Additions
+
+| Area | Status | Evidence |
+|---|---|---|
+| ValueTask fundamentals | Learned at introductory depth | Can explain synchronous-result optimization, hot-path criteria and profiling requirement. |
+| Advanced ValueTask semantics | Pending | Multiple awaits, AsTask, IValueTaskSource and public API guidance intentionally deferred. |
+| Stack / LIFO | Learned | Independently selected a stack for reverse-order bracket matching. |
+| Valid Parentheses | Learned | Correct O(n)/O(n) implementation; review focused on idiomatic C# rather than algorithm repair. |
+| Daily system-design cadence | Decided | One small building block per normal weekday session; Friday for complete simulations. |

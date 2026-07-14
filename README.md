@@ -37,6 +37,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Remove Nth Node From End — Two Pointers / Dummy Head
 - ✅ Longest Substring Without Repeating Characters — Variable-size Sliding Window
 - 🟡 Longest Repeating Character Replacement — Correct solution, but excessively guided
+- ✅ Valid Parentheses — Stack / LIFO
 
 ### Backend / Security
 
@@ -54,6 +55,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Zero Trust identity principles
 - ✅ `async` / `await` internals
 - ✅ SynchronizationContext, ConfigureAwait and TaskScheduler
+- ✅ `Task<T>` vs `ValueTask<T>` fundamentals
 - 🟡 API Gateway / Ingress
 - ⬜ SAML
 - ⬜ TLS
@@ -117,4 +119,4 @@ Each topic should answer:
 
 Authentication and authorization are complete for Senior / Staff interview purposes.
 
-Session 14 completed a guided multi-tenant Notification Service design and added the reusable system-design interview process. Invoice Manager API Service was confirmed as the owner of the final mapped business result and therefore the emitter of the completion notification event. Longest Repeating Character Replacement was implemented correctly but is marked excessively guided. Detailed DR, circuit breaker, global concurrency and multi-region queued-work recovery remain pending.
+Session 15 completed `ValueTask<T>` fundamentals and the Valid Parentheses stack problem. The normal weekday cadence now includes one small system-design building block in addition to backend theory and coding; Friday remains interview-simulation and weekly-review day. Advanced `ValueTask<T>` semantics, the next stack problem, detailed DR, circuit breaker, global concurrency and multi-region queued-work recovery remain pending.

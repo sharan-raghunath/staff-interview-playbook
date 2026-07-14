@@ -13,7 +13,6 @@ This file tracks intentionally pending topics. A pending topic may be named here
 - Global concurrency management beyond per-pod limits.
 - Distributed rate limiting.
 - Retry jitter and detailed delayed-retry implementation.
-- Detailed delayed-retry implementation.
 - Deeper Inbox implementation details, only if needed beyond the Session 11 concept.
 - Multi-region recovery for queued work.
 - Exact PDF-preparation queue naming/topology.
@@ -26,9 +25,16 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Backend / .NET
 
-- `Task` vs `ValueTask`.
+- Advanced `ValueTask<T>` topics: multiple-await restrictions, `AsTask()`, `IValueTaskSource`, and public-API guidance.
 - Cancellation and async failure handling.
 - ASP.NET Core pipeline internals revisit at interview depth.
+
+
+### System Design Building Blocks
+
+- Begin daily small building-block coverage from Session 16.
+- Candidate next topic: load balancing, subject to repository order and session scope.
+- Keep Friday for complete interview simulation rather than teaching.
 
 ### Platform Topics Mentioned but Not Covered
 
@@ -53,11 +59,11 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 - Revisit replacement-budget sliding window with a fresh problem using brute force and the full hint ladder; Session 14 was excessively guided.
 
-- Continue the coding roadmap after Variable-size Sliding Window.
+- Continue the coding roadmap after Stack fundamentals.
+- Next stack problem using the full coding process.
 - Two Sum II.
 - Container With Most Water.
 - Binary Search intro.
-- Valid Parentheses.
 - Maximum Depth of Binary Tree.
 - Number of Islands.
 

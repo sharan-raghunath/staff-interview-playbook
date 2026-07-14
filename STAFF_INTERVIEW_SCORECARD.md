@@ -1,5 +1,22 @@
 # Staff Interview Scorecard
 
+## Session 15 Snapshot
+
+| Competency | Current Level | Evidence |
+|---|---:|---|
+| Backend fundamentals | 9.3/10 | Added introductory `ValueTask<T>` reasoning while keeping `Task<T>` as the default and advanced semantics pending |
+| Coding patterns | 8.8/10 | Independently derived the optimal Stack/LIFO solution for Valid Parentheses |
+| System design | 9.2/10 | No new building block completed; cadence was revised so small guided building blocks begin from Session 16 |
+| Distributed systems | 8.9/10 | No new distributed-systems concept claimed in this session |
+| Interview communication | 8.7/10 | Asked useful input and auxiliary-space questions before implementation |
+
+## Session 15 Evidence
+
+- Correctly identified the cache-hit path as the path that can benefit from `ValueTask<T>`.
+- Correctly reasoned that `ValueTask<T>` has additional representation complexity and is not beneficial when work is predominantly asynchronous.
+- Independently selected a stack for nested bracket validation and stated O(n) time and O(n) worst-case space.
+- Implementation was algorithmically correct; review changes were idiomatic C# improvements (`TryGetValue`, `TryPop`, `Count == 0`).
+
 This is a living review document. It tracks readiness by competency rather than topic count.
 
 ## Session 14 Snapshot

@@ -8,6 +8,10 @@
 
 ## Coding
 
+- Do not ask permission for standard collections unless the interviewer has stated auxiliary-space or library restrictions; ask about constraints instead.
+- Do not over-engineer for hypothetical delimiter types when the input contract is fixed.
+- When `Peek` is immediately followed by `Pop`, check whether `TryPop` expresses the operation more directly.
+
 - Do not ask for hints too early.
 - Explain brute force before optimized solution.
 - Narrate the optimized approach before coding.
