@@ -32,7 +32,8 @@
 - [ ] HTTP/3
 - [ ] REST vs gRPC
 - [ ] Reverse Proxies
-- [ ] Load Balancers
+- [x] Load Balancers fundamentals
+- [ ] Advanced load-balancer policies
 - [ ] L4 vs L7
 - [ ] ASP.NET Middleware
 - [ ] Dependency Injection
@@ -40,7 +41,7 @@
 - [ ] Threading
 - [x] async/await internals
 - [x] Task<T> vs ValueTask<T> fundamentals
-- [ ] Advanced ValueTask usage semantics
+- [~] Advanced ValueTask usage semantics — single-consumption guidance covered; internals pending
 
 ## Phase 2 — Coding Patterns
 
@@ -209,3 +210,11 @@
 - Added durable notes for `ValueTask`, stack fundamentals and Valid Parentheses.
 - Revised Monday–Thursday cadence to include one small system-design building block per session.
 - Friday retained as interview-simulation and weekly-review day.
+
+
+## Session 16 — Completed
+
+- `ValueTask<T>` single-consumption usage guidance.
+- Load Balancer fundamentals: routing, health checks, L4/L7 and sticky sessions.
+- Min Stack with auxiliary minimum state per stack level.
+- Durable notes added for all three topics and progress trackers reconciled.

@@ -25,14 +25,14 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 ### Backend / .NET
 
-- Advanced `ValueTask<T>` topics: multiple-await restrictions, `AsTask()`, `IValueTaskSource`, and public-API guidance.
+- Advanced `ValueTask<T>` topics: `AsTask()`, `IValueTaskSource`, object-pooling internals, exact multiple-await semantics, and public-API guidance. The single-consumption rule is covered.
 - Cancellation and async failure handling.
 - ASP.NET Core pipeline internals revisit at interview depth.
 
 
 ### System Design Building Blocks
 
-- Begin daily small building-block coverage from Session 16.
+- Continue one small system-design building block in each normal weekday session.
 - Candidate next topic: load balancing, subject to repository order and session scope.
 - Keep Friday for complete interview simulation rather than teaching.
 
@@ -91,3 +91,5 @@ This file tracks intentionally pending topics. A pending topic may be named here
 - Continue guided system-design practice before evaluating independent interview performance.
 - Use `CURRICULUM.md` as the mandatory coaching contract.
 - Do not introduce pending concepts as learned content.
+
+- Advanced load-balancer policies: weighted routing, deeper failure thresholds, reverse-proxy internals and global failover.

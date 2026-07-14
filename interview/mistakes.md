@@ -32,3 +32,10 @@
 - Do not conflate Correlation ID and Idempotency Key.
 - Do not retry everything blindly.
 - Do not drop failed work after retries without preserving it for recovery.
+
+
+## Process consistency: sessions are not calendar days
+
+A session may span multiple real-world days. Do not evaluate progress or refer to corrections using “today” or “yesterday.” Use the session number and the exact earlier point in that session.
+
+Also avoid silently changing assumptions during a problem. State any assumption change before reasoning from it.

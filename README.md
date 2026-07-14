@@ -38,6 +38,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Longest Substring Without Repeating Characters — Variable-size Sliding Window
 - 🟡 Longest Repeating Character Replacement — Correct solution, but excessively guided
 - ✅ Valid Parentheses — Stack / LIFO
+- ✅ Min Stack — Stack with Auxiliary State
 
 ### Backend / Security
 
@@ -56,6 +57,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ `async` / `await` internals
 - ✅ SynchronizationContext, ConfigureAwait and TaskScheduler
 - ✅ `Task<T>` vs `ValueTask<T>` fundamentals
+- ✅ `ValueTask<T>` single-consumption usage guidance
 - 🟡 API Gateway / Ingress
 - ⬜ SAML
 - ⬜ TLS
@@ -86,6 +88,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Full staged Invoice Manager pipeline including PDF preparation
 - ✅ Backpressure and bottleneck-oriented scaling
 - ✅ Notification Service guided design: boundaries, fan-out, retries, scheduling and observability
+- ✅ Load Balancer fundamentals: routing, health checks, L4/L7 and sticky sessions
 - 🟡 Per-pod bounded concurrency concept
 - ⬜ Global concurrency management
 - ⬜ Multi-region async DR design
@@ -119,4 +122,4 @@ Each topic should answer:
 
 Authentication and authorization are complete for Senior / Staff interview purposes.
 
-Session 15 completed `ValueTask<T>` fundamentals and the Valid Parentheses stack problem. The normal weekday cadence now includes one small system-design building block in addition to backend theory and coding; Friday remains interview-simulation and weekly-review day. Advanced `ValueTask<T>` semantics, the next stack problem, detailed DR, circuit breaker, global concurrency and multi-region queued-work recovery remain pending.
+Session 16 completed `ValueTask<T>` single-consumption guidance, Load Balancer fundamentals, and Min Stack. Advanced `ValueTask<T>` internals, weighted routing, detailed DR, circuit breaker, global concurrency and multi-region queued-work recovery remain pending.

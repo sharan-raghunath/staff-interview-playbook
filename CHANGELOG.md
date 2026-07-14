@@ -1,3 +1,12 @@
+## Session 16
+
+- Added `ValueTask<T>` single-consumption usage guidance while keeping advanced internals pending.
+- Added Load Balancer fundamentals covering motivation, routing strategies, health checks, Layer 4 versus Layer 7, sticky sessions and failover implications.
+- Added LeetCode 155 Min Stack and the stack-with-auxiliary-state pattern.
+- Added `session-journal/session-016.md`.
+- Updated README, start context, curriculum, roadmap, pending work, skills matrix and scorecard.
+- Added the rule that sessions may span calendar days and all progress references must remain session-based.
+
 # Changelog
 
 ## Session 15

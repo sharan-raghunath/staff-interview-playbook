@@ -74,3 +74,27 @@ Intentionally pending:
 - `IValueTaskSource`;
 - detailed public-API guidance;
 - framework-specific implementation details.
+
+
+## Safe consumption rule added in Session 16
+
+Treat a `ValueTask<T>` as a single-consumption awaitable:
+
+```csharp
+Customer customer = await GetCustomerAsync(id);
+```
+
+Do not store the same `ValueTask<T>` and depend on awaiting it repeatedly. The caller should not assume which internal representation is being used.
+
+Calling the method twice is different from awaiting the same returned `ValueTask<T>` twice.
+
+At the current curriculum depth, retain this rule:
+
+> Await a `ValueTask<T>` once and use the result immediately.
+
+The deeper explanation depends on topics intentionally deferred:
+
+- `AsTask()`;
+- `IValueTaskSource`;
+- object pooling and reusable async sources;
+- detailed public-API guidance.

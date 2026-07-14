@@ -298,3 +298,28 @@ C# review habit:
 - use `TryGetValue` for bracket mapping;
 - use `TryPop` when the value is immediately consumed;
 - use `Count == 0` for the final emptiness check.
+
+
+## Stack with Auxiliary State
+
+Representative problem: Min Stack.
+
+Core idea:
+
+> Store each pushed value together with the aggregate state required at that stack level. Popping then restores the previous aggregate automatically.
+
+For Min Stack:
+
+```text
+(value, minimumAtThisLevel)
+```
+
+Complexity:
+
+```text
+Push:   O(1) amortized
+Pop:    O(1)
+Top:    O(1)
+GetMin: O(1)
+Space:  O(n)
+```

@@ -14,7 +14,7 @@ This is a living assessment based on completed sessions.
 | OIDC | 8.5/10 | Can distinguish ID token from access token |
 | Zero Trust Identity | 9/10 | Can reason about service identity vs user identity |
 | Async/Await Internals | 9/10 | Can explain state machine, MoveNext, context capture and scheduling |
-| ValueTask Fundamentals | Introductory | Can explain why it exists, when synchronous completion helps and why Task remains default |
+| ValueTask Fundamentals | Introductory+ | Can explain why it exists, when synchronous completion helps, why Task remains default, and the safe single-consumption rule |
 
 ## Coding
 
@@ -29,7 +29,7 @@ This is a living assessment based on completed sessions.
 | Prefix Sum / Running Sum | 8/10 | Solved Find Pivot Index with O(n)/O(1) solution |
 | Fast & Slow Pointers | 8.5/10 | Solved Linked List Cycle and Middle of the Linked List with O(n)/O(1) solutions |
 | Linked List Pointer Manipulation | 8.7/10 | Solved Reverse Linked List and Merge Two Sorted Lists; learned dummy-head merge pattern |
-| Stack / LIFO | 8/10 | Independently derived and implemented Valid Parentheses optimally |
+| Stack / LIFO | 8.5/10 | Independently derived Valid Parentheses and Min Stack auxiliary-state design |
 | Trees / Graphs | Not started | User expects rustiness due to long gap |
 | Dynamic Programming | Not started | Future topic |
 
@@ -116,3 +116,12 @@ This is a living assessment based on completed sessions.
 | Stack / LIFO | Learned | Independently selected a stack for reverse-order bracket matching. |
 | Valid Parentheses | Learned | Correct O(n)/O(n) implementation; review focused on idiomatic C# rather than algorithm repair. |
 | Daily system-design cadence | Decided | One small building block per normal weekday session; Friday for complete simulations. |
+
+
+## Session 16 Additions
+
+| Skill | Status | Evidence |
+|---|---|---|
+| ValueTask safe consumption | Learned at usage level | Can state that a `ValueTask<T>` should be awaited once; internals remain pending. |
+| Load Balancer fundamentals | Learned | Can explain motivation, routing strategies, health checks, L4/L7 selection and sticky-session trade-offs. |
+| Stack with auxiliary state | Learned | Derived `(value, minAtThisLevel)` to make all Min Stack operations O(1). |

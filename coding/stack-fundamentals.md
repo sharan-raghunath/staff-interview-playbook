@@ -49,3 +49,20 @@ Peek: O(1)
 ```
 
 A scan that pushes and pops each input item at most once is typically O(n) time and O(n) worst-case space.
+
+
+## Auxiliary state per level
+
+Representative problem: Min Stack.
+
+Sometimes the value removed by `Pop` also destroys information needed for the remaining stack. Preserve that summary alongside every entry.
+
+```text
+(value, summaryAtThisLevel)
+```
+
+For Min Stack, the summary is the minimum at that level. This keeps `GetMin` and restoration after `Pop` in O(1).
+
+General recognition clue:
+
+> Each prefix of the stack needs a queryable aggregate after later elements are removed.

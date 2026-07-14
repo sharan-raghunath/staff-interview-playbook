@@ -68,6 +68,7 @@ Always ask for brute force and complexity before optimization. Use a Hint Ladder
 | 13 | Longest Substring Without Repeating Characters | Variable-size Sliding Window | HashSet and two forward-only pointers |
 | 14 | Longest Repeating Character Replacement | Replacement-budget Sliding Window | Correct but excessively guided |
 | 15 | Valid Parentheses | Stack / LIFO | Independently derived optimal algorithm |
+| 16 | Min Stack | Stack with Auxiliary State | Derived O(1) aggregate-per-level design |
 
 ## Backend Progress
 
@@ -191,7 +192,7 @@ Important production details:
 
 ## Immediate Next Work
 
-- Session 15 is complete. Session 16 should follow the normal cadence: backend topic, coding problem, small system-design building block and journal update.
+- Session 16 is complete. Session 17 should follow the normal cadence: backend topic, coding problem, small system-design building block and journal update.
 - Continue advanced `ValueTask<T>` only within the explicit pending scope.
 - Continue the stack roadmap with a fresh problem.
 - Begin the first dedicated small system-design building block.
@@ -255,3 +256,11 @@ Important production details:
 - Completed Valid Parentheses independently using a stack and a closing-to-opening dictionary.
 - Added stack/LIFO as a coding pattern.
 - Revised normal weekday cadence to include one small system-design building block every session; Friday remains simulation/application day.
+
+
+## Session 16 Progress
+
+- Added the safe single-consumption rule for `ValueTask<T>` without introducing deferred implementation internals.
+- Completed Load Balancer fundamentals: motivation, routing strategies, health checks, Layer 4 versus Layer 7 and sticky sessions.
+- Completed Min Stack by storing `(value, minimumAtThisLevel)` for O(1) operations.
+- Added the project rule that sessions may span multiple calendar days and all progress references must remain session-based.

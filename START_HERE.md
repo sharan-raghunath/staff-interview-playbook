@@ -59,6 +59,7 @@ Coaching rules:
 | 13 | Longest Substring Without Repeating Characters | Variable-size Sliding Window | ✅ |
 | 14 | Longest Repeating Character Replacement | Variable-size Sliding Window | 🟡 Excessively guided |
 | 15 | Valid Parentheses | Stack / LIFO | ✅ |
+| 16 | Min Stack | Stack with Auxiliary State | ✅ |
 
 ## Completed Backend Topics
 
@@ -176,8 +177,8 @@ SQL is authoritative for target-state job/stage state. Redis remains a distribut
 
 ## Where to Continue Next
 
-Session 15 is complete. Session 16 is the next session. Read `CURRICULUM.md`, `project/pending.md`, and `session-journal/session-015.md` before choosing its scope.
-- Continue advanced `ValueTask<T>` only within the pending boundaries.
+Session 16 is complete. Read `CURRICULUM.md`, `project/pending.md`, and `session-journal/session-016.md` before choosing Session 17 scope.
+- Keep advanced `ValueTask<T>` internals within the pending boundaries.
 - Continue the stack coding pattern with a fresh problem.
 - Begin the first small system-design building block under the revised cadence.
 - Keep KEDA internals, Gunicorn internals, global concurrency, circuit breaker, detailed DR and distributed rate limiting in **mentioned but not covered** status until dedicated sessions.
@@ -209,3 +210,11 @@ Next session should begin only after reading the latest journal and pending list
 - Stack/LIFO is now a learned coding pattern.
 - Normal weekday sessions now include backend theory, coding, a small system-design building block and journal reconciliation.
 - Friday remains interview-simulation and weekly-review day; weekends remain optional.
+
+
+## Session 16 Additions
+
+- `ValueTask<T>` should be treated as a single-consumption awaitable at the current curriculum depth.
+- Load Balancer fundamentals completed: motivation, routing strategies, health checks, Layer 4 vs Layer 7 and sticky sessions.
+- Min Stack completed with O(1) `Push`, `Pop`, `Top` and `GetMin` by storing the minimum at each stack level.
+- Sessions are logical learning units and may span multiple calendar days; references and feedback must be session-based.

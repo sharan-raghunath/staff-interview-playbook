@@ -137,3 +137,12 @@ Before closing a session:
 - [ ] Journal updated.
 - [ ] Roadmap, pending list, skills matrix, scorecard, README and changelog reconciled.
 - [ ] No future concept is accidentally marked learned.
+
+
+## Session continuity and references
+
+- A session is a logical learning unit and may span multiple calendar days.
+- Use session numbers in feedback, journal updates and comparisons.
+- Do not infer curriculum progress from “today,” “yesterday,” or elapsed calendar time.
+- Resume the current incomplete session unless the user explicitly changes scope.
+- Preserve assumptions established within a problem; any assumption change must be stated explicitly.

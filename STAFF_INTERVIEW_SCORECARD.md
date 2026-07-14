@@ -1,5 +1,22 @@
 # Staff Interview Scorecard
 
+## Session 16 Snapshot
+
+| Area | Current assessment | Evidence |
+|---|---:|---|
+| Backend fundamentals | 9.3/10 | Retained `Task<T>` as default and added the safe single-consumption rule for `ValueTask<T>` without overclaiming deferred internals |
+| Coding patterns | 8.9/10 | Identified the O(n) Min Stack bottleneck and derived per-level minimum state for O(1) operations |
+| System design | 9.2/10 | Explained why load balancers exist and selected L4/L7 and routing strategies from required information |
+| Interview process | 8.8/10 | Clarified constraints before Min Stack and challenged inconsistent assumptions during sticky-session discussion |
+
+## Session 16 Evidence
+
+- Distinguished a single server's capacity, availability and fairness problems.
+- Derived round robin, least-load and geographic routing before terminology was introduced.
+- Correctly selected Layer 7 for URL-based routing and Layer 4 for identical TCP backends.
+- Derived the Min Stack auxiliary-state solution after identifying why one global minimum is insufficient.
+- Required session-based rather than calendar-day-based feedback and progress references.
+
 ## Session 15 Snapshot
 
 | Competency | Current Level | Evidence |
