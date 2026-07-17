@@ -15,6 +15,7 @@ This is a living assessment based on completed sessions.
 | Zero Trust Identity | 9/10 | Can reason about service identity vs user identity |
 | Async/Await Internals | 9/10 | Can explain state machine, MoveNext, context capture and scheduling |
 | ValueTask Fundamentals | Introductory+ | Can explain why it exists, when synchronous completion helps, why Task remains default, and the safe single-consumption rule |
+| Thread Safety Fundamentals | Introductory+ | Can derive lost updates, identify the full read-modify-write critical section and explain basic `lock` ownership |
 
 ## Coding
 
@@ -29,7 +30,7 @@ This is a living assessment based on completed sessions.
 | Prefix Sum / Running Sum | 8/10 | Solved Find Pivot Index with O(n)/O(1) solution |
 | Fast & Slow Pointers | 8.5/10 | Solved Linked List Cycle and Middle of the Linked List with O(n)/O(1) solutions |
 | Linked List Pointer Manipulation | 8.7/10 | Solved Reverse Linked List and Merge Two Sorted Lists; learned dummy-head merge pattern |
-| Stack / LIFO | 8.5/10 | Independently derived Valid Parentheses and Min Stack auxiliary-state design |
+| Stack / LIFO | 8.7/10 | Independently derived Valid Parentheses, Min Stack auxiliary state and RPN postfix evaluation |
 | Trees / Graphs | Not started | User expects rustiness due to long gap |
 | Dynamic Programming | Not started | Future topic |
 
@@ -48,6 +49,7 @@ This is a living assessment based on completed sessions.
 | Invoice Manager Async Topology | 8.2/10 | Selected separate OCR/field-extraction queues; Billing stays outside Orchestrator |
 | Transactional Outbox | 8/10 | Can explain SQL update + queue publish gap, durable publish intent, duplicate publish and idempotent consumers |
 | Notification Service design | Guided completion | Can explain producer/platform boundaries, tenant policy, per-channel fan-out, scheduling and observability; independent mock pending |
+| Caching | Learned at building-block depth | Can choose cache/no-cache per data type, compare cache-aside/read-through/write strategies, and reason about TTL, L1/L2, eviction and invalidation |
 
 ## Communication
 
@@ -125,3 +127,15 @@ This is a living assessment based on completed sessions.
 | ValueTask safe consumption | Learned at usage level | Can state that a `ValueTask<T>` should be awaited once; internals remain pending. |
 | Load Balancer fundamentals | Learned | Can explain motivation, routing strategies, health checks, L4/L7 selection and sticky-session trade-offs. |
 | Stack with auxiliary state | Learned | Derived `(value, minAtThisLevel)` to make all Min Stack operations O(1). |
+
+
+## Session 17 Additions
+
+| Area | Status | Evidence |
+|---|---|---|
+| Thread safety fundamentals | Learned | Derived the lost-update race and identified the full read-modify-write sequence as the critical section. |
+| Basic C# `lock` | Learned at introductory depth | Explained `private readonly` lock ownership and same-object mutual exclusion. |
+| Evaluate Reverse Polish Notation | Learned | Correct O(n)/O(n) stack solution with correct operand ordering and integer division behavior. |
+| Caching fundamentals | Learned | Covered cache-aside, read-through, write strategies, stale reads, stampede, L1/L2, TTL, LRU/LFU and warming. |
+| Invoice Manager caching strategy | Learned | Chose selective caching for tenant/reference data and rejected caching large low-reuse OCR, result and PDF payloads. |
+| Advanced synchronization/cache coherence | Pending | Explicitly outside current depth. |

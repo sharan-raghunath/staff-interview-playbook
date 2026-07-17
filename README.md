@@ -39,6 +39,7 @@ These files are the canonical context for the Interview Prep project.
 - 🟡 Longest Repeating Character Replacement — Correct solution, but excessively guided
 - ✅ Valid Parentheses — Stack / LIFO
 - ✅ Min Stack — Stack with Auxiliary State
+- ✅ Evaluate Reverse Polish Notation — Stack / Postfix Evaluation
 
 ### Backend / Security
 
@@ -58,6 +59,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ SynchronizationContext, ConfigureAwait and TaskScheduler
 - ✅ `Task<T>` vs `ValueTask<T>` fundamentals
 - ✅ `ValueTask<T>` single-consumption usage guidance
+- ✅ Thread-safety fundamentals: race conditions, critical sections and `lock`
 - 🟡 API Gateway / Ingress
 - ⬜ SAML
 - ⬜ TLS
@@ -89,6 +91,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Backpressure and bottleneck-oriented scaling
 - ✅ Notification Service guided design: boundaries, fan-out, retries, scheduling and observability
 - ✅ Load Balancer fundamentals: routing, health checks, L4/L7 and sticky sessions
+- ✅ Caching fundamentals and Invoice Manager caching strategy
 - 🟡 Per-pod bounded concurrency concept
 - ⬜ Global concurrency management
 - ⬜ Multi-region async DR design
@@ -120,6 +123,4 @@ Each topic should answer:
 
 ## Current Status
 
-Authentication and authorization are complete for Senior / Staff interview purposes.
-
-Session 16 completed `ValueTask<T>` single-consumption guidance, Load Balancer fundamentals, and Min Stack. Advanced `ValueTask<T>` internals, weighted routing, detailed DR, circuit breaker, global concurrency and multi-region queued-work recovery remain pending.
+Session 17 completed thread-safety fundamentals, Evaluate Reverse Polish Notation, and the caching building block through Invoice Manager-specific cache decisions. Advanced synchronization, distributed locking, Redis internals, detailed cache coherence, formal DR, circuit breaker and global concurrency remain pending.

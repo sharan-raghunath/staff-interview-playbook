@@ -1,5 +1,23 @@
 # Staff Interview Scorecard
 
+## Session 17 Snapshot
+
+| Area | Current assessment | Evidence |
+|---|---:|---|
+| Backend fundamentals | 9.2/10 | Derived race-condition mechanics and the complete read-modify-write critical section; advanced synchronization not yet assessed |
+| Coding patterns | 9.0/10 | Identified and implemented RPN stack evaluation with correct operand order and no unnecessary defensive branches |
+| System design | 9.3/10 | Made data-specific cache/no-cache decisions using reuse, size, freshness, security and durable-store trade-offs |
+| Interview process | 9.0/10 | Clarified division and input validity, trusted the contract, and challenged caching trust-boundary implications |
+
+## Session 17 Evidence
+
+- Explained why protecting only the final write cannot prevent a lost update.
+- Used one shared `private readonly` lock object to reason about mutual exclusion.
+- Completed LeetCode 150 with O(n) time and O(n) space.
+- Distinguished cache-aside from read-through based on application responsibility and attack surface.
+- Derived L1/L2 flow, shorter L1 TTL, LRU/LFU trade-offs and cache warming.
+- Rejected caching large, sensitive and low-reuse Invoice Manager payloads when Blob storage already satisfies durability and access.
+
 ## Session 16 Snapshot
 
 | Area | Current assessment | Evidence |

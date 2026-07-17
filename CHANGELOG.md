@@ -1,3 +1,29 @@
+# Changelog
+
+## Session 17
+
+### Backend
+
+- Added race conditions, critical sections, mutual exclusion and basic C# `lock`.
+- Added `backend/thread-safety-and-lock.md`.
+- Kept advanced synchronization and distributed locking pending.
+
+### Coding
+
+- Added LeetCode 150 Evaluate Reverse Polish Notation.
+- Added postfix stack-evaluation pattern and explicit production stack examples.
+
+### System Design
+
+- Added comprehensive caching fundamentals and Invoice Manager strategy.
+- Covered cache-aside, read-through, write-through/write-behind, invalidation, stampede, L1/L2, TTL, LRU/LFU, warming and conceptual cross-pod invalidation.
+- Recorded selective caching for tenant/reference data and no-cache decisions for OCR payloads, final extraction results by default, and uploaded PDFs.
+
+### Repository
+
+- Added `session-journal/session-017.md`.
+- Reconciled README, START_HERE, context, roadmap, pending items, skills matrix, scorecard, coding patterns, system-design fundamentals and interview mistakes.
+
 ## Session 16
 
 - Added `ValueTask<T>` single-consumption usage guidance while keeping advanced internals pending.
@@ -6,8 +32,6 @@
 - Added `session-journal/session-016.md`.
 - Updated README, start context, curriculum, roadmap, pending work, skills matrix and scorecard.
 - Added the rule that sessions may span calendar days and all progress references must remain session-based.
-
-# Changelog
 
 ## Session 15
 

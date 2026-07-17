@@ -60,6 +60,7 @@ Coaching rules:
 | 14 | Longest Repeating Character Replacement | Variable-size Sliding Window | 🟡 Excessively guided |
 | 15 | Valid Parentheses | Stack / LIFO | ✅ |
 | 16 | Min Stack | Stack with Auxiliary State | ✅ |
+| 17 | Evaluate Reverse Polish Notation | Stack / Postfix Evaluation | ✅ |
 
 ## Completed Backend Topics
 
@@ -74,6 +75,18 @@ Coaching rules:
 - refresh-token lifecycle, rotation/reuse-detection principles;
 - logout, SSO/SLO;
 - Zero Trust identity principles.
+- async/await internals and ValueTask usage fundamentals.
+- Thread-safety fundamentals: race conditions, critical sections and basic `lock`.
+
+## Latest Completed Session
+
+Session 17 completed:
+
+- race conditions, critical sections, mutual exclusion and basic C# `lock`;
+- LeetCode 150 — Evaluate Reverse Polish Notation;
+- cache-aside/read-through/write-through/write-behind concepts;
+- L1/L2 caching, TTL, LRU/LFU, stampede, warming and invalidation;
+- Invoice Manager-specific cache and no-cache decisions.
 
 ## Canonical Invoice Manager Context
 

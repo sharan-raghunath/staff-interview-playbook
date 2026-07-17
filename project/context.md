@@ -264,3 +264,11 @@ Important production details:
 - Completed Load Balancer fundamentals: motivation, routing strategies, health checks, Layer 4 versus Layer 7 and sticky sessions.
 - Completed Min Stack by storing `(value, minimumAtThisLevel)` for O(1) operations.
 - Added the project rule that sessions may span multiple calendar days and all progress references must remain session-based.
+
+
+## Session 17 Context
+
+- Backend: race conditions, read-modify-write critical sections, mutual exclusion and basic `lock` with a `private readonly` object. Advanced synchronization remains pending.
+- Coding: LeetCode 150 Evaluate Reverse Polish Notation completed in O(n) time/O(n) space with correct operand order and valid-input contract discipline.
+- System design: caching fundamentals completed, including cache-aside, read-through, write-through/write-behind concepts, invalidation, stampede, per-key coordination, L1/L2, TTL, LRU/LFU, warming and distributed invalidation at a conceptual level.
+- Invoice Manager decisions: cache tenant configuration and small reference data selectively; do not cache OCR payloads, final extraction outputs by default, or uploaded PDFs. Durable Blob storage remains the source for large workflow artifacts.

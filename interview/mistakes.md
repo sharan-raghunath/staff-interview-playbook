@@ -8,6 +8,9 @@
 
 ## Coding
 
+- Trust a guaranteed-valid input contract; do not add defensive branches merely to appear production-ready in a constrained coding problem.
+- For postfix evaluation, pop the right operand before the left operand.
+
 - Do not ask permission for standard collections unless the interviewer has stated auxiliary-space or library restrictions; ask about constraints instead.
 - Do not over-engineer for hypothetical delimiter types when the input contract is fixed.
 - When `Peek` is immediately followed by `Pop`, check whether `TryPop` expresses the operation more directly.
@@ -27,6 +30,9 @@
 - Do not propagate user identity to services that do not need it.
 
 ## System Design
+
+- Do not recommend caching merely because data exists; evaluate size, reuse, volatility, stale-data impact, security and the existing durable store.
+- Do not treat invalidating shared L2 as sufficient when pod-local L1 copies can remain stale.
 
 - Do not start with a product choice before explaining why asynchronous processing is needed.
 - Do not conflate Correlation ID and Idempotency Key.

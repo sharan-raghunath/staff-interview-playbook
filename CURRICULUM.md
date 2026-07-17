@@ -135,6 +135,7 @@ Before closing a session:
 - [ ] On Friday, simulation status recorded separately from teaching status.
 - [ ] Mock interview status recorded accurately.
 - [ ] Journal updated.
+- [ ] Durable topic notes created or updated; the journal alone is not a repository reconciliation.
 - [ ] Roadmap, pending list, skills matrix, scorecard, README and changelog reconciled.
 - [ ] No future concept is accidentally marked learned.
 

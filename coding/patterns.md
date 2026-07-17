@@ -323,3 +323,26 @@ Top:    O(1)
 GetMin: O(1)
 Space:  O(n)
 ```
+
+
+## Stack for Postfix Evaluation
+
+Representative problem: Evaluate Reverse Polish Notation.
+
+Core idea:
+
+> Operands arrive before the operator that consumes them. Push operands; when an operator appears, pop the right operand first and the left operand second, evaluate, and push the intermediate result.
+
+```text
+right = pop()
+left  = pop()
+result = left operator right
+push(result)
+```
+
+Complexity:
+
+```text
+Time:  O(n)
+Space: O(n)
+```

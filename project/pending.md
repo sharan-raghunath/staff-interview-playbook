@@ -33,7 +33,7 @@ This file tracks intentionally pending topics. A pending topic may be named here
 ### System Design Building Blocks
 
 - Continue one small system-design building block in each normal weekday session.
-- Candidate next topic: load balancing, subject to repository order and session scope.
+- Candidate next building block must follow repository order and current session scope; caching fundamentals are complete.
 - Keep Friday for complete interview simulation rather than teaching.
 
 ### Platform Topics Mentioned but Not Covered
@@ -50,7 +50,6 @@ This file tracks intentionally pending topics. A pending topic may be named here
 - TLS and certificates.
 - DNS resolution.
 - Reverse proxy vs load balancer vs API gateway vs ingress controller.
-- L4 vs L7.
 - HTTP/2 vs HTTP/3.
 - gRPC.
 - CORS and CSRF.
@@ -60,7 +59,7 @@ This file tracks intentionally pending topics. A pending topic may be named here
 - Revisit replacement-budget sliding window with a fresh problem using brute force and the full hint ladder; Session 14 was excessively guided.
 
 - Continue the coding roadmap after Stack fundamentals.
-- Next stack problem using the full coding process.
+- Stack core progression completed through Valid Parentheses, Min Stack and RPN; choose the next pattern according to roadmap.
 - Two Sum II.
 - Container With Most Water.
 - Binary Search intro.
@@ -93,3 +92,17 @@ This file tracks intentionally pending topics. A pending topic may be named here
 - Do not introduce pending concepts as learned content.
 
 - Advanced load-balancer policies: weighted routing, deeper failure thresholds, reverse-proxy internals and global failover.
+
+### Threading / Synchronization
+
+- Lock re-entrancy and `Monitor` internals.
+- `Interlocked`, `SemaphoreSlim`, reader/writer locks and deadlock analysis.
+- Distributed locking remains a separate distributed-systems topic.
+
+### Caching
+
+- Redis product internals and deployment choices.
+- Cache sizing and operational capacity planning.
+- Detailed cross-pod invalidation and cache-coherence mechanisms.
+- Negative caching, cache penetration and cache avalanche as formal topics.
+- Distributed per-key coordination after distributed locking is covered.

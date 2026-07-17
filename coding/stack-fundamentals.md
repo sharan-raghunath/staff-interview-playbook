@@ -66,3 +66,19 @@ For Min Stack, the summary is the minimum at that level. This keeps `GetMin` and
 General recognition clue:
 
 > Each prefix of the stack needs a queryable aggregate after later elements are removed.
+
+
+## Postfix expression evaluation
+
+Representative problem: Evaluate Reverse Polish Notation.
+
+A postfix operator consumes the two most recently produced operands or intermediate results. The stack preserves exactly that order.
+
+For non-commutative operations:
+
+```text
+right operand = first pop
+left operand  = second pop
+```
+
+Then evaluate `left - right` or `left / right`.

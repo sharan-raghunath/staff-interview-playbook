@@ -34,11 +34,11 @@
 - [ ] Reverse Proxies
 - [x] Load Balancers fundamentals
 - [ ] Advanced load-balancer policies
-- [ ] L4 vs L7
+- [x] L4 vs L7
 - [ ] ASP.NET Middleware
 - [ ] Dependency Injection
 - [ ] Garbage Collection
-- [ ] Threading
+- [~] Threading — race conditions, critical sections and basic `lock` covered; advanced synchronization pending
 - [x] async/await internals
 - [x] Task<T> vs ValueTask<T> fundamentals
 - [~] Advanced ValueTask usage semantics — single-consumption guidance covered; internals pending
@@ -54,7 +54,7 @@
 - [x] Prefix Sum / Running Sum
 - [x] Fast & Slow Pointers
 - [x] Variable-size Sliding Window
-- [x] Stack
+- [x] Stack — Valid Parentheses, Min Stack and RPN evaluation
 - [ ] Queue
 - [ ] Binary Search
 - [x] Linked List: reversal and manipulation
@@ -101,6 +101,8 @@
 - [ ] Leader election
 - [ ] Service mesh
 - [x] Observability introduction through Notification Service
+- [x] Caching fundamentals and Invoice Manager strategy
+- [ ] Redis internals, cache sizing and advanced coherence
 - [ ] Observability dedicated backend topic
 
 ## Phase 4 — Cloud Architecture
@@ -218,3 +220,12 @@
 - Load Balancer fundamentals: routing, health checks, L4/L7 and sticky sessions.
 - Min Stack with auxiliary minimum state per stack level.
 - Durable notes added for all three topics and progress trackers reconciled.
+
+
+## Session 17 — Completed
+
+- Thread-safety fundamentals: race conditions, critical sections, mutual exclusion and basic C# `lock`.
+- LeetCode 150: Evaluate Reverse Polish Notation using stack/postfix evaluation.
+- Caching fundamentals: cache-aside, read-through, write strategies, invalidation, stampede, L1/L2, TTL, LRU/LFU and warming.
+- Invoice Manager caching strategy: selective tenant/reference caching; no default caching for OCR payloads, final extraction results or uploaded PDFs.
+- Advanced synchronization, distributed locking, Redis internals and detailed cache coherence remain pending.
