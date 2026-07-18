@@ -147,3 +147,18 @@ Before closing a session:
 - Do not infer curriculum progress from “today,” “yesterday,” or elapsed calendar time.
 - Resume the current incomplete session unless the user explicitly changes scope.
 - Preserve assumptions established within a problem; any assumption change must be stated explicitly.
+
+## Guided Discovery for New DSA Patterns
+
+For a pattern the user has not seen, do not name or explain the pattern first. Guide discovery in this order:
+
+1. derive brute force;
+2. identify repeated work;
+3. identify what remains unresolved;
+4. derive the required data structure;
+5. derive the invariant;
+6. analyze total operations and complexity;
+7. implement;
+8. name and generalize the pattern.
+
+Do not introduce a new adjacent mechanism as assumed knowledge. Explicitly mark and defer it or teach it as a separate topic.

@@ -26,3 +26,9 @@ Key learned dimensions:
 - data-specific cache/no-cache decisions.
 
 See [`caching.md`](caching.md).
+
+## Resilience: retries and circuit breakers
+
+Retries handle transient failures. Circuit breakers prevent persistent downstream failure from cascading. Long-running durable work should use delayed queue retries, and recovered services should receive backlog through controlled ramp-up rather than an immediate flood.
+
+See [`../backend/circuit-breakers.md`](../backend/circuit-breakers.md).

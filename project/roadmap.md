@@ -229,3 +229,17 @@
 - Caching fundamentals: cache-aside, read-through, write strategies, invalidation, stampede, L1/L2, TTL, LRU/LFU and warming.
 - Invoice Manager caching strategy: selective tenant/reference caching; no default caching for OCR payloads, final extraction results or uploaded PDFs.
 - Advanced synchronization, distributed locking, Redis internals and detailed cache coherence remain pending.
+
+## Session 18 Completed
+
+- Circuit breaker from cascading-failure motivation through Closed/Open/Half-Open behavior.
+- Retry classification, backoff/jitter, delayed queue retry and controlled recovery.
+- Reliability revision: idempotency, Outbox, Inbox, visibility timeout, leases and reconciliation.
+- Daily Temperatures using a derived monotonic stack of indices in O(n).
+- Coaching rule strengthened: discover an unknown pattern before naming it.
+
+### Next boundaries
+
+- Adaptive concurrency and distributed/adaptive rate limiting remain pending.
+- Formal multi-region DR remains pending.
+- Continue coding roadmap from the repository plan rather than adding another monotonic-stack problem automatically.

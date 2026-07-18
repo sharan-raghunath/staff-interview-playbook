@@ -40,6 +40,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Valid Parentheses — Stack / LIFO
 - ✅ Min Stack — Stack with Auxiliary State
 - ✅ Evaluate Reverse Polish Notation — Stack / Postfix Evaluation
+- ✅ Daily Temperatures — Monotonic Stack / Next Greater Event
 
 ### Backend / Security
 
@@ -60,6 +61,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ `Task<T>` vs `ValueTask<T>` fundamentals
 - ✅ `ValueTask<T>` single-consumption usage guidance
 - ✅ Thread-safety fundamentals: race conditions, critical sections and `lock`
+- ✅ Circuit breakers, retry classification, half-open probes and recovery surge
 - 🟡 API Gateway / Ingress
 - ⬜ SAML
 - ⬜ TLS
@@ -93,7 +95,7 @@ These files are the canonical context for the Interview Prep project.
 - ✅ Load Balancer fundamentals: routing, health checks, L4/L7 and sticky sessions
 - ✅ Caching fundamentals and Invoice Manager caching strategy
 - 🟡 Per-pod bounded concurrency concept
-- ⬜ Global concurrency management
+- ⬜ Global concurrency management and adaptive rate limiting
 - ⬜ Multi-region async DR design
 
 ## Repository Structure
@@ -123,4 +125,4 @@ Each topic should answer:
 
 ## Current Status
 
-Session 17 completed thread-safety fundamentals, Evaluate Reverse Polish Notation, and the caching building block through Invoice Manager-specific cache decisions. Advanced synchronization, distributed locking, Redis internals, detailed cache coherence, formal DR, circuit breaker and global concurrency remain pending.
+Session 18 completed circuit breakers, delayed queue retry and controlled recovery, revised core reliability patterns, and derived/implemented Daily Temperatures with a monotonic stack. Adaptive concurrency/rate limiting, advanced synchronization, distributed locking, Redis internals, detailed cache coherence and formal DR remain pending.

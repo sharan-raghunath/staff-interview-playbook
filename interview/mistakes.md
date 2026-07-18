@@ -45,3 +45,10 @@
 A session may span multiple real-world days. Do not evaluate progress or refer to corrections using “today” or “yesterday.” Use the session number and the exact earlier point in that session.
 
 Also avoid silently changing assumptions during a problem. State any assumption change before reasoning from it.
+
+## Session 18 corrections
+
+- Do not count `400` or business-validation failures toward a downstream circuit breaker.
+- Do not release an entire queued backlog immediately when a circuit closes.
+- For Daily Temperatures, store indices because the output is positional distance.
+- When introducing a new DSA pattern, derive it from brute force and repeated work before naming the pattern.

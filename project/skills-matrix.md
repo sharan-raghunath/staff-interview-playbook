@@ -139,3 +139,14 @@ This is a living assessment based on completed sessions.
 | Caching fundamentals | Learned | Covered cache-aside, read-through, write strategies, stale reads, stampede, L1/L2, TTL, LRU/LFU and warming. |
 | Invoice Manager caching strategy | Learned | Chose selective caching for tenant/reference data and rejected caching large low-reuse OCR, result and PDF payloads. |
 | Advanced synchronization/cache coherence | Pending | Explicitly outside current depth. |
+
+## Session 18 Additions
+
+| Area | Status | Evidence |
+|---|---|---|
+| Circuit breaker | Learned | Explained retry vs breaker, Closed/Open/Half-Open and failure classification. |
+| Delayed queue retry | Learned conceptually | Selected delayed rescheduling for 40-second OCR work instead of immediate retry. |
+| Recovery surge control | Learned conceptually | Identified overload/429 risk and proposed gradually increasing batches. |
+| Adaptive rate/concurrency control | Pending | New concept was introduced but deliberately excluded from Session 18 coverage. |
+| Monotonic stack | Learned at introductory depth | Derived unresolved-work stack and descending invariant from brute force. |
+| Daily Temperatures | Learned | Correct index-based O(n) implementation and complexity explanation. |

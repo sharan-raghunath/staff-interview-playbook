@@ -174,3 +174,20 @@ These are process failures, not evidence of user weakness. `CURRICULUM.md` now g
 ## Coaching Notes
 
 The user learns best when concepts are derived from concrete failure windows and then mapped to Invoice Manager. Follow the agreed curriculum in order; do not cut planned sections short or introduce future concepts as learned content.
+
+## Session 18 Snapshot
+
+| Competency | Current assessment | Evidence |
+|---|---:|---|
+| Backend fundamentals | 9.4/10 | Distinguished transient retry from persistent-failure circuit breaking and corrected breaker classification for `400`. |
+| Coding patterns | 9.0/10 | Derived the monotonic-stack mechanism from O(n²) brute force and implemented Daily Temperatures in O(n). |
+| Distributed systems | 9.0/10 | Chose durable delayed retry for OCR and identified thundering-herd/429 risk during recovery. |
+| Interview communication | 8.9/10 | Explained index storage, value comparison and positional result clearly before coding. |
+
+## Session 18 Evidence
+
+- Corrected that `400` should not increment the circuit breaker.
+- Proposed delayed rescheduling for a failed long-running OCR job.
+- Identified that releasing 500 queued jobs could overwhelm recovery and suggested progressively larger batches.
+- Derived stack choice, monotonic invariant and O(n) amortized reasoning before implementation.
+- Produced correct C# using `TryPeek`, index storage and `i - index`.

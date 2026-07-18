@@ -61,6 +61,7 @@ Coaching rules:
 | 15 | Valid Parentheses | Stack / LIFO | ✅ |
 | 16 | Min Stack | Stack with Auxiliary State | ✅ |
 | 17 | Evaluate Reverse Polish Notation | Stack / Postfix Evaluation | ✅ |
+| 18 | Daily Temperatures | Monotonic Stack / Next Greater Event | ✅ |
 
 ## Completed Backend Topics
 
@@ -77,16 +78,17 @@ Coaching rules:
 - Zero Trust identity principles.
 - async/await internals and ValueTask usage fundamentals.
 - Thread-safety fundamentals: race conditions, critical sections and basic `lock`.
+- Circuit breakers, retry classification, half-open recovery probes and controlled backlog ramp-up.
 
 ## Latest Completed Session
 
-Session 17 completed:
+Session 18 completed:
 
-- race conditions, critical sections, mutual exclusion and basic C# `lock`;
-- LeetCode 150 — Evaluate Reverse Polish Notation;
-- cache-aside/read-through/write-through/write-behind concepts;
-- L1/L2 caching, TTL, LRU/LFU, stampede, warming and invalidation;
-- Invoice Manager-specific cache and no-cache decisions.
+- circuit breakers, retries, half-open probes and retry amplification;
+- delayed queue retry for long-running OCR work;
+- thundering-herd risk and controlled recovery;
+- revision of idempotency, Inbox/Outbox, leases and reconciliation;
+- LeetCode 739 — Daily Temperatures, derived through guided discovery.
 
 ## Canonical Invoice Manager Context
 
@@ -190,11 +192,11 @@ SQL is authoritative for target-state job/stage state. Redis remains a distribut
 
 ## Where to Continue Next
 
-Session 16 is complete. Read `CURRICULUM.md`, `project/pending.md`, and `session-journal/session-016.md` before choosing Session 17 scope.
-- Keep advanced `ValueTask<T>` internals within the pending boundaries.
-- Continue the stack coding pattern with a fresh problem.
-- Begin the first small system-design building block under the revised cadence.
-- Keep KEDA internals, Gunicorn internals, global concurrency, circuit breaker, detailed DR and distributed rate limiting in **mentioned but not covered** status until dedicated sessions.
+Session 18 is complete. Read `CURRICULUM.md`, `project/pending.md`, and `session-journal/session-018.md` before choosing Session 19 scope.
+- Keep adaptive concurrency and distributed/adaptive rate limiting pending for a dedicated lesson.
+- Continue the coding roadmap from the planned order; do not automatically repeat monotonic stack.
+- Continue one small system-design building block in normal weekday sessions.
+- Keep KEDA internals, Gunicorn internals and detailed DR in **mentioned but not covered** status until dedicated sessions.
 
 Do not mark future topics as learned until covered.
 
@@ -208,7 +210,7 @@ Do not mark future topics as learned until covered.
 - Retry/DLQ separated from broader outbox/inbox/idempotency/reconciliation resilience.
 - Scheduling uses UTC execution time with local/time-zone context retained when needed.
 - Observability begins from business identifiers as well as technical correlation IDs.
-- Detailed DR and circuit breaker remain pending.
+- Detailed DR was pending at this point; circuit breaker was later completed in Session 18.
 - Coding problem completed correctly but marked excessively guided.
 - Friday is the preferred mock-interview day; weekends are optional.
 - `CURRICULUM.md` is mandatory operating context.
@@ -231,3 +233,15 @@ Next session should begin only after reading the latest journal and pending list
 - Load Balancer fundamentals completed: motivation, routing strategies, health checks, Layer 4 vs Layer 7 and sticky sessions.
 - Min Stack completed with O(1) `Push`, `Pop`, `Top` and `GetMin` by storing the minimum at each stack level.
 - Sessions are logical learning units and may span multiple calendar days; references and feedback must be session-based.
+
+## Session 18 Additions
+
+- Circuit breaker is now covered at interview depth.
+- `400`, auth and business-validation failures are not retryable and do not increment the breaker.
+- Long-running OCR work uses delayed queue retry rather than immediate worker retry.
+- Recovery backlog must be ramped gradually to avoid a thundering herd.
+- Adaptive rate limiting/concurrency remains pending as a dedicated topic.
+- Daily Temperatures completed using an index-based monotonic stack.
+- New coding patterns should be derived before they are named.
+
+Next session: read `session-journal/session-018.md` and `project/pending.md`, then begin Session 19 on Monday.

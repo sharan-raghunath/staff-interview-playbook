@@ -335,3 +335,21 @@
 - Added Session 12 journal, coding note and backpressure note.
 - Updated context, roadmap, pending topics, skills matrix, scorecard, vocabulary, README and start-here context.
 - Added explicit “mentioned but not covered” status for KEDA, Gunicorn and global concurrency.
+
+## Session 18
+
+### Backend / Distributed Systems
+- Added circuit breaker fundamentals: Closed, Open and Half-Open.
+- Distinguished transient retries from persistent-failure protection.
+- Added failure classification, retry amplification, backoff/jitter and delayed queue retry.
+- Added recovery-surge/thundering-herd guidance and controlled ramp-up.
+- Kept adaptive concurrency and adaptive rate limiting pending.
+
+### Coding
+- Added Daily Temperatures.
+- Derived the introductory monotonic-stack invariant from brute force.
+- Stored unresolved indices and completed an O(n) C# implementation.
+
+### Repository
+- Added Session 18 journal and durable circuit-breaker/Daily Temperatures notes.
+- Updated curriculum, README, start-here, context, roadmap, pending list, skills matrix, scorecard, mistakes and pattern references.

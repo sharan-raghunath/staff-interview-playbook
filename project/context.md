@@ -192,11 +192,11 @@ Important production details:
 
 ## Immediate Next Work
 
-- Session 16 is complete. Session 17 should follow the normal cadence: backend topic, coding problem, small system-design building block and journal update.
-- Continue advanced `ValueTask<T>` only within the explicit pending scope.
-- Continue the stack roadmap with a fresh problem.
-- Begin the first dedicated small system-design building block.
-- Keep global concurrency, distributed rate limiting, KEDA internals, Gunicorn internals, circuit breaker and detailed DR pending until dedicated coverage.
+- Session 18 is complete. Session 19 should resume on Monday with the normal cadence.
+- Keep adaptive concurrency and distributed/adaptive rate limiting within explicit pending scope.
+- Continue the coding roadmap in planned order and use guided discovery for unseen patterns.
+- Continue one small system-design building block.
+- Keep KEDA internals, Gunicorn internals and detailed DR pending until dedicated coverage.
 - Inbox pattern is covered conceptually; revisit only for deeper implementation detail if needed.
 - Derive detailed field-extraction output persistence and Billing execution topology later.
 
@@ -242,7 +242,7 @@ Important production details:
 - Scheduling uses UTC execution time and atomic claiming plus outbox publication.
 - Observability uses business identifiers as well as technical correlation IDs.
 - Invoice Manager API Service owns final prediction mapping/overrides and emits the completion event after final business data is persisted. Orchestrator remains responsible for coordinating TE/DE.
-- Detailed DR and circuit breaker remain pending and must not be used as learned concepts.
+- Detailed DR remained pending at this point; circuit breaker was later completed in Session 18.
 - Longest Repeating Character Replacement was implemented correctly but after the assistant revealed the optimal structure; record it as excessively guided.
 - Friday is the preferred interview-simulation day; weekends are optional.
 - `CURRICULUM.md` is now the authoritative coaching contract.
@@ -272,3 +272,11 @@ Important production details:
 - Coding: LeetCode 150 Evaluate Reverse Polish Notation completed in O(n) time/O(n) space with correct operand order and valid-input contract discipline.
 - System design: caching fundamentals completed, including cache-aside, read-through, write-through/write-behind concepts, invalidation, stampede, per-key coordination, L1/L2, TTL, LRU/LFU, warming and distributed invalidation at a conceptual level.
 - Invoice Manager decisions: cache tenant configuration and small reference data selectively; do not cache OCR payloads, final extraction outputs by default, or uploaded PDFs. Durable Blob storage remains the source for large workflow artifacts.
+
+## Session 18 Context
+
+- Backend: circuit breaker states, retry classification, retry amplification, exponential backoff/jitter, delayed queue retry and controlled recovery are covered.
+- `400`, authentication/authorization and business-validation failures do not retry or count toward the circuit breaker.
+- Adaptive rate limiting and adaptive concurrency were introduced but remain pending for a dedicated lesson.
+- Coding: Daily Temperatures completed in O(n) using a stack of unresolved indices.
+- Coaching: for unknown DSA patterns, derive the mechanism from brute force before naming the pattern.

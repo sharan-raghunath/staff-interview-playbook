@@ -7,12 +7,11 @@ This file tracks intentionally pending topics. A pending topic may be named here
 ### Messaging / Distributed Systems
 
 - Dedicated Disaster Recovery topic before using detailed DR terminology in designs.
-- Circuit breaker pattern; mentioned but not covered.
 - Provider idempotency/reconciliation details beyond the Session 14 concept.
 
 - Global concurrency management beyond per-pod limits.
 - Distributed rate limiting.
-- Retry jitter and detailed delayed-retry implementation.
+- Detailed delayed-retry implementation and operational tuning; exponential backoff and jitter are covered conceptually.
 - Deeper Inbox implementation details, only if needed beyond the Session 11 concept.
 - Multi-region recovery for queued work.
 - Exact PDF-preparation queue naming/topology.
@@ -58,8 +57,8 @@ This file tracks intentionally pending topics. A pending topic may be named here
 
 - Revisit replacement-budget sliding window with a fresh problem using brute force and the full hint ladder; Session 14 was excessively guided.
 
-- Continue the coding roadmap after Stack fundamentals.
-- Stack core progression completed through Valid Parentheses, Min Stack and RPN; choose the next pattern according to roadmap.
+- Continue the coding roadmap after the introductory monotonic-stack problem.
+- Stack progression completed through Valid Parentheses, Min Stack, RPN and Daily Temperatures.
 - Two Sum II.
 - Container With Most Water.
 - Binary Search intro.
